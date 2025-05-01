@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+@use "tailwindcss";
+
+
+:root {
+    --primary: #1E3A8A;
+    --blur : #F4F4F4;
+    --placeholder_text: #9d9d9d;
+}
+
+.input-field {
+    @apply w-full p-4 mt-2 border rounded-lg border-gray-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+.input-field::placeholder{
+    color: var(--placeholder_text),
+}
+.error-warning{
+    text-align: left;
+    color:red;
+    font-size:0.8rem;
+    opacity: 0.8;
+    margin-top:5px;
+}
+.error-warning::before{
+    content:"*";
+    padding:5px;
+}

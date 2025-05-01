@@ -1,0 +1,16 @@
+@import 'scss/mixin';
+@import 'scss/variables';
+
+.input-field{
+    color:var(--green_sys)
+}
+.login-button{
+    @include button(auto,auto,0.8rem 3rem 0.8rem 3rem,$black,10px,$yellow,
+    1px solid rgb(255, 255, 255),null,$white)
+}
+.google-button{
+    @include button(auto,auto,0.2rem 2rem 0.2rem 2rem,#7C838A,10px,$white,1px solid black, null, $black)
+}
+.github-button{
+    @include button(auto,auto,0.2rem 2rem 0.2rem 2rem,#7C838A,10px,$white,1px solid black, null, $black)
+}

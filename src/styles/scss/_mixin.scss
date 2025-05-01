@@ -1,0 +1,34 @@
+@mixin button($width, $height, $padding, $textColor, $radius,
+    $backgroundColor, $border, $hoverBgColor: darken($backgroundColor, 20%),
+    $hoverTextColor: $textColor,
+    $activeBgColor: darken($backgroundColor, 40%)) {
+    border-radius: $radius;
+    border: $border;
+    background-color: $backgroundColor;
+    color: $textColor;
+    width: $width;
+    height: $height;
+    padding: $padding;
+    transition: all 0.3s ease;
+
+    $hoverBgColor: if($hoverBgColor == null, darken($backgroundColor, 10%), $hoverBgColor);
+    $hoverTextColor: if($hoverTextColor ==null, $textColor, $hoverTextColor);
+    $activeBgColor: if($activeBgColor ==null, darken($backgroundColor, 20%), $activeBgColor);
+
+    &:hover {
+        background-color: $hoverBgColor;
+        color: $hoverTextColor;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    &:active {
+        background-color: $activeBgColor;
+        box-shadow: 0 0 0 2px rgba($textColor, 0.3);
+        cursor: pointer;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

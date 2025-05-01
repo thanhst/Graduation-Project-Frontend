@@ -1,0 +1,16 @@
+<div class="bg-[url('/assets/images/thumbnail.png')] bg-cover bg-no-repeat bg-center w-screen h-screen flex relative">
+    <div class="flex-1 h-full relative">
+        <div *ngFor="let svg of svgList" data-svg-wrapper>
+            <img class="absolute" [attr.src]="svg.src" [attr.width]="svg.width" [attr.height]="svg.height"
+            [ngStyle]="{ 'top.px': svg.top, 'left.px': svg.left }" style="z-index: 1"/>
+        </div>
+        <div class="absolute w-full h-full">
+            <img class="img-base z-10 w-[60%] h-[60%]" [src]="srcImg.src" [ngStyle]="{ 'top.px': srcImg.top, 'left.px': srcImg.left }">
+        </div>
+    </div>
+    <div class="flex-2 h-full relative">
+        <div class="w-full h-full bg-white rounded-tl-2xl rounded-bl-2xl justify-self-end items-end absolute top-0 left-0 z-10">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>
