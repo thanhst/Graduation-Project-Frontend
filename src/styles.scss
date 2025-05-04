@@ -1,11 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 @use "tailwindcss";
+@use 'scss/mixin' as *;
+@use 'scss/variables' as *;
 
 
 :root {
     --primary: #1E3A8A;
     --blur : #F4F4F4;
     --placeholder_text: #9d9d9d;
+}
+
+body{
+    background-color: #F5F5F5 !important;
 }
 
 .input-field {
@@ -25,4 +31,24 @@
 .error-warning::before{
     content:"*";
     padding:5px;
+}
+
+.btn-submit{
+    @include button(auto,auto,0.8rem 3rem 0.8rem 3rem,white,10px,$blue,1px solid white);
+}
+.btn-submit:hover{
+    font-weight:normal;
+}
+
+.input-text{
+    @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
+}
+.input-combobox{
+    @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
+}
+.deactive{
+    opacity: 40%;
+}
+.active{
+    opacity: 100%;
 }

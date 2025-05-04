@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { BaseComponent } from '../../shared/component/base/base.component';
-
 @Component({
   selector: 'app-base-login',
   standalone: true,
@@ -12,11 +11,22 @@ import { BaseComponent } from '../../shared/component/base/base.component';
   templateUrl: './base-login.component.html',
 })
 export class BaseLoginComponent {
-  constructor(private router: Router) {}
-
+  form: FormGroup;
+  
+  constructor(private router: Router,private fb: FormBuilder) {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      rememberMe: [false],
+    });
+  }
 
   @Input() role: 'user' | 'admin' = 'user';
-  isErrorWarning : boolean = false;
+
+
+  ngOnInit(): void {
+
+  }
 
   get userRole(): boolean {
     return this.role === 'user';
@@ -28,10 +38,13 @@ export class BaseLoginComponent {
   get warning(): Array<string>{
     return ["Email is required","Password is required"]
   }
-  email: string = '';
-  password: string = '';
-  rememberMe: boolean = false;
+
   onSubmit() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) {
+      return;
+    }
+  
     if (this.role === 'admin') {
       this.router.navigate(['/admin-dashboard']);
     } else {

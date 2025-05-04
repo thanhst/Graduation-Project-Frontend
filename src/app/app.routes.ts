@@ -1,21 +1,27 @@
 import { Routes } from '@angular/router';
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
-import { BaseLoginComponent } from './layout/base-login-layout/base-login.component';
-import { AdminLoginComponent } from './pages/auth/admin-login/admin-login.component';
+import { SchedularComponent } from './pages/schedular/schedular.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 export const routes: Routes = [
-    { path: '', component: BaseLoginComponent },
-    { path: 'admin', component: AdminLoginComponent },
+    { path: 'login', loadComponent:()=> import('../app/pages/auth/user-login/user-login.component').then(m=>m.UserLoginComponent) },
+    { path: 'register', loadComponent:()=> import('../app/pages/auth/user-register/user-register.component').then(m=>m.UserRegisterComponent)},
     {
-        path: '',
-        component: BaseLayoutComponent,
-        children: [
-            { path: 'dashboard', component: AdminLoginComponent }
+        path: 'admin', children: [
+            { path: 'login', loadComponent:()=> import('../app/pages/auth/admin-login/admin-login.component').then(m=>m.AdminLoginComponent) }
         ]
     },
     {
         path: 'welcome',
-        component: WelcomeComponent
+        loadComponent: () => import('../app/pages/welcome/welcome.component').then(m => m.WelcomeComponent) // Lazy load WelcomeModule
+    },
+    {
+        path: '',
+        component: BaseLayoutComponent,
+        children: [
+            { path: 'dashboard', component: WelcomeComponent },
+            {path:'schedular',component:SchedularComponent},
+            { path: '**', redirectTo: 'dashboard' }
+        ]
     },
     { path: '**', redirectTo: '' }
 ];

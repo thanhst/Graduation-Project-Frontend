@@ -1,0 +1,79 @@
+<app-base>
+    <div class="flex pt-[0%] pb-[0%] ps-[10%] pe-[10%] justify-center items-center">
+        <div class="bg-white p-8 rounded-lg w-full">
+            <h1 class="text-[1.5rem] font-bold text-center mb-12">Register your account</h1>
+            <form (ngSubmit)="onSubmit()" [formGroup]="form" class="mb-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="relative mb-8 grid">
+                        <label for="email" class="block text-lg font-semibold text-gray-700">Email</label>
+                        <input type="email" id="email" formControlName="email" class="input-field"
+                            placeholder="Enter your email" required />
+                        <div class="absolute top-full">
+                            <p class="error-warning"
+                                *ngIf="form.controls['email'].invalid && form.controls['email'].touched">
+                                Invalid email. </p>
+                        </div>
+                    </div>
+                    <div class="relative mb-8 grid grid-col-1">
+                        <label for="fullname" class="block text-lg font-semibold text-gray-700">Fullname</label>
+                        <input type="input" id="fullname" formControlName="fullname" class="input-field"
+                            placeholder="Enter your fullname" required />
+                        <div class="absolute top-full">
+                            <p class="error-warning"
+                                *ngIf="form.controls['fullname'].invalid && form.controls['fullname'].touched">
+                                Invalid fullname.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class=" relative mb-8">
+                    <label for="password" class="block text-lg font-semibold text-gray-700">Password</label>
+                    <input type="password" id="password" formControlName="password" class="input-field"
+                        placeholder="Enter your password" required />
+                    <div class="absolute top-full">
+                        <p class="error-warning"
+                            *ngIf="form.controls['password'].invalid && form.controls['password'].touched">
+                            Password must be 8 characters or more. </p>
+                    </div>
+                </div>
+                <div class=" relative mb-8">
+                    <label for="rePassword" class="block text-lg font-semibold text-gray-700">Re-password</label>
+                    <input type="password" id="re-password" formControlName="rePassword" class="input-field"
+                        placeholder="Enter your re-password" required />
+                    <div class="absolute top-full">
+                        <p class="error-warning"
+                            *ngIf="(form.controls['rePassword']?.errors?.['required'] && form.controls['rePassword']?.errors?.['minlength'] ) && form.controls['rePassword'].touched">
+                            Password must be 8 characters or more. </p>
+                        <p class="error-warning"
+                            *ngIf="form.errors?.['checkPassword'] && form.controls['rePassword'].touched">
+                            The confirmation password does not match the original password.</p>
+                    </div>
+                </div>
+
+                <div class="w-full flex justify-center items-center">
+                    <button type="submit" class="login-button">Register</button>
+                </div>
+            </form>
+            <div class="flex flex-col w-full">
+                <div class="mb-6">
+                    <span class="text-gray-500 text-lg font-normal">Do you have an account? </span>
+                    <span class="text-black text-lg font-normal"> </span>
+                    <a routerLink="/login" class="text-yellow-300 text-lg font-normal">Login</a>
+                </div>
+                <div class="flex flex-row justify-around items-center">
+                    <button class="google-button flex justify-between items-center gap-3">
+                        <img class="max-w-xs sm:w-[1rem] md:max-w-md lg:max-w-lg xl:w-[2rem]"
+                            src="/assets/images/Google.png">
+                        Register with google
+                    </button>
+                    <span class="text-gray-400 text-2xl font-medium">- Or -</span>
+                    <button class="github-button flex justify-between items-center gap-3">
+                        <img class="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:w-[2rem]"
+                            src="/assets/images/GitHub.png">
+                        Register with github
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</app-base>

@@ -1,7 +1,9 @@
+@use 'scss/variables' as *;
+
 @mixin button($width, $height, $padding, $textColor, $radius,
     $backgroundColor, $border, $hoverBgColor: darken($backgroundColor, 20%),
     $hoverTextColor: $textColor,
-    $activeBgColor: darken($backgroundColor, 40%)) {
+    $activeBgColor: darken($backgroundColor, 20%)) {
     border-radius: $radius;
     border: $border;
     background-color: $backgroundColor;
@@ -11,7 +13,7 @@
     padding: $padding;
     transition: all 0.3s ease;
 
-    $hoverBgColor: if($hoverBgColor == null, darken($backgroundColor, 10%), $hoverBgColor);
+    $hoverBgColor: if($hoverBgColor ==null, darken($backgroundColor, 10%), $hoverBgColor);
     $hoverTextColor: if($hoverTextColor ==null, $textColor, $hoverTextColor);
     $activeBgColor: if($activeBgColor ==null, darken($backgroundColor, 20%), $activeBgColor);
 
@@ -30,5 +32,33 @@
 
     &:focus {
         outline: none;
+    }
+}
+
+@mixin input($width, $height, $padding, $textColor, $radius,
+    $backgroundColor, $border,$placeholder_color) {
+    border-radius: $radius;
+    border: $border;
+    background-color: $backgroundColor;
+    color: $textColor;
+    width: $width;
+    height: $height;
+    padding: $padding;
+    transition: all 0.3s ease;
+    &::placeholder{
+        color:$placeholder_color;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        box-shadow: 0 0 0 2px rgba($textColor, 0.3);
+        cursor: pointer;
+    }
+
+    &:focus {
+        outline: $blue;
+        border:1px solid $blue;
     }
 }

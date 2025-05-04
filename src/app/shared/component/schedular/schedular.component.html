@@ -1,0 +1,31 @@
+<div class="schedular-container" >
+    <div class="schedular-header">
+        <h1>{{ monthYear }}</h1>
+        <div class="schedular-button-change">
+            <button (click)="prevMonth()">
+                <img src="/assets/images/arrow-left.svg" alt="Previous">
+            </button>
+            <button (click)="nextMonth()">
+                <img src="/assets/images/arrow-rights.svg" alt="Next">
+            </button>
+        </div>
+    </div>
+
+    <div class="schedular-content">
+        <table class="schedular-table">
+            <thead>
+                <tr>
+                    <th *ngFor="let day of ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']">{{ day }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let week of weeks">
+                    <td (click)="setSelectedDate(day)" [ngClass]="getClassForDay(day)"
+                        [class.selected-date]="isSelectedDate(day)" *ngFor="let day of week">
+                        <p *ngIf="day !== 0">{{ day }}</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
