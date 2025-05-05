@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 @Component({
-  selector: 'app-schedular-shared',
+  selector: 'app-scheduler-shared',
   imports: [CommonModule],
-  templateUrl: './schedular.component.html',
-  styleUrl: './schedular.component.scss'
+  templateUrl: './scheduler.component.html',
+  styleUrl: './scheduler.component.scss'
 })
-export class SchedularComponent {
+export class SchedulerComponent {
 
-  isActiveSchedular:boolean =true;
+  isActiveScheduler:boolean =true;
 
   currentDate: Date = new Date();
   weeks: number[][] = [];

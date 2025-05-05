@@ -67,25 +67,31 @@
     width: 25vw;
     right: 0px;
     background-color: white;
-    padding: 1.8rem;
+    padding:4rem 1.8rem 1.8rem 1.8rem;
     gap: 1rem;
 }
 
+.div-user{
+    right:2rem;
+    top:1rem;
+    z-index: 10;
+    position: fixed;
+}
 .image-user {
     width: 2rem;
     height: 2rem;
 }
 
-.schedular-notification {
+.scheduler-notification {
     width: 100%;
 }
 
-.schedular-notification-header {
+.scheduler-notification-header {
     font-size: 1rem;
     font-weight: bold;
 }
 
-.schedular-notification-content {
+.scheduler-notification-content {
     height:100%;
     width: 100%;
 }
@@ -121,7 +127,7 @@
 
 .notification-content-full-height {
     height: 40%;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .circle-blue {
@@ -138,7 +144,7 @@
     justify-content: space-between;
     align-items: center;
 }
-.schedular-active{
+.scheduler-active{
     background-color: blanchedalmond;
 }
 
@@ -170,6 +176,15 @@
 
 //end-main-content
 
+//search-input
+.search-input{
+    @include input(auto,auto,10px 10px 10px 50px,black,10px,white,1px solid rgb(193, 193, 193),#6D7C90);
+    font-size:0.8rem;
+}
+//pagination
+.pagination{
+    position: absolute;
+}
 
 
 //media query

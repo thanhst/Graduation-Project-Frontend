@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Type } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
-import { Schedular } from '../../core/models/schedular/schedular';
+import { Scheduler } from '../../core/models/scheduler/scheduler';
 import { User } from '../../core/models/user/user';
 @Component({
   selector: 'app-base-layout',
@@ -15,13 +15,18 @@ export class BaseLayoutComponent {
 
   private routerSubscription!: Subscription;
 
-  isActiveSchedular: boolean = true;
-  schedularComponent: Type<any> | null = null;
-  user: User = new User();
+  isActiveScheduler: boolean = true;
+  isActiveSearch: boolean = true;
+  isActiveSidebarRight: boolean = true;
 
-  notifClass = Array.from({ length: 20 }, () => new Schedular());
-  activeMenu: string = 'dashboard';
+  schedulerComponent: Type<any> | null = null;
+
+  user: User = new User();
   title: string = "";
+  selectedDate:Date= new Date();
+
+  notifClass = Array.from({ length: 20 }, () => new Scheduler());
+
 
 
   //init
@@ -30,9 +35,9 @@ export class BaseLayoutComponent {
     const initialUrl = this.router.url;
     this.handleRouteChange(initialUrl);
 
-    // Optionally auto-load schedular initially
-    if (this.isActiveSchedular) {
-      this.loadSchedular();
+    // Optionally auto-load scheduler initially
+    if (this.isActiveScheduler) {
+      this.loadScheduler();
     }
   }
   //destroy
@@ -43,26 +48,23 @@ export class BaseLayoutComponent {
   }
 
   //setter
-  setActiveSchedular(value: boolean) {
-    this.isActiveSchedular = value;
-  }
-  setActive(menu: string) {
-    this.activeMenu = menu;
+  setActiveScheduler(value: boolean) {
+    this.isActiveScheduler = value;
   }
   //end-setter
 
   //function
-  async loadSchedular() {
-    if (!this.schedularComponent) {
-      const { SchedularComponent } = await import('../../shared/component/schedular/schedular.component');
-      this.schedularComponent = SchedularComponent;
-      this.isActiveSchedular = true;
+  async loadScheduler() {
+    if (!this.schedulerComponent) {
+      const { SchedulerComponent } = await import('../../shared/component/scheduler/scheduler.component');
+      this.schedulerComponent = SchedulerComponent;
+      this.isActiveScheduler = true;
     }
   }
 
-  unloadSchedular() {
-    this.schedularComponent = null;
-    this.isActiveSchedular = false;
+  unloadScheduler() {
+    this.schedulerComponent = null;
+    this.isActiveScheduler = false;
   }
 
   private listenRouteChanges() {
@@ -70,39 +72,39 @@ export class BaseLayoutComponent {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event) => {
         const currentUrl = (event as NavigationEnd).urlAfterRedirects;
-        if (currentUrl.includes('/schedular')) {
-          this.unloadSchedular();
-          this.title = "Schedular"!
-        }
-        else if (currentUrl.includes('/dashboard')) {
-          this.title = `Welcome, ${this.user.getUsername()}`
-          this.loadSchedular();
-        }
-        else if (currentUrl.includes('/work')) {
-          this.title = "Work"
-        }
-        else if (currentUrl.includes('/statisfical')) {
-          this.title = "Statisfical"
-        }
-        else if (currentUrl.includes('/settings')) {
-          this.title = "Settings"
-        }
+        this.handleRouteChange(currentUrl);
       });
   }
 
   private handleRouteChange(currentUrl: string) {
-    if (currentUrl.includes('/schedular')) {
-      this.unloadSchedular();
-      this.title = 'Schedular';
-    } else if (currentUrl.includes('/dashboard')) {
-      this.title = `Welcome, ${this.user.getUsername()}`;
-    } else if (currentUrl.includes('/work')) {
-      this.title = 'Work';
-    } else if (currentUrl.includes('/statisfical')) {
-      this.title = 'Statisfical';
-    } else if (currentUrl.includes('/settings')) {
-      this.title = 'Settings';
+    const routeConfig = [
+      { path: '/scheduler/create', title: 'Scheduler', isSearch: false, isActiveScheduler: true, isActiveSidebarRight:true },
+      { path: '/scheduler/update', title: 'Scheduler', isSearch: false, isActiveScheduler: true, isActiveSidebarRight:true },
+      { path: '/scheduler/list-your', title: 'Scheduler', isSearch: true, isActiveScheduler: true, isActiveSidebarRight:true },
+      { path: '/scheduler', title: 'Scheduler', isSearch: true, isActiveScheduler: true,isActiveSidebarRight:true },
+      { path: '/dashboard', title: () => `Welcome, ${this.user.getUsername()}`, isSearch: false, isActiveScheduler: false },
+      { path: '/work', title: 'Work', isSearch: true },
+      { path: '/statisfical', title: 'Statisfical', isSearch: true },
+      { path: '/settings', title: 'Settings', isSearch: false }
+    ];
+
+    for (const config of routeConfig) {
+      if (currentUrl.includes(config.path)) {
+        this.title = typeof config.title === 'function' ? config.title() : config.title;
+        this.isActiveSearch = config.isSearch;
+        this.isActiveSidebarRight = config.isActiveSidebarRight?? true;
+
+        if (config.isActiveScheduler) this.loadScheduler();
+        if (!config.isActiveScheduler) this.unloadScheduler();
+
+        break;
+      }
     }
+  }
+
+  onSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    console.log('Enter pressed: ', value);
   }
 
   logOut() {

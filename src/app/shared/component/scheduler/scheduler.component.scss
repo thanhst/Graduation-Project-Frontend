@@ -1,7 +1,7 @@
 @use 'scss/mixin' as *;
 @use 'scss/variables' as *;
 
-.schedular-container{
+.scheduler-container{
     width: 100%;
     height:100%;
     box-sizing: border-box;
@@ -9,34 +9,34 @@
     flex-direction: column;
     overflow: hidden;
 }
-.schedular-header {
+.scheduler-header {
     display: flex;
     justify-content: space-between;
 }
 
-.schedular-header h1 {
+.scheduler-header h1 {
     font-size: 1.5rem;
     font-weight: 600;
 }
 
-.schedular-button-change {
+.scheduler-button-change {
     display: flex;
     justify-content: space-around;
     align-items: center;
     gap: 0.5rem;
 }
 
-.schedular-button-change>button {
+.scheduler-button-change>button {
     @include button(2.2rem, 2.2rem, 10px, #6D7C90, 100%, white, 1px solid rgba(0, 0, 0, 0.2), null);
 }
 
-.schedular-content {
+.scheduler-content {
     margin-top: 2rem;
     width: 100%;
     flex-grow: 1;
 }
 
-.schedular-table {
+.scheduler-table {
     width: 100%;
     font-size: 0.8rem;
     border-collapse: separate;
@@ -44,12 +44,12 @@
     height:100%;
 }
 
-.schedular-table>thead {
+.scheduler-table>thead {
     color: #3649F9;
     font-weight: 600;
 }
 
-.schedular-table>tbody>tr>td {
+.scheduler-table>tbody>tr>td {
     text-align: center;
     @include button(2rem, 2rem, 5px, #6D7C90, 100%, white, null);
 }

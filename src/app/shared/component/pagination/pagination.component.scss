@@ -1,0 +1,12 @@
+@use 'scss/mixin.scss' as *;
+@use 'scss/variables.scss' as *;
+
+.btn-arrow{
+    @include button(auto,auto,5px,black,10px 0px 10px 0px,#059BFF,null);
+}
+.btn-number{
+    @include button(24px,24px,0px,black,100px,white,1px solid rgba(0, 0, 0, 0.2));
+}
+.active{
+    background-color: aqua;
+}

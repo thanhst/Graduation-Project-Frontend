@@ -1,0 +1,75 @@
+<div class="edit-scheduler-container flex flex-col gap-5">
+    <div class="edit-scheduler-function">
+        <button (click)="goBack()" class="btn">
+            <svg width="39" height="36" viewBox="0 0 39 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M38.2273 6.75C38.2273 5.55653 37.7137 4.41193 36.7994 3.56802C35.8852 2.72411 34.6452 2.25 33.3523 2.25H16.0948C15.3914 2.24973 14.6964 2.38995 14.0572 2.66104C13.4181 2.93213 12.8501 3.32767 12.3922 3.8205L0.587431 16.5375C0.208491 16.9454 0.000183105 17.4649 0.000183105 18.0023C0.000183105 18.5396 0.208491 19.0591 0.587431 19.467L12.3922 32.1795C12.8501 32.6723 13.4181 33.0679 14.0572 33.339C14.6964 33.6101 15.3914 33.7503 16.0948 33.75H33.3523C34.6452 33.75 35.8852 33.2759 36.7994 32.432C37.7137 31.5881 38.2273 30.4435 38.2273 29.25V6.75ZM14.2082 13.1715C14.0949 13.067 14.0049 12.943 13.9436 12.8065C13.8822 12.67 13.8505 12.5236 13.8504 12.3758C13.8503 12.228 13.8817 12.0816 13.9429 11.945C14.0041 11.8084 14.0938 11.6842 14.207 11.5796C14.3201 11.475 14.4545 11.392 14.6024 11.3354C14.7503 11.2787 14.9088 11.2495 15.069 11.2494C15.2291 11.2493 15.3877 11.2783 15.5357 11.3348C15.6837 11.3912 15.8182 11.474 15.9315 11.5785L21.1648 16.4093L26.3957 11.5785C26.509 11.474 26.6435 11.3912 26.7915 11.3348C26.9395 11.2783 27.0981 11.2493 27.2582 11.2494C27.4183 11.2495 27.5769 11.2787 27.7248 11.3354C27.8727 11.392 28.0071 11.475 28.1202 11.5796C28.2334 11.6842 28.3231 11.8084 28.3843 11.945C28.4454 12.0816 28.4769 12.228 28.4768 12.3758C28.4767 12.5236 28.445 12.67 28.3836 12.8065C28.3222 12.943 28.2323 13.067 28.119 13.1715L22.8881 18L28.119 22.8285C28.3478 23.0394 28.4765 23.3257 28.4768 23.6242C28.477 23.9227 28.3487 24.2091 28.1202 24.4204C27.8917 24.6316 27.5816 24.7504 27.2582 24.7506C26.9348 24.7508 26.6245 24.6324 26.3957 24.4215L21.1648 19.5907L15.9315 24.4215C15.8182 24.5259 15.6837 24.6088 15.5357 24.6652C15.3877 24.7217 15.2291 24.7507 15.069 24.7506C14.9088 24.7505 14.7503 24.7213 14.6024 24.6646C14.4545 24.608 14.3201 24.525 14.207 24.4204C14.0938 24.3158 14.0041 24.1916 13.9429 24.055C13.8817 23.9184 13.8503 23.772 13.8504 23.6242C13.8506 23.3257 13.9793 23.0394 14.2082 22.8285L19.4415 18L14.2082 13.1715Z"
+                    fill="#FA9A9A" />
+            </svg>
+        </button>
+        <button form="form" class="btn-submit-sm">
+            Submit
+        </button>
+    </div>
+    <form [formGroup]="form" id="form" class="form-edit-scheduler" (ngSubmit)="onSubmit()" method="post">
+        <div class="title-page">Edit schedule</div>
+        <div class="flex relative justify-between">
+            <label for="title" class="flex-1">Title</label>
+            <div class="flex-3 flex">
+                <input formControlName="idRoom" id="idRoom" name="idRoom" class="input flex-3" type="text" placeholder="IdRoom" readonly>
+            </div>
+        </div>
+        <div class="flex relative justify-between">
+            <label for="title" class="flex-1">Title</label>
+            <div class="flex-3 flex">
+                <input formControlName="title" id="title" name="title" class="input flex-3" type="text"
+                    placeholder="Title of schedular">
+                <div class="absolute top-full">
+                    <p class="error-warning" *ngIf="form.controls['title'].invalid && form.controls['title'].touched">
+                        Invalid title. </p>
+                </div>
+            </div>
+        </div>
+        <div class="flex relative justify-between">
+            <label class="flex-1" for="date">
+                <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_58_1483)">
+                        <path
+                            d="M6.75 0.84375C6.75 0.619974 6.66111 0.405362 6.50287 0.247129C6.34464 0.0888949 6.13003 0 5.90625 0C5.68247 0 5.46786 0.0888949 5.30963 0.247129C5.15139 0.405362 5.0625 0.619974 5.0625 0.84375V1.6875H3.375C2.47989 1.6875 1.62145 2.04308 0.988515 2.67601C0.355579 3.30895 0 4.16739 0 5.0625L0 6.75H27V5.0625C27 4.16739 26.6444 3.30895 26.0115 2.67601C25.3785 2.04308 24.5201 1.6875 23.625 1.6875H21.9375V0.84375C21.9375 0.619974 21.8486 0.405362 21.6904 0.247129C21.5321 0.0888949 21.3175 0 21.0938 0C20.87 0 20.6554 0.0888949 20.4971 0.247129C20.3389 0.405362 20.25 0.619974 20.25 0.84375V1.6875H6.75V0.84375ZM15.8659 17.2901C16.9206 17.2901 17.8639 16.4734 17.8639 15.2989C17.8639 13.8949 16.9746 13.2233 15.9064 13.2233C14.9175 13.2233 13.9354 13.8763 13.9354 15.2651C13.9354 16.6438 14.8517 17.2901 15.8659 17.2901Z"
+                            fill="#047DF6" />
+                        <path
+                            d="M27 23.625V8.4375H0V23.625C0 24.5201 0.355579 25.3785 0.988515 26.0115C1.62145 26.6444 2.47989 27 3.375 27H23.625C24.5201 27 25.3785 26.6444 26.0115 26.0115C26.6444 25.3785 27 24.5201 27 23.625ZM15.7545 21.5831C13.8814 21.5831 12.96 20.2888 12.8807 19.2088H14.0332C14.1058 19.8332 14.6863 20.5926 15.8068 20.5926C17.2311 20.5926 18.0023 19.1616 18.009 16.9408H17.9634C17.7053 17.6394 16.8885 18.2739 15.6296 18.2739C14.1919 18.2739 12.8014 17.2446 12.8014 15.2871C12.8014 13.3684 14.2712 12.2344 15.8338 12.2344C17.8116 12.2344 19.1295 13.473 19.1295 16.7366C19.1295 19.7826 17.8774 21.5814 15.7545 21.5814V21.5831ZM10.8776 12.4116V21.4093H9.73687V13.6333H9.71663C9.22725 13.8966 8.22656 14.5108 7.59375 14.9445V13.77C8.30482 13.2738 9.04468 12.8202 9.80944 12.4116H10.8776Z"
+                            fill="#047DF6" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_58_1483">
+                            <rect width="27" height="27" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </label>
+            <div class="flex-3 flex">
+                <input formControlName="date" id="date" name="date" class="input flex-3" type="datetime-local">
+                <div class="absolute top-full">
+                    <p class="error-warning" *ngIf="form.controls['date'].invalid && form.controls['date'].touched">
+                        Invalid date.</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex relative justify-between gap-3">
+            <label class="flex-1" for="password">Password</label>
+            <input formControlName="password" id="password" name="password" class="input flex-3" type="text"
+                placeholder="Password">
+        </div>
+        <div *ngIf="isTeacher" class="flex relative justify-between gap-3">
+            <label class="flex-1" for="classname">Classname</label>
+            <select formControlName="classname" id="classname" name="classname" class="input flex-3">
+                <option *ngFor="let i of numbers">{{ i }}</option>
+            </select>
+        </div>
+        <div class="flex relative justify-between gap-3">
+            <label class="flex-1" for="description">Description</label>
+            <textarea formControlName="description" id="description" name="description" class="input flex-3"></textarea>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,21 @@
+<div class="pagination flex mt-4">
+    <button class="btn-arrow me-2" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 6H1" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M5.2 10.2L1 6L5.2 1.8" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </button>
+
+    <button class="btn-number" *ngFor="let page of pages" (click)="changePage(page)" [class.active]="page === currentPage">
+        {{ page }}
+    </button>
+
+    <button class="btn-arrow ms-2" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 5H13" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M8.99995 9.4L13.2 5.2L8.99995 1" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </button>
+</div>

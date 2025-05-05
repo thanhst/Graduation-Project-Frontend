@@ -1,0 +1,16 @@
+<div class="list-scheduler-container">
+    <div *ngFor="let schedule of paginatedSchedulers" class="box flex justify-between items-center">
+        <div>
+            <div>{{schedule.getTitle()}}</div>
+            <div class="text-smaller">{{ schedule.getClassname() }}</div>
+        </div>
+        <div class="flex gap-5">
+            <a routerLink="/scheduler/view" [queryParams]="{ id: schedule.getId() }" class="btn-view">View</a>
+            <a routerLink="/scheduler/edit" [queryParams]="{ id: schedule.getId() }" class="btn-edit">Edit</a>
+        </div>
+    </div>
+</div>
+<div class="flex justify-center">
+    <app-pagination [totalItems]="mySchedulers.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)"></app-pagination>
+</div>

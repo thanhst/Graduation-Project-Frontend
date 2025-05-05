@@ -40,15 +40,70 @@ body{
     font-weight:normal;
 }
 
+.btn-submit-sm{
+    @include button(auto,auto,10px 20px 10px 20px,white,10px,$blue,1px solid white);
+}
+.btn-submit-sm:hover{
+    font-weight:normal;
+}
+
+.btn{
+    @include button(auto,auto,0px,white,10px,transparent,null);
+}
+.btn:hover{
+    font-weight:normal;
+}
+
+.btn-view{
+    @include button(auto,auto,10px 20px 10px 20px,white,10px,#16824C,null);
+    font-size:0.8rem;
+}
+.btn-view:hover{
+    font-weight:normal;
+}
+
+.btn-edit{
+    @include button(auto,auto,10px 20px 10px 20px,black,10px,#FBCA8D,null);
+    font-size:0.8rem;
+}
+.btn-edit:hover{
+    font-weight:normal;
+}
+
+.btn-remove{
+    @include button(auto,auto,10px 20px 10px 20px,white,10px,#FF6E64,null);
+    font-size:0.8rem;
+}
+.btn-remove:hover{
+    font-weight:normal;
+}
+
 .input-text{
     @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
 }
 .input-combobox{
     @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
 }
+.input{
+    @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
+}
+
+.box{
+    width:auto;
+    height:auto;
+    padding:20px;
+    border-radius: 10px;
+    border:1px solid rgba(0, 0, 0, 0.2);
+    background-color: #F3F3F3;
+}
+
 .deactive{
     opacity: 40%;
 }
 .active{
     opacity: 100%;
+}
+
+.text-smaller{
+    font-size: 0.8rem;
 }

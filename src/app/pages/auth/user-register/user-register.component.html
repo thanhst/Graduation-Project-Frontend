@@ -2,7 +2,7 @@
     <div class="flex pt-[0%] pb-[0%] ps-[10%] pe-[10%] justify-center items-center">
         <div class="bg-white p-8 rounded-lg w-full">
             <h1 class="text-[1.5rem] font-bold text-center mb-12">Register your account</h1>
-            <form (ngSubmit)="onSubmit()" [formGroup]="form" class="mb-4">
+            <form (ngSubmit)="onSubmit()" [formGroup]="form" class="mb-4" method="post">
                 <div class="grid grid-cols-2 gap-3">
                     <div class="relative mb-8 grid">
                         <label for="email" class="block text-lg font-semibold text-gray-700">Email</label>

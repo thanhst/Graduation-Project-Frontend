@@ -1,6 +1,6 @@
-export class Schedular {
+export class Scheduler {
     constructor(
-        private schedularID:string ="schedularID",
+        private schedulerID:string ="schedularID",
         private roomID:string = "roomID",
         private hostName:string = "hostName",
         private className:string = "className",

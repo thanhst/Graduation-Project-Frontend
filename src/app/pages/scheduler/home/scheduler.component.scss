@@ -1,0 +1,23 @@
+.scheduler-main{
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+}
+.scheduler-main-container{
+    background-color: white;
+    padding:20px;
+    border-radius: 10px;
+}
+.function-scheduler{
+
+}
+.create-scheduler{
+    background-color: #5697FF;
+    padding:20px;
+    border-radius: 10px;
+}
+.edit-scheduler{
+    background-color: #FBCA8D;
+    padding:20px;
+    border-radius: 10px;
+}

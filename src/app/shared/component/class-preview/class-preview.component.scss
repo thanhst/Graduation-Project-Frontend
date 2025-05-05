@@ -1,0 +1,49 @@
+@use 'scss/mixin' as *;
+@use 'scss/variables' as *;
+
+.class-preview {
+    border-top: 10px;
+    border-color: #3649F9;
+    display:block;
+    @include button(auto,auto,20px,black,10px,white,null)
+}
+
+.class-preview-header {
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+.class-preview-descriptions {
+    font-size: 0.8rem;
+    opacity: 60%;
+    width:100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 20px;
+    max-height: 2.4rem;
+}
+
+.class-username {
+    font-size: 0.8rem;
+    opacity: 60%;
+    margin-bottom: 20px;
+}
+
+.user-in-class {
+    position: relative;
+    height:2rem;
+}
+
+.user-image {
+    width:2rem;
+    height:2rem;
+    position: absolute;
+}
+
+.user-image>img {
+    border-radius: 100%;
+    width: 100%;
+    height:100%;
+    object-fit: cover;
+    border: 2px solid white;
+}
