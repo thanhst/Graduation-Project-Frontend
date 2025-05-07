@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FlagService } from '../../../core/services/flag/flag.service';
 @Component({
   selector: 'app-scheduler-shared',
   imports: [CommonModule],
@@ -7,12 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './scheduler.component.scss'
 })
 export class SchedulerComponent {
-
   isActiveScheduler:boolean =true;
 
   currentDate: Date = new Date();
   weeks: number[][] = [];
   currentSelectedDate: Date = this.currentDate;
+
+  constructor(public flagService:FlagService){
+  }
 
   ngOnInit() {
     this.generateCalendar();

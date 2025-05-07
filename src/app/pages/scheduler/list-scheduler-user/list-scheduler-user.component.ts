@@ -1,21 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { FlagService } from '../../../core/services/flag/flag.service';
 import { PaginationComponent } from '../../../shared/component/pagination/pagination.component';
 
 @Component({
   selector: 'app-list-scheduler-user',
-  imports: [RouterLink,CommonModule,PaginationComponent],
+  imports: [RouterLink, CommonModule, PaginationComponent],
   templateUrl: './list-scheduler-user.component.html',
   styleUrl: './list-scheduler-user.component.scss'
 })
 export class ListSchedulerUserComponent {
+
   mySchedulers: any[] = [];
 
   currentPage = 1;
   itemsPerPage = 5;
 
-  constructor(private route:Router) {
+  constructor(private route: Router, private flagService: FlagService) {
+    this.flagService.setActiveScheduler(true);
+    this.flagService.setActiveSchedulerNotification(true);
+    this.flagService.setActiveSearch(true);
+    this.flagService.setActiveSidebarRight(true);
+    this.flagService.setTitle("Scheduler");
+    this.flagService.setActiveNotif(false);
+
+
     this.generateMockData(23); // tạo 23 mục test
   }
 

@@ -68,7 +68,6 @@
     right: 0px;
     background-color: white;
     padding:4rem 1.8rem 1.8rem 1.8rem;
-    gap: 1rem;
 }
 
 .div-user{
@@ -163,6 +162,15 @@
     color:#3649F9;
 }
 
+
+.notif{
+
+}
+.notif-header{
+    display:flex;
+    align-items:center;
+    color:#72A0BE;
+}
 //end-sidebar-right
 
 //main-content

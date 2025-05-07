@@ -6,6 +6,11 @@ import { EditScheduleComponent } from './pages/scheduler/edit-schedule/edit-sche
 import { SchedulerComponent } from './pages/scheduler/home/scheduler.component';
 import { ListSchedulerUserComponent } from './pages/scheduler/list-scheduler-user/list-scheduler-user.component';
 import { ViewScheduleComponent } from './pages/scheduler/view-schedule/view-schedule.component';
+import { StatisticalComponent } from './pages/statistical/home/statistical.component';
+import { ViewStatisticalComponent } from './pages/statistical/view-statistical/view-statistical.component';
+import { AllWorkComponent } from './pages/work/all-work/all-work.component';
+import { WorkComponent } from './pages/work/home/work.component';
+import { ProfileComponent } from './settings/profile/profile.component';
 export const routes: Routes = [
     { path: 'login', loadComponent: () => import('../app/pages/auth/user-login/user-login.component').then(m => m.UserLoginComponent) },
     { path: 'register', loadComponent: () => import('../app/pages/auth/user-register/user-register.component').then(m => m.UserRegisterComponent) },
@@ -23,13 +28,22 @@ export const routes: Routes = [
         component: BaseLayoutComponent,
         children: [
             { path: 'dashboard', component: DashboardComponent },
-            {
-                path: 'scheduler', component: SchedulerComponent,
-            },
+            { path: 'dashboard/:id', component: DashboardComponent },
+
+
             { path: 'scheduler/create', component: CreateSchedulerComponent },
             { path: 'scheduler/list-your', component: ListSchedulerUserComponent },
-            { path: 'scheduler/view', component: ViewScheduleComponent },
-            { path: 'scheduler/edit', component: EditScheduleComponent },
+            { path: 'scheduler/:id/view', component: ViewScheduleComponent },
+            { path: 'scheduler/:id/edit', component: EditScheduleComponent },
+            { path: 'scheduler', component: SchedulerComponent },
+
+            { path: 'setting', component: ProfileComponent },
+
+            { path: 'statistical/:id/chart', component: ViewStatisticalComponent },
+            { path: 'statistical', component: StatisticalComponent },
+
+            {path:'work/all-work',component:AllWorkComponent},
+            {path:'work',component:WorkComponent},
             { path: '**', redirectTo: 'dashboard' }
         ]
     },

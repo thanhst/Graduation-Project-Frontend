@@ -1,0 +1,91 @@
+@use 'scss/mixin.scss' as *;
+@use 'scss/variables.scss' as *;    
+.scheduler-notification {
+    width: 100%;
+}
+
+.scheduler-notification-header {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.scheduler-notification-content {
+    height:100%;
+    width: 100%;
+}
+
+.notification-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    height: 200px;
+    scrollbar-width: auto;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+.notification-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notification-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+}
+
+.notification-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px ;
+}
+
+.notification-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.notification-content-full-height {
+    height: 40%;
+    overflow-y: scroll;
+}
+
+.circle-blue {
+    width: 5px;
+    height: 5px;
+    background-color: #3649F9;
+    border-radius: 100%;
+}
+
+.content {
+    @include button(100%, auto, 20px, black, 10px, #F9F9F9, null);
+    display: flex;
+    padding: 10px 20px 10px 20px;
+    justify-content: space-between;
+    align-items: center;
+}
+.scheduler-active{
+    background-color: blanchedalmond;
+}
+
+.class-name {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.class-user {
+    font-size: 0.8rem;
+    color: #6D7C90;
+}
+
+.class-start-time{
+    font-size: 0.7rem;
+    color:#3649F9;
+}
+
+.scheduler-container{
+    width: 100%;
+    height:100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}

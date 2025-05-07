@@ -1,0 +1,24 @@
+<div class="scheduler-container">
+    <div *ngIf="flagService.isActiveSchedulerNotification$ | async" class="scheduler-notification">
+        <div class="scheduler-notification-header">Scheduler - {{ selectedDate | date: 'dd/MM/yyyy' }}</div>
+        <div class="scheduler-notification-content">
+            <ul class="notification-content mt-3"
+                [ngClass]="{ 'notification-content-full-height': (flagService.isActiveScheduler$ | async) === false }">
+                <li class="w-full" *ngFor="let class of notifClass">
+                    <a class="content" routerLinkActive="scheduler-active" [routerLinkActiveOptions]="{ exact: false }"
+                        [routerLink]="['/scheduler',class.getClassName(),'view']">
+                        <div class="flex items-center gap-5">
+                            <div class="circle-blue"></div>
+                            <div>
+                                <p class="class-name">{{ class.getClassName() }}</p>
+                                <p class="class-user">{{class.getHostName()}}</p>
+                            </div>
+                            <p class="class-start-time">Start at: {{class.getClassName()}}</p>
+                        </div>
+                        <img src="/assets/images/arrow-right.svg">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

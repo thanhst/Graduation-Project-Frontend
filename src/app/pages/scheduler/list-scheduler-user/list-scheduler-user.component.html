@@ -5,8 +5,8 @@
             <div class="text-smaller">{{ schedule.getClassname() }}</div>
         </div>
         <div class="flex gap-5">
-            <a routerLink="/scheduler/view" [queryParams]="{ id: schedule.getId() }" class="btn-view">View</a>
-            <a routerLink="/scheduler/edit" [queryParams]="{ id: schedule.getId() }" class="btn-edit">Edit</a>
+            <a [routerLink]="['/scheduler',schedule.getId(),'view']"  class="btn-view">View</a>
+            <a [routerLink]="['/scheduler',schedule.getId(),'edit']" class="btn-edit">Edit</a>
         </div>
     </div>
 </div>

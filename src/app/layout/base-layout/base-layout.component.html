@@ -31,13 +31,13 @@
                         </svg>
                         Scheduler</a></li>
                 <li routerLinkActive="active"><a routerLinkActive="menu-active"
-                        [routerLinkActiveOptions]="{ exact: false }" routerLink="/statisfical">
+                        [routerLinkActiveOptions]="{ exact: false }" routerLink="/statistical">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M20 10.6156H10.269L3.38792 17.4966C4.79259 18.7359 6.51685 19.5561 8.36458 19.8639C10.2123 20.1718 12.1094 19.9549 13.8399 19.238C15.5705 18.5211 17.0652 17.3329 18.154 15.8087C19.2427 14.2844 19.8831 12.4851 20 10.6156ZM2.50339 16.6108C1.26413 15.2062 0.443938 13.4819 0.136091 11.6342C-0.171756 9.78643 0.0451009 7.8894 0.761998 6.15881C1.47889 4.42822 2.66706 2.93354 4.19135 1.84478C5.71564 0.756009 7.51488 0.116852 9.38443 0V9.73104L2.50339 16.6108ZM10.6355 0V9.36447H20C19.8478 6.93072 18.8123 4.63627 17.088 2.91198C15.3637 1.1877 13.0693 0.152223 10.6355 0Z"
                                 fill="#6D7C90" />
                         </svg>
-                        Statisfical</a></li>
+                        Statistical</a></li>
                 <li routerLinkActive="active"><a routerLinkActive="menu-active"
                         [routerLinkActiveOptions]="{ exact: false }" routerLink="/work">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,11 +66,11 @@
     <main class="main-content">
         <div class="flex w-full justify-between mb-5">
             <div class="main-title">
-                <div class="class-name"> {{ title }}
+                <div class="class-name"> {{ flagService.title$ | async }}
                 </div>
                 <div class="class-user">Have a good day!</div>
             </div>
-            <div *ngIf="isActiveSearch" class="search relative flex justify-start items-center">
+            <div *ngIf="(flagService.isActiveSearch$ | async)" class="search relative flex justify-start items-center">
                 <svg class="absolute left-3" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -87,32 +87,19 @@
         <img class="image-user" src="/assets/images/usertest.svg">
     </div>
 
-    <aside *ngIf="isActiveSidebarRight" class="sidebar-right flex flex-col justify-start">
-        <ng-container *ngIf="isActiveScheduler">
-            <ng-component *ngComponentOutlet="schedulerComponent"></ng-component>
-        </ng-container>
-        <div class="scheduler-notification">
-            <div class="scheduler-notification-header">Scheduler - {{ selectedDate | date: 'dd/MM/yyyy' }}</div>
-            <div class="scheduler-notification-content">
-                <ul class="notification-content mt-3"
-                    [ngClass]="{ 'notification-content-full-height': isActiveScheduler === false }">
-                    <li class="w-full" *ngFor="let class of notifClass">
-                        <a class="content" routerLinkActive="scheduler-active"
-                            [routerLinkActiveOptions]="{ exact: false }" routerLink="/dashboard"
-                            [queryParams]="{ id: class.getClassName()}">
-                            <div class="flex items-center gap-5">
-                                <div class="circle-blue"></div>
-                                <div>
-                                    <p class="class-name">{{ class.getClassName() }}</p>
-                                    <p class="class-user">{{class.getHostName()}}</p>
-                                </div>
-                                <p class="class-start-time">Start at: {{class.getClassName()}}</p>
-                            </div>
-                            <img src="/assets/images/arrow-right.svg">
-                        </a>
-                    </li>
-                </ul>
-            </div>
+    <aside *ngIf="(flagService.isActiveSidebarRight$ | async)" class="sidebar-right">
+        <div class="schedule-notif flex flex-col justify-start gap-[2rem] w-full h-full">
+            <ng-container *ngIf="flagService.isActiveScheduler$ | async">
+                <ng-component *ngComponentOutlet="schedulerComponent"></ng-component>
+            </ng-container>
+            <ng-container *ngIf="flagService.isActiveSchedulerNotification$ | async">
+                <ng-component *ngComponentOutlet="schedulerNotifComponent"></ng-component>
+            </ng-container>
+            <ng-container *ngIf="flagService.isActiveNotification$ | async">
+                <ng-component *ngComponentOutlet="notificationComponent">
+                </ng-component>
+            </ng-container>
+
         </div>
     </aside>
 </div>

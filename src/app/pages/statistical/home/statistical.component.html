@@ -1,0 +1,15 @@
+<div class="bg-white rounded-[2rem] p-[2rem] w-[70vw] h-[80vh] flex flex-col gap-5">
+    <div *ngFor="let content of paginatedContents" class="box flex justify-between items-center">
+        <div>
+            <div>{{content.getClassname()}}</div>
+            <div class="text-smaller">{{ content.getId()}}</div>
+        </div>
+        <div class="flex gap-5">
+            <a [routerLink]="['/statistical',1,'chart']" class="btn-view">View chart</a>
+        </div>
+    </div>
+</div>
+<div class="flex justify-center">
+    <app-pagination [totalItems]="myRooms.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)"></app-pagination>
+</div>

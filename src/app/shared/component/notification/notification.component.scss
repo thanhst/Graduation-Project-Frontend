@@ -1,0 +1,22 @@
+@use 'scss/mixin.scss' as *;
+@use 'scss/variables.scss' as *;
+
+.notification-container{
+    width:100%;
+    height:100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.notification-header{
+    display: flex;
+    gap:1rem;
+    font-size:1.4rem;
+    justify-content: start;
+    align-items: center;
+    color:#72A0BE;
+}
+.notification-content{
+    @include button(auto,auto,10px,black,10px,(0,0,0,0.2),1px solid (0,0,0,0.2),null)
+}

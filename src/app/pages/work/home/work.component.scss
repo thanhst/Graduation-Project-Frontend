@@ -1,0 +1,44 @@
+.main-container{
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+    width:100%;
+}
+.function-container{
+    display: flex;
+    width: 100%;
+    padding:20px 0px;
+    border-radius: 10px;
+    background-color: white;
+    justify-content: space-around;
+}
+.class-preview-container{
+    display:block;
+}
+.class-preview-header{
+    display:flex;
+    justify-content: space-between;
+    margin-bottom:20px;
+}
+.header{
+    font-weight: bold;
+    opacity: 50%;
+}
+.link-all{
+    color: #3649F9;
+}
+
+.rectangle-color-meeting{
+    background-color: #FFF3E6;
+    border-radius: 10px;
+    padding:20px;
+    width:10rem;
+    height:10rem;
+}
+.rectangle-color-work{
+    background-color: #A8DBFF;
+    border-radius: 10px;
+    padding:20px;
+    width:10rem;
+    height:10rem;
+}

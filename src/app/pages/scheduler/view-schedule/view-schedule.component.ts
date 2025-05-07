@@ -2,24 +2,34 @@ import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { FlagService } from '../../../core/services/flag/flag.service';
 
 @Component({
   selector: 'app-view-schedule',
-  imports: [CommonModule,ReactiveFormsModule,RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './view-schedule.component.html',
   styleUrl: './view-schedule.component.scss'
 })
 export class ViewScheduleComponent {
   form: FormGroup;
-  isTeacher:boolean = true;
+  isTeacher: boolean = true;
 
-  constructor(private route: Router, private fb: FormBuilder, private location:Location) {
+  constructor(private route: Router, private fb: FormBuilder
+    , private location: Location, private flagService: FlagService) {
+    this.flagService.setActiveScheduler(true);
+    this.flagService.setActiveSchedulerNotification(true);
+    this.flagService.setActiveSearch(false);
+    this.flagService.setActiveSidebarRight(true);
+    this.flagService.setTitle("Scheduler");
+    this.flagService.setActiveNotif(false);
+
+
     this.form = this.fb.group(
       {
-        idRoom:[''],
+        idRoom: [''],
         title: ['', [Validators.required]],
         password: [''],
-        date: [null,[Validators.required]],
+        date: [null, [Validators.required]],
         classname: [''],
         description: ['']
       })
@@ -27,10 +37,10 @@ export class ViewScheduleComponent {
   }
   numbers = [0, 1, 2, 3, 4];
 
-  goBack(){
+  goBack() {
     this.location.back();
   }
-  
+
   onSubmit() {
     this.form.markAllAsTouched();
     if (this.form.valid) {

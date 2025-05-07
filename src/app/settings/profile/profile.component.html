@@ -1,0 +1,80 @@
+<div class="bg-white pt-[2rem] pb-[2rem] ps-[3rem] pe-[3rem] rounded-[10px] w-[75vw] flex flex-col gap-5">
+    <div class="flex justify-end">
+        <button class="btn-edit" (click)="onChangeEdit()">
+            Edit
+        </button>
+    </div>
+    <form [formGroup]="form" id="form" class="flex flex-col gap-[2rem]" method="post" (ngSubmit)="onSubmit()">
+        <div class="flex relative justify-between">
+            <label for="fullname" class="flex-1">Fullname</label>
+            <div class="flex-3 flex">
+                <input formControlName="fullname" id="fullname" name="fullname" class="input flex-3" type="text"
+                    placeholder="Fullname">
+                <div class="absolute top-full">
+                    <p class="error-warning"
+                        *ngIf="form.controls['fullname'].invalid && form.controls['fullname'].touched">
+                        Invalid fullname. </p>
+                </div>
+            </div>
+        </div>
+        <div class="flex relative justify-between">
+            <label for="title" class="flex-1">Email</label>
+            <div class="flex-3 flex">
+                <input formControlName="email" id="email" name="email" class="input flex-3" type="text"
+                    placeholder="Email">
+                <div class="absolute top-full">
+                    <p class="error-warning" *ngIf="form.controls['email'].invalid && form.controls['email'].touched">
+                        Invalid email. </p>
+                </div>
+            </div>
+        </div>
+        <div class="flex relative justify-between" [class.deactive]="!isEditForm">
+            <label for="title" class="flex-1">Current password</label>
+            <div class="flex-3 flex">
+                <input formControlName="currentPassword" id="currentPassword" name="currentPassword"
+                    class="input flex-3" type="password" placeholder="Current password">
+                <div class="absolute top-full">
+                    <p class="error-warning"
+                        *ngIf="form.controls['currentPassword'].invalid && form.controls['currentPassword'].touched">
+                        Invalid current password. </p>
+                </div>
+            </div>
+        </div>
+        <div class="flex relative justify-between" [class.deactive]="!isEditForm">
+            <label for="title" class="flex-1">New password</label>
+            <div class="flex-3 flex">
+                <input formControlName="newPassword" id="newPassword" name="newPassword" class="input flex-3"
+                    type="password" placeholder="New password">
+                <div class="absolute top-full">
+                    <p class="error-warning" *ngIf="form.controls['newPassword'].touched && (form.controls['newPassword'].invalid || form.errors?.['checkNewPassword'])">
+                        {{ form.controls['newPassword'].invalid
+                        ? ' Invalid New password.'
+                        : form.errors?.['checkNewPassword']
+                        ? 'The new password must be difference with current password.'
+                        : null }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="flex relative justify-between" [class.deactive]="!isEditForm">
+            <label for="title" class="flex-1">Re password</label>
+            <div class="flex-3 flex">
+                <input formControlName="rePassword" id="rePassword" name="rePassword" class="input flex-3"
+                    type="password" placeholder="Re password">
+                <div class="absolute top-full">
+                    <p class="error-warning" *ngIf="form.controls['rePassword'].touched && (form.controls['rePassword'].invalid || form.errors?.['checkPassword'])">
+                        {{
+                        form.controls['rePassword'].invalid
+                        ? 'Invalid re password.'
+                        : form.errors?.['checkPassword']
+                        ? 'The confirmation password does not match the original password.'
+                        : null
+                        }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-center">
+            <Button form="form" class="btn-submit">Submit</Button>
+        </div>
+    </form>
+</div>
