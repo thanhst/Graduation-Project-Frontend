@@ -5,7 +5,7 @@ import { FlagService } from '../../../core/services/flag/flag.service';
   selector: 'app-scheduler-shared',
   imports: [CommonModule],
   templateUrl: './scheduler.component.html',
-  styleUrl: './scheduler.component.scss'
+  styleUrl: './scheduler.component.scss',
 })
 export class SchedulerComponent {
   isActiveScheduler:boolean =true;

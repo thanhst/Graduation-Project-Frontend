@@ -7,7 +7,7 @@ import { SchedulerComponent as SchedulerCpt } from '../../../shared/component/sc
   selector: 'app-scheduler',
   imports: [SchedulerCpt,RouterLink,CommonModule],
   templateUrl: './scheduler.component.html',
-  styleUrl: './scheduler.component.scss'
+  styleUrl: './scheduler.component.scss',
 })
 export class SchedulerComponent {
   constructor(private flagService:FlagService){

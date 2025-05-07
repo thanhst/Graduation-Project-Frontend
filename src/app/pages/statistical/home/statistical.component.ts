@@ -9,7 +9,7 @@ import { PaginationComponent } from "../../../shared/component/pagination/pagina
   selector: 'app-home',
   imports: [ReactiveFormsModule, CommonModule, PaginationComponent, RouterModule],
   templateUrl: './statistical.component.html',
-  styleUrl: './statistical.component.scss'
+  styleUrl: './statistical.component.scss',
 })
 export class StatisticalComponent {
   myRooms: any[] = [];

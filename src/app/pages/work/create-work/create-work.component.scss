@@ -1,0 +1,21 @@
+.create-work-container{
+    color: #047DF6;
+
+}
+.create-work-function{
+    display: flex;
+    justify-content: space-between;
+}
+.form-create-work{
+    display:flex;
+    flex-direction: column;
+    gap:2rem;
+    padding:2rem;
+    border-radius: 10px;
+    background-color: white;
+}
+.title-page{
+    font-size: 1.2rem;
+    color: black;
+    text-align: center;
+}

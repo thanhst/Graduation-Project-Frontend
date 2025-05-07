@@ -8,7 +8,7 @@ import { ClassPreviewComponent } from "../../../shared/component/class-preview/c
   selector: 'app-work',
   imports: [ClassPreviewComponent, CommonModule,RouterLink],
   templateUrl: './work.component.html',
-  styleUrl: './work.component.scss'
+  styleUrl: './work.component.scss',
 })
 export class WorkComponent {
   classPreviews = Array.from({ length: 4 }, () => {
@@ -21,11 +21,11 @@ export class WorkComponent {
     };
   });
   constructor(private flagService:FlagService){
+    this.flagService.setTitle("Work");
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(false);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setActiveSearch(false);
-    this.flagService.setTitle("Work");
     this.flagService.setActiveNotif(true);
   }
 }

@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    gap:2rem;
 }
 .notification-header{
     display: flex;
@@ -17,6 +18,10 @@
     align-items: center;
     color:#72A0BE;
 }
-.notification-content{
-    @include button(auto,auto,10px,black,10px,(0,0,0,0.2),1px solid (0,0,0,0.2),null)
+.notifications{
+    display:flex;
+    flex-direction: column;
+    height:90%;
+    gap:2rem;
+    overflow-y: scroll;
 }

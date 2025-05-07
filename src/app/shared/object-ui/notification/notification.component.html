@@ -1,1 +1,20 @@
-<p>notification works!</p>
+<div class="notification-content">
+    <div class="flex justify-between">
+        <div class="classname">
+            {{ className }}
+        </div>
+        <div class="flex gap-3">
+            <div class="date">{{ title }}</div>
+        </div>
+    </div>
+
+    <div [ngClass]="
+    type === 'success' ? 'text-green' :
+    type === 'warning' ? 'text-warning' :
+    'text-info'">
+        {{ title }}
+    </div>
+    <div class="description text-smaller">
+        {{ description }}
+    </div>
+</div>

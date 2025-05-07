@@ -1,0 +1,36 @@
+@use 'scss/mixin' as *;
+@use 'scss/variables' as *;
+
+.notification-content{
+    @include button(auto,auto,1rem,black,10px,rgba(231, 231, 231, 0.2),1px solid rgba(0, 0, 0, 0.1),null)
+}
+.notification-content:hover{
+    font-weight: normal;
+}
+.notification-title{
+    font-weight: bold;
+}
+.text-green{
+    color: $green;
+}
+.text-yellow{
+    color: $yellow;
+}
+.text-blue{
+    color:$blue;
+}
+.title{
+    font-size:1.4rem;
+}
+.classname{
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+.description{
+    display:block;
+    text-align: right;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

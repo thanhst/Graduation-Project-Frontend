@@ -9,7 +9,7 @@ import { FlagService } from '../../../core/services/flag/flag.service';
   selector: 'app-view-statistical',
   imports: [ReactiveFormsModule, CommonModule, NgChartsModule  ],
   templateUrl: './view-statistical.component.html',
-  styleUrl: './view-statistical.component.scss'
+  styleUrl: './view-statistical.component.scss',
 })
 export class ViewStatisticalComponent {
   pieChartData: ChartData<'pie', number[], string | string[]> = {

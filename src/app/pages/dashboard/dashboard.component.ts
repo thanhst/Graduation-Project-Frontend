@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FlagService } from '../../core/services/flag/flag.service';
 import { ClassPreviewComponent } from "../../shared/component/class-preview/class-preview.component";
@@ -8,21 +8,22 @@ import { ClassPreviewComponent } from "../../shared/component/class-preview/clas
   selector: 'app-dashboard',
   imports: [RouterLink, CommonModule, ClassPreviewComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  constructor(private route: Router, private flagService: FlagService) {
+  constructor(private route: Router, private flagService: FlagService, private cdRef: ChangeDetectorRef) {
+    const username = "Hehe";
+    const title = `Welcome ${username}!`;
+    this.flagService.setTitle(title);
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSearch(false);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setActiveNotif(false);
-
-
-    const username = "Hehe";
-    const title = `Welcome ${username}!`;
-    this.flagService.setTitle(title);
   }
+  ngOnInit(): void {
+  }
+
   classPreviews = Array.from({ length: 4 }, () => {
     return {
       id: "idClass",

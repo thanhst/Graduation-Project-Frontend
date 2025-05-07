@@ -8,7 +8,7 @@ import { PaginationComponent } from '../../../shared/component/pagination/pagina
   selector: 'app-list-scheduler-user',
   imports: [RouterLink, CommonModule, PaginationComponent],
   templateUrl: './list-scheduler-user.component.html',
-  styleUrl: './list-scheduler-user.component.scss'
+  styleUrl: './list-scheduler-user.component.scss',
 })
 export class ListSchedulerUserComponent {
 

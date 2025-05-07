@@ -2,10 +2,9 @@
 @use 'scss/variables' as *;
 
 .class-preview {
-    border-top: 10px;
-    border-color: #3649F9;
     display:block;
-    @include button(auto,auto,20px,black,10px,white,null)
+    @include button(auto,auto,20px,black,10px,white,null);
+    border-top: 10px solid #3649F9 !important;
 }
 
 .class-preview-header {

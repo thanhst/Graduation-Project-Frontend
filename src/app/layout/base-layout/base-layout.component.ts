@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Type } from '@angular/core';
+import { ChangeDetectorRef, Component, Type } from '@angular/core';
 import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { User } from '../../core/models/user/user';
 import { FlagService } from '../../core/services/flag/flag.service';
@@ -7,27 +7,26 @@ import { FlagService } from '../../core/services/flag/flag.service';
   selector: 'app-base-layout',
   imports: [RouterOutlet, RouterLink, RouterModule, CommonModule],
   templateUrl: './base-layout.component.html',
-  styleUrl: './base-layout.component.scss'
+  styleUrl: './base-layout.component.scss',
 })
 export class BaseLayoutComponent {
-  constructor(private router: Router, public flagService: FlagService) { }
-
-  schedulerComponent: Type<any> | null = null;
-  schedulerNotifComponent: Type<any> | null = null;
-  notificationComponent:Type<any> | null = null;
-
-  user: User = new User();
-  title: string = "";
-
-  //init
-  ngOnInit(): void {
+  constructor(private router: Router, public flagService: FlagService,
+    private cdRef: ChangeDetectorRef  ) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSearch(true);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setActiveNotif(false);
+  }
 
+  schedulerComponent: Type<any> | null = null;
+  schedulerNotifComponent: Type<any> | null = null;
+  notificationComponent: Type<any> | null = null;
 
+  user: User = new User();
+
+  //init
+  ngOnInit(): void {
     this.flagService.isActiveScheduler$.subscribe((isActive) => {
       if (isActive) {
         this.loadScheduler();
@@ -35,22 +34,26 @@ export class BaseLayoutComponent {
         this.unloadScheduler();
       }
     });
-    this.flagService.isActiveNotification$.subscribe((isActive)=>{
-      if(isActive){
+    this.flagService.isActiveNotification$.subscribe((isActive) => {
+      if (isActive) {
         this.loadNotif();
-      }else{
+      } else {
         this.unloadNotif();
       }
     })
 
-    this.flagService.isActiveSchedulerNotification$.subscribe((isActive)=>{
-      if(isActive){
+    this.flagService.isActiveSchedulerNotification$.subscribe((isActive) => {
+      if (isActive) {
         this.loadSchedulerNotif();
       }
-      else{
+      else {
         this.unloadNotif();
       }
     })
+
+    this.flagService.title$.subscribe(title => {
+      this.cdRef.detectChanges();
+    });
   }
   //destroy
   ngOnDestroy(): void {
@@ -73,23 +76,23 @@ export class BaseLayoutComponent {
     this.schedulerComponent = null;
   }
 
-  async loadNotif(){
-    if(!this.notificationComponent){
-      const {NotificationComponent} = await import('../../shared/component/notification/notification.component');
+  async loadNotif() {
+    if (!this.notificationComponent) {
+      const { NotificationComponent } = await import('../../shared/component/notification/notification.component');
       this.notificationComponent = NotificationComponent;
     }
   }
-  unloadNotif(){
+  unloadNotif() {
     this.notificationComponent = null;
   }
 
-  async loadSchedulerNotif(){
+  async loadSchedulerNotif() {
     if (!this.schedulerNotifComponent) {
       const { SchedulerNotifComponent } = await import('../../shared/component/scheduler-notif/scheduler-notif.component');
       this.schedulerNotifComponent = SchedulerNotifComponent;
     }
   }
-  unloadSchedulerNotif(){
+  unloadSchedulerNotif() {
     this.schedulerNotifComponent = null;
   }
 

@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { FlagService } from '../../core/services/flag/flag.service';
+import { FlagService } from '../../../core/services/flag/flag.service';
 
 @Component({
   selector: 'app-profile',
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrl: './profile.component.scss',
 })
 export class ProfileComponent {
   form: FormGroup;

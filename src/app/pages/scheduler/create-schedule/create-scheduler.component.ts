@@ -8,7 +8,7 @@ import { FlagService } from '../../../core/services/flag/flag.service';
   selector: 'app-create-scheduler',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './create-scheduler.component.html',
-  styleUrl: './create-scheduler.component.scss'
+  styleUrl: './create-scheduler.component.scss',
 })
 export class CreateSchedulerComponent {
   form: FormGroup;

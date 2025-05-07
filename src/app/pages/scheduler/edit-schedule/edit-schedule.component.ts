@@ -8,7 +8,7 @@ import { FlagService } from '../../../core/services/flag/flag.service';
   selector: 'app-edit-schedule',
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './edit-schedule.component.html',
-  styleUrl: './edit-schedule.component.scss'
+  styleUrl: './edit-schedule.component.scss',
 })
 export class EditScheduleComponent {
   form: FormGroup;

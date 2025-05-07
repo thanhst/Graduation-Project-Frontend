@@ -6,108 +6,141 @@
 
 :root {
     --primary: #1E3A8A;
-    --blur : #F4F4F4;
+    --blur: #F4F4F4;
     --placeholder_text: #9d9d9d;
 }
 
-body{
+body {
     background-color: #F5F5F5 !important;
 }
+
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
 
 .input-field {
     @apply w-full p-4 mt-2 border rounded-lg border-gray-300;
     @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
 }
-.input-field::placeholder{
+
+.input-field::placeholder {
     color: var(--placeholder_text),
 }
-.error-warning{
+
+.error-warning {
     text-align: left;
-    color:red;
-    font-size:0.8rem;
+    color: red;
+    font-size: 0.8rem;
     opacity: 0.8;
-    margin-top:5px;
-}
-.error-warning::before{
-    content:"*";
-    padding:5px;
+    margin-top: 5px;
 }
 
-.btn-submit{
-    @include button(auto,auto,0.8rem 3rem 0.8rem 3rem,white,10px,$blue,1px solid white);
-}
-.btn-submit:hover{
-    font-weight:normal;
+.error-warning::before {
+    content: "*";
+    padding: 5px;
 }
 
-.btn-submit-sm{
-    @include button(auto,auto,10px 20px 10px 20px,white,10px,$blue,1px solid white);
-}
-.btn-submit-sm:hover{
-    font-weight:normal;
+.btn-submit {
+    @include button(auto, auto, 0.8rem 3rem 0.8rem 3rem, white, 10px, $blue, 1px solid white);
 }
 
-.btn{
-    @include button(auto,auto,0px,white,10px,transparent,null);
-}
-.btn:hover{
-    font-weight:normal;
+.btn-submit:hover {
+    font-weight: normal;
 }
 
-.btn-view{
-    @include button(auto,auto,10px 20px 10px 20px,white,10px,#16824C,null);
-    font-size:0.8rem;
-}
-.btn-view:hover{
-    font-weight:normal;
+.btn-submit-sm {
+    @include button(auto, auto, 10px 20px 10px 20px, white, 10px, $blue, 1px solid white);
 }
 
-.btn-edit{
-    @include button(auto,auto,10px 20px 10px 20px,black,10px,#FBCA8D,null);
-    font-size:0.8rem;
-}
-.btn-edit:hover{
-    font-weight:normal;
+.btn-submit-sm:hover {
+    font-weight: normal;
 }
 
-.btn-remove{
-    @include button(auto,auto,10px 20px 10px 20px,white,10px,#FF6E64,null);
-    font-size:0.8rem;
-}
-.btn-remove:hover{
-    font-weight:normal;
+.btn {
+    @include button(auto, auto, 0px, white, 10px, transparent, null);
 }
 
-.input-text{
-    @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
-}
-.input-combobox{
-    @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
-}
-.input{
-    @include input(auto,auto,10px 15px 10px 15px,black,10px,white,1px solid $stroke,$gray)
+.btn:hover {
+    font-weight: normal;
 }
 
-.box{
-    width:auto;
-    height:auto;
-    padding:20px;
+.btn-view {
+    @include button(auto, auto, 10px 20px 10px 20px, white, 10px, #16824C, null);
+    font-size: 0.8rem;
+}
+
+.btn-view:hover {
+    font-weight: normal;
+}
+
+.btn-edit {
+    @include button(auto, auto, 10px 20px 10px 20px, black, 10px, #FBCA8D, null);
+    font-size: 0.8rem;
+}
+
+.btn-edit:hover {
+    font-weight: normal;
+}
+
+.btn-remove {
+    @include button(auto, auto, 10px 20px 10px 20px, white, 10px, #FF6E64, null);
+    font-size: 0.8rem;
+}
+
+.btn-remove:hover {
+    font-weight: normal;
+}
+
+.input-text {
+    @include input(auto, auto, 10px 15px 10px 15px, black, 10px, white, 1px solid $stroke, $gray)
+}
+
+.input-combobox {
+    @include input(auto, auto, 10px 15px 10px 15px, black, 10px, white, 1px solid $stroke, $gray)
+}
+
+.input {
+    @include input(auto, auto, 10px 15px 10px 15px, black, 10px, white, 1px solid $stroke, $gray)
+}
+
+.box {
+    width: auto;
+    height: auto;
+    padding: 20px;
     border-radius: 10px;
-    border:1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     background-color: #F3F3F3;
 }
 
-.deactive{
+.deactive {
     opacity: 40%;
 }
-.active{
+
+.active {
     opacity: 100%;
 }
 
-.text-bigger{
-    font-size:1.2rem;
+.text-bigger {
+    font-size: 1.2rem;
 }
 
-.text-smaller{
+.text-smaller {
     font-size: 0.8rem;
 }

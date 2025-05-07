@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class FlagService {
   // Cờ trạng thái cho giao diện
-  private titleSubject = new BehaviorSubject<string>('');
+  private titleSubject = new BehaviorSubject<string>('title');
   title$ = this.titleSubject.asObservable();
 
   private isActiveSchedulerSubject = new BehaviorSubject<boolean>(true);

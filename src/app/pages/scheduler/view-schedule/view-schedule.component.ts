@@ -8,7 +8,7 @@ import { FlagService } from '../../../core/services/flag/flag.service';
   selector: 'app-view-schedule',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './view-schedule.component.html',
-  styleUrl: './view-schedule.component.scss'
+  styleUrl: './view-schedule.component.scss',
 })
 export class ViewScheduleComponent {
   form: FormGroup;

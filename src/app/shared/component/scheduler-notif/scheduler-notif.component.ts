@@ -8,7 +8,7 @@ import { FlagService } from '../../../core/services/flag/flag.service';
   selector: 'app-scheduler-notif',
   imports: [CommonModule,RouterLink, RouterLinkActive],
   templateUrl: './scheduler-notif.component.html',
-  styleUrl: './scheduler-notif.component.scss'
+  styleUrl: './scheduler-notif.component.scss',
 })
 export class SchedulerNotifComponent {
   selectedDate: Date = new Date();
