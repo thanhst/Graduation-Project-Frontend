@@ -15,7 +15,6 @@ export class ProfileComponent {
 
   constructor(private fb: FormBuilder, private flagService:FlagService) {
     this.flagService.setActiveScheduler(true);
-    this.flagService.setActiveSearch(false);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(false);
     this.flagService.setTitle("Settings");

@@ -10,8 +10,11 @@ import { ProfileComponent } from './pages/settings/profile/profile.component';
 import { StatisticalComponent } from './pages/statistical/home/statistical.component';
 import { ViewStatisticalComponent } from './pages/statistical/view-statistical/view-statistical.component';
 import { AllWorkComponent } from './pages/work/all-work/all-work.component';
+import { HomeClassComponent } from './pages/work/classroom/home-class/home-class.component';
+import { LayoutComponent } from './pages/work/classroom/layout/layout.component';
 import { CreateWorkComponent } from './pages/work/create-work/create-work.component';
 import { WorkComponent } from './pages/work/home/work.component';
+import { JoinWorkComponent } from './pages/work/join-work/join-work.component';
 export const routes: Routes = [
     { path: 'login', loadComponent: () => import('../app/pages/auth/user-login/user-login.component').then(m => m.UserLoginComponent) },
     { path: 'register', loadComponent: () => import('../app/pages/auth/user-register/user-register.component').then(m => m.UserRegisterComponent) },
@@ -33,7 +36,7 @@ export const routes: Routes = [
 
 
             { path: 'scheduler/create', component: CreateSchedulerComponent },
-            { path: 'scheduler/list-your', component: ListSchedulerUserComponent },
+            { path: 'scheduler/all', component: ListSchedulerUserComponent },
             { path: 'scheduler/:id/view', component: ViewScheduleComponent },
             { path: 'scheduler/:id/edit', component: EditScheduleComponent },
             { path: 'scheduler', component: SchedulerComponent },
@@ -43,9 +46,13 @@ export const routes: Routes = [
             { path: 'statistical/:id/chart', component: ViewStatisticalComponent },
             { path: 'statistical', component: StatisticalComponent },
 
-            {path:'work/:id/view',component:CreateWorkComponent},
+            {path:'work/join',component:JoinWorkComponent},
+            {path:'work/:id/class',component:LayoutComponent,children:[
+                {path:'home',component:HomeClassComponent},
+                {path:'**',redirectTo:'home'}
+            ]},
             {path:'work/create',component:CreateWorkComponent},
-            {path:'work/all-work',component:AllWorkComponent},
+            {path:'work/all',component:AllWorkComponent},
             {path:'work',component:WorkComponent},
             { path: '**', redirectTo: 'dashboard' }
         ]

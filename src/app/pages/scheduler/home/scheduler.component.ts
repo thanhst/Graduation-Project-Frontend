@@ -13,7 +13,6 @@ export class SchedulerComponent {
   constructor(private flagService:FlagService){
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(true);
-    this.flagService.setActiveSearch(true);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setTitle("Scheduler");
     this.flagService.setActiveNotif(false);

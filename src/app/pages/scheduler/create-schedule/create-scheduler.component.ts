@@ -17,7 +17,6 @@ export class CreateSchedulerComponent {
   constructor(private route: Router, private fb: FormBuilder,
     private location: Location, private flagService: FlagService) {
     this.flagService.setActiveScheduler(true);
-    this.flagService.setActiveSearch(false);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setTitle("Scheduler");

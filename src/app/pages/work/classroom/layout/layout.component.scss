@@ -1,0 +1,51 @@
+@use 'scss/mixin' as *;
+@use 'scss/variables' as *;
+.layout-container{
+    display: flex;
+    width:75vw;
+    position: absolute;
+    top:0;
+}
+.layout-content{
+    margin-top:15vh;
+}
+.menu-class{
+    position: fixed;
+    width: 10vw;
+    height:100vh;
+    right: 0;
+    background-color: white;
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+.menu-class-ul{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:1rem;
+    font-size:0.8rem;
+}
+.menu-class-ul>li{
+    width: 100%;
+}
+.class-deactive{
+    display: block;
+    @include button(auto,auto,10px,#6D7C90,10px,#D4E0F0,null);
+}
+.class-deactive:hover{
+    font-weight: normal;
+}
+
+.class-active{
+    display: block;
+    @include button(auto,auto,10px,white,10px,#3649F9,1px solid #1EFE38);
+}
+.class-active path{
+    fill:white;
+}
+.class-active:hover{
+    font-weight: normal;
+}

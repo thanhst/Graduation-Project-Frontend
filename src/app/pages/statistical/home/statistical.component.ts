@@ -20,7 +20,6 @@ export class StatisticalComponent {
   constructor(private route: Router, private flagService: FlagService) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
-    this.flagService.setActiveSearch(true);
     this.flagService.setActiveSidebarRight(false);
     this.flagService.setTitle("Statistical");
 

@@ -25,7 +25,6 @@ export class WorkComponent {
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(false);
     this.flagService.setActiveSidebarRight(true);
-    this.flagService.setActiveSearch(false);
     this.flagService.setActiveNotif(true);
   }
 }

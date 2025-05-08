@@ -12,8 +12,6 @@ export class FlagService {
   private isActiveSchedulerSubject = new BehaviorSubject<boolean>(true);
   isActiveScheduler$ = this.isActiveSchedulerSubject.asObservable();
 
-  private isActiveSearchSubject = new BehaviorSubject<boolean>(true);
-  isActiveSearch$ = this.isActiveSearchSubject.asObservable();
 
   private isActiveSidebarRightSubject = new BehaviorSubject<boolean>(true);
   isActiveSidebarRight$ = this.isActiveSidebarRightSubject.asObservable();
@@ -28,10 +26,6 @@ export class FlagService {
   // Các setter và getter để cập nhật và lấy giá trị của các cờ
   setActiveScheduler(value: boolean) {
     this.isActiveSchedulerSubject.next(value);
-  }
-
-  setActiveSearch(value: boolean) {
-    this.isActiveSearchSubject.next(value);
   }
 
   setActiveSidebarRight(value: boolean) {

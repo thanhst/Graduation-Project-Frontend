@@ -51,7 +51,6 @@ export class ViewStatisticalComponent {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(false);
-    this.flagService.setActiveSearch(false);
     this.flagService.setTitle("Statistical");
   }
 

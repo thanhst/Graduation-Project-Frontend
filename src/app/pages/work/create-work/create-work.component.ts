@@ -17,13 +17,12 @@ export class CreateWorkComponent {
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(false);
     this.flagService.setActiveSidebarRight(true);
-    this.flagService.setActiveSearch(false);
     this.flagService.setActiveNotif(true);
 
     this.form = fb.group({
       classname: ['', Validators.required],
       description: ['', Validators.required],
-      classLink:['']
+      link:['']
     })
   }
 
@@ -31,6 +30,10 @@ export class CreateWorkComponent {
     this.location.back()
   }
   onSubmit(){
-    
+    this.form.markAllAsTouched();
+    if(this.form.invalid){
+      return;
+    }
+    console.log('Hello');
   }
 }

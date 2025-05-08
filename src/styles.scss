@@ -138,9 +138,19 @@ body {
 }
 
 .text-bigger {
-    font-size: 1.2rem;
+    font-size: 1.2rem !important;
 }
 
 .text-smaller {
-    font-size: 0.8rem;
+    font-size: 0.8rem !important;
+}
+
+.text-green{
+    color: $green;
+}
+.text-yellow{
+    color: $yellow;
+}
+.text-blue{
+    color:$blue;
 }

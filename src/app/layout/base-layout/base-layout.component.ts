@@ -14,7 +14,6 @@ export class BaseLayoutComponent {
     private cdRef: ChangeDetectorRef  ) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
-    this.flagService.setActiveSearch(true);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setActiveNotif(false);
   }

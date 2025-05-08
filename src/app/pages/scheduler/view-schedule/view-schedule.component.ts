@@ -18,7 +18,6 @@ export class ViewScheduleComponent {
     , private location: Location, private flagService: FlagService) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
-    this.flagService.setActiveSearch(false);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setTitle("Scheduler");
     this.flagService.setActiveNotif(false);

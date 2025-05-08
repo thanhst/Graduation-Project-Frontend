@@ -20,7 +20,6 @@ export class ListSchedulerUserComponent {
   constructor(private route: Router, private flagService: FlagService) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
-    this.flagService.setActiveSearch(true);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setTitle("Scheduler");
     this.flagService.setActiveNotif(false);

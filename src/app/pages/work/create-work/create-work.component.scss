@@ -1,3 +1,5 @@
+@use 'scss/mixin.scss' as *;
+@use 'scss/variables' as *;
 .create-work-container{
     color: #047DF6;
 
@@ -18,4 +20,7 @@
     font-size: 1.2rem;
     color: black;
     text-align: center;
+}
+.btn-copy{
+    @include button(auto, auto, 10px, white, 10px,$gray,null);
 }

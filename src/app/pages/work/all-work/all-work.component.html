@@ -1,1 +1,13 @@
-<p>all-work works!</p>
+<div class="all-works-container">
+    <div class="grid grid-cols-3 gap-4 grid-rows-[repeat(2,_minmax(0,_1fr))]">
+        <div *ngFor="let classPreview of paginatedContents">
+            <app-class-preview [classID]="classPreview.id" [classname]="classPreview.classname"
+                [descriptions]="classPreview.description" [imageSrcs]="classPreview.src"
+                [username]="classPreview.username"></app-class-preview>
+        </div>
+    </div>
+</div>
+<div class="flex justify-center">
+    <app-pagination [totalItems]="classPreviews.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)"></app-pagination>
+</div>
