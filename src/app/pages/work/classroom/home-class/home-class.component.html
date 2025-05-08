@@ -1,20 +1,28 @@
 <div class="home-container">
     <div class="infor-container">
-        <div class="flex flex-col gap-3">
-            {{ 'value' }}
-            Student
-        </div>
-        <div class="flex flex-col gap-3">
-            {{ 'value' }}
-            Request join class
-        </div>
+        <a [routerLink]="['../all-members']"  class="flex flex-col gap-3 justify-center items-center box-sum">
+            <div class="number">{{ '64' }}</div>
+            <div>Student</div>
+        </a>
+        <a [routerLink]="['../all-members/request']"  class="flex flex-col gap-3 justify-center items-center box-request">
+            <div class="number">{{ '32' }}</div>
+            <div>
+                Request join class
+            </div>
+        </a>
     </div>
-    <div class="meeting-today">
+    <div class="meeting-today flex flex-col gap-4">
         <div class="meeting-today-header">
             All room meeting today
         </div>
-        <div class="flex flex-col gap-3">
-            <div class="box"></div>
+        <div class="grid grid-rows-2 gap-3">
+            <ng-container *ngFor="let room of paginatedContents">
+                <app-room [roomId]="room.id" [roomTitle]="room.title" [startTime]="room.date"></app-room>
+            </ng-container>
         </div>
     </div>
+</div>
+<div class="flex justify-center">
+    <app-pagination [totalItems]="roomPreviews().length" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+        (pageChange)="onPageChange($event)"></app-pagination>
 </div>

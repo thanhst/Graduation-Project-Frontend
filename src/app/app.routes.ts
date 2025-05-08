@@ -10,8 +10,11 @@ import { ProfileComponent } from './pages/settings/profile/profile.component';
 import { StatisticalComponent } from './pages/statistical/home/statistical.component';
 import { ViewStatisticalComponent } from './pages/statistical/view-statistical/view-statistical.component';
 import { AllWorkComponent } from './pages/work/all-work/all-work.component';
+import { AllMemberComponent } from './pages/work/classroom/all-member/all-member.component';
 import { HomeClassComponent } from './pages/work/classroom/home-class/home-class.component';
 import { LayoutComponent } from './pages/work/classroom/layout/layout.component';
+import { RequestRoomComponent } from './pages/work/classroom/request-room/request-room.component';
+import { SettingsComponent } from './pages/work/classroom/settings/settings.component';
 import { CreateWorkComponent } from './pages/work/create-work/create-work.component';
 import { WorkComponent } from './pages/work/home/work.component';
 import { JoinWorkComponent } from './pages/work/join-work/join-work.component';
@@ -49,6 +52,9 @@ export const routes: Routes = [
             {path:'work/join',component:JoinWorkComponent},
             {path:'work/:id/class',component:LayoutComponent,children:[
                 {path:'home',component:HomeClassComponent},
+                {path:'all-members',component:AllMemberComponent},
+                {path:'all-members/request',component:RequestRoomComponent},
+                {path:'settings',component:SettingsComponent},
                 {path:'**',redirectTo:'home'}
             ]},
             {path:'work/create',component:CreateWorkComponent},

@@ -1,1 +1,30 @@
-<p>settings works!</p>
+<div class="settings-container flex flex-col gap-3">
+    <div class="flex justify-end">
+        <button class="btn-remove">Remove</button>
+    </div>
+    <form [formGroup]="form" class="bg-white rounded-[10px] p-[2rem]">
+        <div class="flex flex-col gap-[2rem] relative justify-between">
+            <div class="flex gap-2">
+                <label for="classId" class="flex-1">Class ID</label>
+                <div class="flex-3 flex">
+                    <input *ngIf="isTeacher" formControlName="classId" id="classId" name="classId" class="input flex-3" type="text"
+                        placeholder="Class id">
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <label for="classId" class="flex-1">Classname</label>
+                <div class="flex-3 flex">
+                    <input formControlName="className" id="classname" name="classname" class="input flex-3" type="text"
+                        placeholder="Classname">
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <label for="classId" class="flex-1">Created at</label>
+                <div class="flex-3 flex">
+                    <input *ngIf="isTeacher" formControlName="createdAt" id="createdAt" name="createdAt" class="input flex-3" type="text"
+                        placeholder="Created at">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,27 @@
+@use 'scss/mixin.scss' as *;
+
+.home-container{
+    width:100%;
+    background-color: white;
+    padding:2rem;
+    border-radius: 10px;
+    display:flex;
+    flex-direction: column;
+    gap:1rem;
+}
+.infor-container{
+    width:auto;
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:2rem;
+}
+.number{
+    font-size: 2rem;
+}
+
+.box-sum{
+    @include button(auto,auto,50px 20px 50px 20px,black,10px, #E5CBCB,null)
+}
+.box-request{
+    @include button(auto,auto,50px 20px 50px 20px,black,10px, #CBDCE5,null)
+}

@@ -1,5 +1,5 @@
-<div class="join-work-container flex flex-col gap-5">
-    <div class="join-work-function">
+<div class="all-members-container">
+    <div class="request-btn flex justify-start">
         <button (click)="goBack()" class="btn">
             <svg width="39" height="36" viewBox="0 0 39 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -8,25 +8,16 @@
             </svg>
         </button>
     </div>
-    <form [formGroup]="form" id="form" class="join-work-form" (ngSubmit)="onSubmit()" method="post">
-        <div class="title-page">Join class</div>
-        <div class="flex relative justify-between">
-            <label for="classname" class="flex-1">Classname</label>
-            <div class="flex-3 flex">
-                <input formControlName="classID" id="classID" name="classID" class="input flex-3" type="text"
-                    placeholder="Class id">
-                <div class="absolute top-full">
-                    <p class="error-warning"
-                        *ngIf="form.controls['classID'].invalid && form.controls['classID'].touched">
-                        Invalid classID. </p>
-                </div>
-            </div>
+    <div class="bg-white rounded-[10px] p-[2rem] flex flex-col gap-[3rem]">
+        <h1 class="text-bigger text-center font-bold">Waiting room</h1>
+        <div class="student-container" class="grid grid-rows-5 gap-3">
+            <ng-container *ngFor="let student of paginatedContents">
+                <app-user [src]="student.src" [username]="student.name" [type]="'request'"></app-user>
+            </ng-container>
         </div>
-        <div class="flex justify-center">
-            <button form="form" class="btn-view">
-                Join
-            </button>
-        </div>
-    </form>
-
+    </div>
+</div>
+<div class="flex justify-center">
+    <app-pagination [totalItems]="studentPreviews().length" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+        (pageChange)="onPageChange($event)"></app-pagination>
 </div>

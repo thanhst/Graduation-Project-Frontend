@@ -1,0 +1,9 @@
+<div class="box flex justify-between">
+    <div class="flex flex-col gap-0">
+        <div>{{ roomTitle }}</div>
+        <div class="text-smaller">Start at: {{ startTime | date :'HH:mm - dd/MM/yyyy' }}</div>
+    </div>
+    <div>
+        <button class="btn-view" (click)="onJoin()">Join</button>
+    </div>
+</div>

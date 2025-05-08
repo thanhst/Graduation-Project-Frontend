@@ -2,12 +2,13 @@
 @use 'scss/variables' as *;
 .layout-container{
     display: flex;
-    width:75vw;
+    width:65vw;
     position: absolute;
     top:0;
 }
 .layout-content{
-    margin-top:15vh;
+    margin-top:12vh;
+    width:100%;
 }
 .menu-class{
     position: fixed;

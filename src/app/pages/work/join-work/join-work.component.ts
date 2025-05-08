@@ -19,7 +19,7 @@ export class JoinWorkComponent {
     this.flagService.setActiveNotif(true);
     
     this.form = this.fb.group({
-      idClass: ['',Validators.required]
+      classID: ['',Validators.required]
     })
   }
 
