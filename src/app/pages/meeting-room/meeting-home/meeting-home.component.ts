@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-meeting-home',
-  imports: [CommonModule],
+  imports: [CommonModule,ReactiveFormsModule,RouterLink],
   templateUrl: './meeting-home.component.html',
   styleUrl: './meeting-home.component.scss'
 })

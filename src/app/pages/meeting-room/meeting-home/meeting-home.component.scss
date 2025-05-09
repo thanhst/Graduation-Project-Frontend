@@ -27,3 +27,31 @@
     cursor: pointer;
     border:1px solid rgb(199, 193, 193);
 }
+.create-meeting{
+    background-color: #ffffffc1;
+    padding:20px;
+    border-radius: 10px;
+}
+.menu{
+    background-color: #ffffffc1;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.menu>ul{
+    width:100%;
+    display:flex;
+    gap:20px;
+    justify-content: space-around;
+}
+.menu a{
+    display:block;
+    border-radius: 100%;
+    padding:20px;
+}
+.menu a:hover{
+    cursor: pointer;
+    border:1px solid rgba(0, 0, 0, 0.1);
+}
