@@ -9,6 +9,9 @@ export class FlagService {
   private titleSubject = new BehaviorSubject<string>('title');
   title$ = this.titleSubject.asObservable();
 
+  private isBackSubject = new BehaviorSubject<boolean>(false);
+  isBack$ = this.isBackSubject.asObservable();
+
   private isActiveSchedulerSubject = new BehaviorSubject<boolean>(true);
   isActiveScheduler$ = this.isActiveSchedulerSubject.asObservable();
 
@@ -42,5 +45,8 @@ export class FlagService {
 
   setActiveNotif(value:boolean){
     this.isActiveNotificationSubject.next(value);
+  }
+  setBack(value:boolean){
+    this.isBackSubject.next(value);
   }
 }

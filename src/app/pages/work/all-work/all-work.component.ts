@@ -12,12 +12,23 @@ import { PaginationComponent } from '../../../shared/component/pagination/pagina
 })
 export class AllWorkComponent {
   constructor(private flagService: FlagService) {
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+  }
+
+  setFlag(){
     this.flagService.setTitle("Work");
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(false);
     this.flagService.setActiveSidebarRight(false);
     this.flagService.setActiveNotif(true);
   }
+  
   classPreviews = Array.from({ length: 20 }, () => {
     return {
       id: "idClass",

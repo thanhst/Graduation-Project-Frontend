@@ -18,14 +18,23 @@ export class ListSchedulerUserComponent {
   itemsPerPage = 5;
 
   constructor(private route: Router, private flagService: FlagService) {
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+
+    this.generateMockData(23); // tạo 23 mục test
+  }
+  
+  setFlag(){
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setTitle("Scheduler");
     this.flagService.setActiveNotif(false);
-
-
-    this.generateMockData(23); // tạo 23 mục test
   }
 
   generateMockData(count: number) {

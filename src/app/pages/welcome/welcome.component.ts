@@ -73,6 +73,5 @@ export class WelcomeComponent {
     }
   }
   
-
   username: string = "Hello";
 }

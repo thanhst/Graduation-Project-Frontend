@@ -1,0 +1,38 @@
+<div class="w-full h-full p-[3rem]">
+    <div class="flex gap-[2rem]">
+        <div class="camera-preview relative">
+            <video #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"></video>
+            <div class="absolute relative">
+                <button (click)="toggleMicro()" class="absolute btn-media bottom-2 right-[4rem]" id="micro">
+                    <svg width="19" height="29" viewBox="0 0 19 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9.45825 1C8.49684 1 7.57481 1.38192 6.89499 2.06174C6.21517 2.74156 5.83325 3.66359 5.83325 4.625V14.2917C5.83325 15.2531 6.21517 16.1751 6.89499 16.8549C7.57481 17.5347 8.49684 17.9167 9.45825 17.9167C10.4197 17.9167 11.3417 17.5347 12.0215 16.8549C12.7013 16.1751 13.0833 15.2531 13.0833 14.2917V4.625C13.0833 3.66359 12.7013 2.74156 12.0215 2.06174C11.3417 1.38192 10.4197 1 9.45825 1V1Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M17.9167 11.875V14.2917C17.9167 16.535 17.0255 18.6864 15.4393 20.2726C13.853 21.8589 11.7016 22.75 9.45833 22.75C7.21504 22.75 5.06363 21.8589 3.47739 20.2726C1.89114 18.6864 1 16.535 1 14.2917V11.875"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9.45825 22.75V27.5833" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M4.625 27.5834H14.2917" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+                <button (click)="toggleCamera()" class="absolute btn-media bottom-2 right-[1rem]" id="camera">
+                    <svg width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24.0001 3.37665L16.6819 9.31821L24.0001 15.2598V3.37665Z" stroke="black"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M14.5909 1H3.09091C1.93613 1 1 2.06405 1 3.37662V15.2597C1 16.5723 1.93613 17.6364 3.09091 17.6364H14.5909C15.7457 17.6364 16.6818 16.5723 16.6818 15.2597V3.37662C16.6818 2.06405 15.7457 1 14.5909 1Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="flex gap-[2rem]">
+        <div class="create-meeting">
+
+        </div>
+        <div class="menu"></div>
+    </div>
+</div>

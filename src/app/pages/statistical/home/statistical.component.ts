@@ -18,12 +18,21 @@ export class StatisticalComponent {
   itemsPerPage = 5;
 
   constructor(private route: Router, private flagService: FlagService) {
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack == true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+    this.generateMockData(50); // tạo 23 mục test
+  }
+
+  setFlag() {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(false);
     this.flagService.setTitle("Statistical");
-
-    this.generateMockData(50); // tạo 23 mục test
   }
 
   generateMockData(count: number) {

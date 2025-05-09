@@ -21,6 +21,15 @@ export class WorkComponent {
     };
   });
   constructor(private flagService:FlagService){
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+  }
+  setFlag(){
     this.flagService.setTitle("Work");
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(false);

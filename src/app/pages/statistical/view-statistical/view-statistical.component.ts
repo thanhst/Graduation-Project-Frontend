@@ -48,6 +48,16 @@ export class ViewStatisticalComponent {
   lineChartLegend = true;
 
   constructor(private location: Location, private flagService: FlagService) {
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+  }
+
+  setFlag(){
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(false);

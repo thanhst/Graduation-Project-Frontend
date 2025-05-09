@@ -14,10 +14,13 @@ export class ProfileComponent {
   isEditForm: boolean = false;
 
   constructor(private fb: FormBuilder, private flagService:FlagService) {
-    this.flagService.setActiveScheduler(true);
-    this.flagService.setActiveSchedulerNotification(true);
-    this.flagService.setActiveSidebarRight(false);
-    this.flagService.setTitle("Settings");
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
 
     this.form = this.fb.group({
       fullname: ['', [Validators.required]],
@@ -32,6 +35,13 @@ export class ProfileComponent {
         this.checkNewPassword()
       ])
     })
+  }
+
+  setFlag(){
+    this.flagService.setActiveScheduler(true);
+    this.flagService.setActiveSchedulerNotification(true);
+    this.flagService.setActiveSidebarRight(false);
+    this.flagService.setTitle("Settings");
   }
 
   checkPassword(): ValidatorFn {

@@ -12,17 +12,27 @@ import { FlagService } from '../../../core/services/flag/flag.service';
 export class JoinWorkComponent {
   form: FormGroup;
   constructor(private flagService: FlagService, private fb: FormBuilder, private location:Location) {
-    this.flagService.setTitle("Work");
-    this.flagService.setActiveScheduler(false);
-    this.flagService.setActiveSchedulerNotification(false);
-    this.flagService.setActiveSidebarRight(true);
-    this.flagService.setActiveNotif(true);
-    
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+
     this.form = this.fb.group({
       classID: ['',Validators.required]
     })
   }
 
+  setFlag(){
+    this.flagService.setTitle("Work");
+    this.flagService.setActiveScheduler(false);
+    this.flagService.setActiveSchedulerNotification(false);
+    this.flagService.setActiveSidebarRight(true);
+    this.flagService.setActiveNotif(true);
+  }
+  
   goBack(){
     this.location.back();
   }

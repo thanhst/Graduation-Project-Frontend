@@ -16,12 +16,14 @@ export class ViewScheduleComponent {
 
   constructor(private route: Router, private fb: FormBuilder
     , private location: Location, private flagService: FlagService) {
-    this.flagService.setActiveScheduler(true);
-    this.flagService.setActiveSchedulerNotification(true);
-    this.flagService.setActiveSidebarRight(true);
-    this.flagService.setTitle("Scheduler");
-    this.flagService.setActiveNotif(false);
 
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
 
     this.form = this.fb.group(
       {
@@ -35,6 +37,14 @@ export class ViewScheduleComponent {
     // gọi service lấy thông tin user để thay đổi về role người dùng.
   }
   numbers = [0, 1, 2, 3, 4];
+
+  setFlag(){
+    this.flagService.setActiveScheduler(true);
+    this.flagService.setActiveSchedulerNotification(true);
+    this.flagService.setActiveSidebarRight(true);
+    this.flagService.setTitle("Scheduler");
+    this.flagService.setActiveNotif(false);
+  }
 
   goBack() {
     this.location.back();

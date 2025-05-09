@@ -11,6 +11,15 @@ import { SchedulerComponent as SchedulerCpt } from '../../../shared/component/sc
 })
 export class SchedulerComponent {
   constructor(private flagService:FlagService){
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack === true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+  }
+  setFlag(){
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(true);

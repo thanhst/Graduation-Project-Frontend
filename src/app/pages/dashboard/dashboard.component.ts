@@ -12,6 +12,18 @@ import { ClassPreviewComponent } from "../../shared/component/class-preview/clas
 })
 export class DashboardComponent {
   constructor(private route: Router, private flagService: FlagService, private cdRef: ChangeDetectorRef) {
+    this.flagService.isBack$.subscribe(isBack => {
+      if (isBack == true) {
+        this.setFlag();
+      }
+    })
+    this.flagService.setBack(false);
+    this.setFlag();
+  }
+  ngOnInit(): void {
+  }
+
+  setFlag() {
     const username = "Hehe";
     const title = `Welcome ${username}!`;
     this.flagService.setTitle(title);
@@ -19,8 +31,6 @@ export class DashboardComponent {
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setActiveNotif(false);
-  }
-  ngOnInit(): void {
   }
 
   classPreviews = Array.from({ length: 4 }, () => {
