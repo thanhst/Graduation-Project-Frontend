@@ -3,6 +3,8 @@ import { BaseLayoutComponent } from './layout/base-layout/base-layout.component'
 import { BaseRoomLayoutComponent } from './layout/base-room-layout/base-room-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MeetingHomeComponent } from './pages/meeting-room/meeting-home/meeting-home.component';
+import { MeetingJoinComponent } from './pages/meeting-room/meeting-join/meeting-join.component';
+import { MeetingRoomComponent } from './pages/meeting-room/meeting-room/meeting-room.component';
 import { CreateSchedulerComponent } from './pages/scheduler/create-schedule/create-scheduler.component';
 import { EditScheduleComponent } from './pages/scheduler/edit-schedule/edit-schedule.component';
 import { SchedulerComponent } from './pages/scheduler/home/scheduler.component';
@@ -37,6 +39,8 @@ export const routes: Routes = [
         path: 'meeting', component: BaseRoomLayoutComponent, children: [
             { path: '', component: MeetingHomeComponent },
             { path: 'start', component: MeetingHomeComponent },
+            { path: ':id/join', component: MeetingJoinComponent },
+            { path: ':id/room', component: MeetingRoomComponent },
             { path: '**', redirectTo: '' }
         ]
     },

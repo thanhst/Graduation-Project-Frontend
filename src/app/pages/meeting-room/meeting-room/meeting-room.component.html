@@ -1,0 +1,22 @@
+<div class="room-container">
+    <div class="user-container gap-[2rem]">
+        <div *ngIf="isOpenShare" class=""></div>
+        <div *ngIf="!isOpenShare" class="camera-main">
+            <video *ngIf="isCamOn" #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"></video>
+            <div *ngIf="!isCamOn" class="user-image">
+                <div></div>
+            </div>
+        </div>
+        <div class="user-view">
+            <div class="user-view-camera" [id]="">
+                <app-user-meeting></app-user-meeting>
+                <app-user-meeting></app-user-meeting>
+                <app-user-meeting></app-user-meeting>
+                <app-user-meeting></app-user-meeting>
+                <app-user-meeting></app-user-meeting>
+                <app-user-meeting></app-user-meeting>
+            </div>
+        </div>
+    </div>
+    <div class="room-menu"></div>
+</div>

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Type } from '@angular/core';
 import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { User } from '../../core/models/user/user';
+import { DialogService } from '../../core/services/dialog/dialog.service';
 import { FlagService } from '../../core/services/flag/flag.service';
 @Component({
   selector: 'app-base-layout',
@@ -11,7 +12,7 @@ import { FlagService } from '../../core/services/flag/flag.service';
 })
 export class BaseLayoutComponent {
   constructor(private router: Router, public flagService: FlagService,
-    private cdRef: ChangeDetectorRef  ) {
+    private cdRef: ChangeDetectorRef, private dialogService:DialogService ) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(true);
@@ -100,9 +101,18 @@ export class BaseLayoutComponent {
     console.log('Enter pressed: ', value);
   }
 
-  logOut() {
-    console.log("Logout")
-    return;
+  async logOut() {
+    const result = await this.dialogService.open({
+      content:'Confirm logout ?',
+      yesText:'Yes',
+      noText:'No'
+    })
+    if(result==1){
+      console.log('logout');
+    }
+    else{
+      console.log('Not logout');
+    }
   }
   //end
 }

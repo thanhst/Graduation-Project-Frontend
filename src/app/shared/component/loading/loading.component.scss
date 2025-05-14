@@ -1,0 +1,18 @@
+.loading{
+    display:block;
+    border-radius: 100%;
+    width:5rem;
+    height:5rem;
+    background-color: transparent;
+    border: 0.25rem solid  #FF7A7A;
+    border-right-color: transparent;
+    animation: spinner 1s linear infinite;
+}
+.loading-container{
+    background-color: rgba(0, 0, 0, 0.66);
+}
+@keyframes spinner {
+    100%{
+        transform: rotate(360deg);
+    }
+}

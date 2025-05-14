@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { DialogService } from '../../../core/services/dialog/dialog.service';
 import { FlagService } from '../../../core/services/flag/flag.service';
+import { LoadingService } from '../../../core/services/loading/loading.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +15,10 @@ export class ProfileComponent {
   form: FormGroup;
   isEditForm: boolean = false;
 
-  constructor(private fb: FormBuilder, private flagService:FlagService) {
+  constructor(private fb: FormBuilder, private flagService: FlagService,
+    private dialogService: DialogService,
+    private loadingService: LoadingService
+  ) {
     this.flagService.isBack$.subscribe(isBack => {
       if (isBack === true) {
         this.setFlag();
@@ -37,7 +42,7 @@ export class ProfileComponent {
     })
   }
 
-  setFlag(){
+  setFlag() {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(false);
@@ -55,6 +60,9 @@ export class ProfileComponent {
     return (group: AbstractControl): ValidationErrors | null => {
       const password = group.get('currentPassword')?.value;
       const rePassword = group.get('newPassword')?.value;
+      if (group.get('newPassword')?.disabled) {
+        return null;
+      }
       return password === rePassword ? { checkNewPassword: true } : null;
     }
   }
@@ -89,11 +97,29 @@ export class ProfileComponent {
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.form.markAllAsTouched();
+
     if (this.form.invalid) {
-      return
+      return;
     }
-    //toast open
+    const result = await this.dialogService.open({
+      content: 'Confirm update your information?',
+      yesText: 'Yes',
+      noText: 'No'
+    });
+
+    if (result === 1) {
+      // Người dùng chọn "Yes"
+      console.log('Gửi dữ liệu!');
+      this.loadingService.show();
+      setTimeout(() => {
+        this.loadingService.hide();
+      }, 5000)
+      // Gọi API hoặc logic xử lý tại đây
+    } else if (result === 2) {
+      // Người dùng chọn "No"
+      console.log('Hủy gửi.');
+    }
   }
 }

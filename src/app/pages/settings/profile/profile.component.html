@@ -21,7 +21,7 @@
             <label for="title" class="flex-1">Email</label>
             <div class="flex-3 flex">
                 <input formControlName="email" id="email" name="email" class="input flex-3" type="text"
-                    placeholder="Email">
+                    placeholder="Email" autocomplete="email">
                 <div class="absolute top-full">
                     <p class="error-warning" *ngIf="form.controls['email'].invalid && form.controls['email'].touched">
                         Invalid email. </p>
@@ -32,7 +32,7 @@
             <label for="title" class="flex-1">Current password</label>
             <div class="flex-3 flex">
                 <input formControlName="currentPassword" id="currentPassword" name="currentPassword"
-                    class="input flex-3" type="password" placeholder="Current password">
+                    class="input flex-3" type="password" placeholder="Current password" autocomplete="new-password">
                 <div class="absolute top-full">
                     <p class="error-warning"
                         *ngIf="form.controls['currentPassword'].invalid && form.controls['currentPassword'].touched">
@@ -44,7 +44,7 @@
             <label for="title" class="flex-1">New password</label>
             <div class="flex-3 flex">
                 <input formControlName="newPassword" id="newPassword" name="newPassword" class="input flex-3"
-                    type="password" placeholder="New password">
+                    type="password" placeholder="New password" autocomplete="new-password">
                 <div class="absolute top-full">
                     <p class="error-warning" *ngIf="form.controls['newPassword'].touched && (form.controls['newPassword'].invalid || form.errors?.['checkNewPassword'])">
                         {{ form.controls['newPassword'].invalid
@@ -60,7 +60,7 @@
             <label for="title" class="flex-1">Re password</label>
             <div class="flex-3 flex">
                 <input formControlName="rePassword" id="rePassword" name="rePassword" class="input flex-3"
-                    type="password" placeholder="Re password">
+                    type="password" placeholder="Re password" autocomplete="new-password">
                 <div class="absolute top-full">
                     <p class="error-warning" *ngIf="form.controls['rePassword'].touched && (form.controls['rePassword'].invalid || form.errors?.['checkPassword'])">
                         {{

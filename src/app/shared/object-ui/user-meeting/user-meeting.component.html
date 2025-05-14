@@ -1,1 +1,62 @@
-<p>user-meeting works!</p>
+<div class="user-container">
+    <div class="user-container-meeting">
+        <div class="camera-main relative flex-col">
+            <video *ngIf="isCamOn" #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"></video>
+            <div class="absolute relative">
+                <div class="absolute media-icon bottom-1 right-[2.5rem]" id="micro">
+                    <svg *ngIf="isMicOn" width="19" height="29" viewBox="0 0 19 29" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9.45825 1C8.49684 1 7.57481 1.38192 6.89499 2.06174C6.21517 2.74156 5.83325 3.66359 5.83325 4.625V14.2917C5.83325 15.2531 6.21517 16.1751 6.89499 16.8549C7.57481 17.5347 8.49684 17.9167 9.45825 17.9167C10.4197 17.9167 11.3417 17.5347 12.0215 16.8549C12.7013 16.1751 13.0833 15.2531 13.0833 14.2917V4.625C13.0833 3.66359 12.7013 2.74156 12.0215 2.06174C11.3417 1.38192 10.4197 1 9.45825 1V1Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M17.9167 11.875V14.2917C17.9167 16.535 17.0255 18.6864 15.4393 20.2726C13.853 21.8589 11.7016 22.75 9.45833 22.75C7.21504 22.75 5.06363 21.8589 3.47739 20.2726C1.89114 18.6864 1 16.535 1 14.2917V11.875"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9.45825 22.75V27.5833" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M4.625 27.5834H14.2917" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <svg *ngIf="!isMicOn" width="32" height="35" viewBox="0 0 32 35" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_50_323)">
+                            <path
+                                d="M1.33337 1.45839L30.6667 33.5417M12 13.1251V17.5001C12.0007 18.3648 12.2357 19.2099 12.6753 19.9287C13.1149 20.6474 13.7393 21.2076 14.4698 21.5384C15.2003 21.8692 16.004 21.9558 16.7794 21.7874C17.5549 21.6189 18.2673 21.2028 18.8267 20.5917M20 13.6209V5.83339C20.001 4.74843 19.6334 3.70177 18.9685 2.89659C18.3037 2.09142 17.389 1.58518 16.402 1.47614C15.4151 1.3671 14.4263 1.66305 13.6277 2.30654C12.829 2.95002 12.2774 3.89513 12.08 4.95839M22.6667 24.7188C21.3651 26.1719 19.6962 27.1665 17.8742 27.5751C16.0522 27.9836 14.1601 27.7874 12.4407 27.0117C10.7213 26.236 9.25305 24.9161 8.22427 23.2213C7.19548 21.5266 6.6531 19.5343 6.66671 17.5001V14.5834M25.3334 14.5834V17.5001C25.3329 18.1015 25.2838 18.7018 25.1867 19.2938M16 27.7084V33.5417M10.6667 33.5417H21.3334"
+                                stroke="#B93737" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_50_323">
+                                <rect width="32" height="35" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                </div>
+                <div class="absolute media-icon bottom-1 right-[0.2rem]" id="camera">
+                    <svg *ngIf="isCamOn" width="25" height="19" viewBox="0 0 25 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24.0001 3.37665L16.6819 9.31821L24.0001 15.2598V3.37665Z" stroke="black"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M14.5909 1H3.09091C1.93613 1 1 2.06405 1 3.37662V15.2597C1 16.5723 1.93613 17.6364 3.09091 17.6364H14.5909C15.7457 17.6364 16.6818 16.5723 16.6818 15.2597V3.37662C16.6818 2.06405 15.7457 1 14.5909 1Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <svg *ngIf="!isCamOn" width="16" height="15" viewBox="0 0 16 15" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_44_312)">
+                            <path
+                                d="M10.5396 9.59487V10.1946C10.5396 10.5126 10.4008 10.8177 10.1538 11.0426C9.9067 11.2676 9.57159 11.3939 9.22218 11.3939H1.97615C1.62674 11.3939 1.29164 11.2676 1.04457 11.0426C0.797495 10.8177 0.658691 10.5126 0.658691 10.1946V4.19775C0.658691 3.87966 0.797495 3.5746 1.04457 3.34968C1.29164 3.12475 1.62674 2.99839 1.97615 2.99839H3.29361M7.02202 2.99839H9.22218C9.57159 2.99839 9.9067 3.12475 10.1538 3.34968C10.4008 3.5746 10.5396 3.87966 10.5396 4.19775V6.20068L11.1984 6.80036L15.1508 4.19775V10.1946M0.658691 0.59967L15.1508 13.7926"
+                                stroke="#B3261E" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_44_312">
+                                <rect width="15.8095" height="14.3923" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+            <div class="user-image"></div>
+        </div>
+    </div>
+</div>

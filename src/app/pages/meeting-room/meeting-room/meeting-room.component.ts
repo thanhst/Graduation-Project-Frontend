@@ -1,20 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DialogService } from '../../../core/services/dialog/dialog.service';
 import { StreamService } from '../../../core/services/stream/stream.service';
+import { UserMeetingComponent } from "../../../shared/object-ui/user-meeting/user-meeting.component";
 
 @Component({
-  selector: 'app-meeting-join',
-  imports: [CommonModule],
-  templateUrl: './meeting-join.component.html',
-  styleUrl: './meeting-join.component.scss'
+  selector: 'app-meeting-room',
+  imports: [UserMeetingComponent,CommonModule],
+  templateUrl: './meeting-room.component.html',
+  styleUrl: './meeting-room.component.scss'
 })
-export class MeetingJoinComponent {
+export class MeetingRoomComponent {
+  isOpenShare:boolean = false;
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
-  constructor(public streamService: StreamService,private diaglogService:DialogService,
-    private router:Router,  private route: ActivatedRoute
-  ) {
+  constructor(public streamService: StreamService) {
+
+
   }
   async ngAfterViewInit() {
     try {
@@ -25,7 +25,6 @@ export class MeetingJoinComponent {
       videoTrack.enabled = this.streamService.isCameraOnSubject.getValue();
       const audioTrack = this.stream.getAudioTracks()[0];
       audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
-      
       this.videoElement.nativeElement.srcObject = this.stream;
       this.videoElement.nativeElement.muted = true;
 
@@ -69,16 +68,5 @@ export class MeetingJoinComponent {
     this.streamService.switchMicroState();
     const audioTrack = this.stream.getAudioTracks()[0];
     audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
-  }
-
-  async onLeave(){
-    const result = await this.diaglogService.open({
-      content:'Do you want to leave this room?',
-      yesText:'Yes',
-      noText:'No'
-    })
-    if(result == 1){
-      this.router.navigate(['../start'], { relativeTo: this.route });
-    }
   }
 }

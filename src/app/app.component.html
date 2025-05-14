@@ -1,1 +1,9 @@
-<router-outlet />
+<div class="relative">
+    <router-outlet />
+    <ng-container *ngIf="loadingService.isLoading$|async">
+        <app-loading></app-loading>
+    </ng-container>
+    <ng-container *ngIf="dialogService.dialogVisible$ | async">
+        <app-diaglog></app-diaglog>
+    </ng-container>
+</div>

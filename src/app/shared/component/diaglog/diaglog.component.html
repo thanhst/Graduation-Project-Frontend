@@ -1,1 +1,11 @@
-<p>diaglog works!</p>
+<div class="fixed inset-0 z-100 w-screen h-screen dialog-container">
+    <div class="w-full h-full flex justify-center items-center">
+        <div class="dialog" *ngIf="dialogService.dialogConfig$ | async as config">
+            <div class="w-full title text-center">{{ config.content}}</div>
+            <div class="w-full btn-container flex justify-around items-center">
+                <button class="btn-submit btn-dialog" (click)="onSubmit()" >{{ config.yesText }}</button>
+                <button class="btn-remove btn-dialog" (click)="onCancel()">{{ config.noText }}</button>
+            </div>
+        </div>
+    </div>
+</div>

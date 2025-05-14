@@ -1,0 +1,23 @@
+.user-container {
+    display: flex;
+    justify-content: center;
+    aspect-ratio: 4/3;
+    width: 15rem;
+    background-color: #616161;
+    border-radius: 10px;
+}
+
+.user-container-meeting {}
+
+.user-active {}
+
+.media-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    padding: 10px;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(245, 245, 245, 0.61);
+}

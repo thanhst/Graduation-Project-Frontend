@@ -1,4 +1,3 @@
-// dialog.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,37 +8,31 @@ export class DialogService {
   private dialogVisibleSubject = new BehaviorSubject<boolean>(false);
   private dialogConfigSubject = new BehaviorSubject<any>(null);
 
+
+  private resolver: ((result: number) => void) | null = null;
+
   dialogVisible$ = this.dialogVisibleSubject.asObservable();
   dialogConfig$ = this.dialogConfigSubject.asObservable();
 
+
   open(config: any): Promise<number> {
+    this.dialogConfigSubject.next(config);
+    this.dialogVisibleSubject.next(true);
+
     return new Promise((resolve) => {
-      this.dialogConfigSubject.next(config);
-      this.dialogVisibleSubject.next(true);
-
-      this.dialogConfigSubject.subscribe(() => {
-        this.dialogVisible$.subscribe(() => {
-          this.dialogVisibleSubject.next(true);
-        });
-      });
-
-      this.dialogVisibleSubject.subscribe((visible) => {
-        if (!visible) resolve(2);
-      });
+      this.resolver = resolve;  // Gán resolver để dùng trong confirm/cancel
     });
   }
 
-  close() {
-    this.dialogVisibleSubject.next(false);
-  }
-
   confirm() {
-    this.close();
-    return 1;
+    this.dialogVisibleSubject.next(false);
+    if (this.resolver) this.resolver(1); // 1: Yes
+    this.resolver = null;
   }
 
   cancel() {
-    this.close();
-    return 2;
+    this.dialogVisibleSubject.next(false);
+    if (this.resolver) this.resolver(2); // 2: No
+    this.resolver = null;
   }
 }
