@@ -1,56 +1,58 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StreamService } from '../../../core/services/stream/stream.service';
 import { UserMeetingComponent } from "../../../shared/object-ui/user-meeting/user-meeting.component";
+import { UserComponent } from "../../../shared/object-ui/user/user.component";
 
 @Component({
   selector: 'app-meeting-room',
-  imports: [UserMeetingComponent,CommonModule],
+  imports: [UserMeetingComponent, CommonModule, ReactiveFormsModule, UserComponent],
   templateUrl: './meeting-room.component.html',
   styleUrl: './meeting-room.component.scss'
 })
 export class MeetingRoomComponent {
-  isOpenShare:boolean = false;
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
-  constructor(public streamService: StreamService) {
+  form: FormGroup;
 
-
+  constructor(public streamService: StreamService, private fb: FormBuilder) {
+    this.form = this.fb.group({
+      'shareState': ['', Validators.required],
+      'password': ['', Validators.minLength(6)],
+      'hostId': [''],
+      'roleJoin':['',Validators.required]
+    });
   }
   async ngAfterViewInit() {
-    try {
-      this.stream = await navigator.mediaDevices.getUserMedia({
-        video: true, audio: true
-      });
+    this.stream = await this.streamService.cameraService(this.stream, this.videoElement);
+    this.streamService.isCameraOn$.subscribe(value => {
+      this.isCamOn = value;
       const videoTrack = this.stream.getVideoTracks()[0];
       videoTrack.enabled = this.streamService.isCameraOnSubject.getValue();
+    })
+    this.streamService.isMicOn$.subscribe(value => {
+      this.isMicOn = value;
       const audioTrack = this.stream.getAudioTracks()[0];
       audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
-      this.videoElement.nativeElement.srcObject = this.stream;
-      this.videoElement.nativeElement.muted = true;
-
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const mediaStreamSource = audioContext.createMediaStreamSource(this.stream);
-      const gainNode = audioContext.createGain();
-      gainNode.gain.value = 1;
-
-      mediaStreamSource.connect(gainNode);
-      // gainNode.connect(audioContext.destination);
-    } catch (err) {
-    }
+    })
   }
 
   stream!: MediaStream;
-  isMicOn:boolean = true;
-  isCamOn:boolean =true;
+  isMicOn: boolean = true;
+  isCamOn: boolean = true;
+  isShare: boolean = false;
+  isSetting: boolean = false;
+  isManageMember:boolean = false;
+
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.streamService.isCameraOn$.subscribe(value=>{
-      this.isCamOn = value;
-    })
-    this.streamService.isMicOn$.subscribe(value=>{
-      this.isMicOn = value;
-    })
+    this.form.get('password')!.valueChanges.subscribe(value => {
+      const numericValue = value.replace(/\D/g, '');
+      if (value !== numericValue) {
+        this.form.get('password')!.setValue(numericValue, { emitEvent: false });
+      }
+    });
   }
   ngOnDestroy(): void {
     if (this.stream) {
@@ -63,10 +65,58 @@ export class MeetingRoomComponent {
     const videoTrack = this.stream.getVideoTracks()[0];
     videoTrack.enabled = this.streamService.isCameraOnSubject.getValue();
   }
-  
+
   toggleMicro() {
     this.streamService.switchMicroState();
     const audioTrack = this.stream.getAudioTracks()[0];
     audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
+  }
+  toggleShare() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+      console.error('Trình duyệt không hỗ trợ chia sẻ màn hình.');
+      return;
+    }
+
+    const displayMediaOptions = {
+      video: {
+        cursor: 'always'
+      },
+      audio: false
+    } as any;
+
+    navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+      .then(
+        (stream) => {
+          this.isShare = true;
+          const shardElement = this.videoElement.nativeElement;
+          if (shardElement) {
+            if (this.stream) {
+              this.stream.getTracks().forEach(track => track.stop());
+            }
+            shardElement.srcObject = stream;
+            shardElement.play();
+          }
+          const [track] = stream.getVideoTracks();
+          track.addEventListener('ended', async () => {
+            if (shardElement) {
+              this.isShare = false;
+              shardElement.srcObject = null;
+              setTimeout(async () => {
+                this.stream = await this.streamService.cameraService(this.stream, this.videoElement);
+              }, 1000)
+            }
+          });
+        })
+      .catch((err) => {
+        console.error('Lỗi chia sẻ màn hình:', err);
+      });
+  }
+  
+  switchSetting() {
+    this.isSetting = !this.isSetting;
+  }
+
+  switchMember() {
+    this.isManageMember = !this.isManageMember;
   }
 }

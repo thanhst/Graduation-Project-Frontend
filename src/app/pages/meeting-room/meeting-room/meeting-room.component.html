@@ -1,14 +1,14 @@
-<div class="room-container">
-    <div class="user-container gap-[2rem]">
-        <div *ngIf="isOpenShare" class=""></div>
-        <div *ngIf="!isOpenShare" class="camera-main">
-            <video *ngIf="isCamOn" #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"></video>
-            <div *ngIf="!isCamOn" class="user-image">
-                <div></div>
+<div class="room-container relative">
+    <div class="user-container gap-[2rem] relative">
+        <div class="camera-main relative">
+            <video #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"
+                [ngClass]="{'object-fit-cover transform scale-x-[1]':isShare}"></video>
+            <div *ngIf="!isCamOn" class="user-image absolute inset-0 flex justify-center items-center">
+                <img src="assets/images/Happy.svg">
             </div>
         </div>
         <div class="user-view">
-            <div class="user-view-camera" [id]="">
+            <div class="user-view-camera">
                 <app-user-meeting></app-user-meeting>
                 <app-user-meeting></app-user-meeting>
                 <app-user-meeting></app-user-meeting>
@@ -18,5 +18,236 @@
             </div>
         </div>
     </div>
-    <div class="room-menu"></div>
+    <div class="room-menu">
+        <ul>
+            <li><button (click)="toggleMicro()" class="btn-media" id="micro">
+                    <svg *ngIf="isMicOn" width="19" height="29" viewBox="0 0 19 29" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9.45825 1C8.49684 1 7.57481 1.38192 6.89499 2.06174C6.21517 2.74156 5.83325 3.66359 5.83325 4.625V14.2917C5.83325 15.2531 6.21517 16.1751 6.89499 16.8549C7.57481 17.5347 8.49684 17.9167 9.45825 17.9167C10.4197 17.9167 11.3417 17.5347 12.0215 16.8549C12.7013 16.1751 13.0833 15.2531 13.0833 14.2917V4.625C13.0833 3.66359 12.7013 2.74156 12.0215 2.06174C11.3417 1.38192 10.4197 1 9.45825 1V1Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M17.9167 11.875V14.2917C17.9167 16.535 17.0255 18.6864 15.4393 20.2726C13.853 21.8589 11.7016 22.75 9.45833 22.75C7.21504 22.75 5.06363 21.8589 3.47739 20.2726C1.89114 18.6864 1 16.535 1 14.2917V11.875"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9.45825 22.75V27.5833" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M4.625 27.5834H14.2917" stroke="black" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <svg *ngIf="!isMicOn" width="32" height="35" viewBox="0 0 32 35" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_50_323)">
+                            <path
+                                d="M1.33337 1.45839L30.6667 33.5417M12 13.1251V17.5001C12.0007 18.3648 12.2357 19.2099 12.6753 19.9287C13.1149 20.6474 13.7393 21.2076 14.4698 21.5384C15.2003 21.8692 16.004 21.9558 16.7794 21.7874C17.5549 21.6189 18.2673 21.2028 18.8267 20.5917M20 13.6209V5.83339C20.001 4.74843 19.6334 3.70177 18.9685 2.89659C18.3037 2.09142 17.389 1.58518 16.402 1.47614C15.4151 1.3671 14.4263 1.66305 13.6277 2.30654C12.829 2.95002 12.2774 3.89513 12.08 4.95839M22.6667 24.7188C21.3651 26.1719 19.6962 27.1665 17.8742 27.5751C16.0522 27.9836 14.1601 27.7874 12.4407 27.0117C10.7213 26.236 9.25305 24.9161 8.22427 23.2213C7.19548 21.5266 6.6531 19.5343 6.66671 17.5001V14.5834M25.3334 14.5834V17.5001C25.3329 18.1015 25.2838 18.7018 25.1867 19.2938M16 27.7084V33.5417M10.6667 33.5417H21.3334"
+                                stroke="#B93737" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_50_323">
+                                <rect width="32" height="35" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                </button></li>
+            <li><button (click)="toggleCamera()" class="btn-media" id="camera">
+                    <svg *ngIf="isCamOn" width="25" height="19" viewBox="0 0 25 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24.0001 3.37665L16.6819 9.31821L24.0001 15.2598V3.37665Z" stroke="black"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M14.5909 1H3.09091C1.93613 1 1 2.06405 1 3.37662V15.2597C1 16.5723 1.93613 17.6364 3.09091 17.6364H14.5909C15.7457 17.6364 16.6818 16.5723 16.6818 15.2597V3.37662C16.6818 2.06405 15.7457 1 14.5909 1Z"
+                            stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <svg *ngIf="!isCamOn" width="25" height="19" viewBox="0 0 16 15" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_44_312)">
+                            <path
+                                d="M10.5396 9.59487V10.1946C10.5396 10.5126 10.4008 10.8177 10.1538 11.0426C9.9067 11.2676 9.57159 11.3939 9.22218 11.3939H1.97615C1.62674 11.3939 1.29164 11.2676 1.04457 11.0426C0.797495 10.8177 0.658691 10.5126 0.658691 10.1946V4.19775C0.658691 3.87966 0.797495 3.5746 1.04457 3.34968C1.29164 3.12475 1.62674 2.99839 1.97615 2.99839H3.29361M7.02202 2.99839H9.22218C9.57159 2.99839 9.9067 3.12475 10.1538 3.34968C10.4008 3.5746 10.5396 3.87966 10.5396 4.19775V6.20068L11.1984 6.80036L15.1508 4.19775V10.1946M0.658691 0.59967L15.1508 13.7926"
+                                stroke="#B3261E" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_44_312">
+                                <rect width="15.8095" height="14.3923" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </button>
+            </li>
+            <li><button (click)="toggleShare()" class="btn-media" id="share" [ngClass]="{'active-menu' : isShare}">
+                    <svg width="34" height="30" viewBox="0 0 34 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1.5" y="1.5" width="31" height="27" rx="3.5" stroke="black" stroke-width="3" />
+                        <path d="M16.5 20.2602V11.5" stroke="black" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M12 14.7059L16.5051 9.23077L21.0102 14.7059" stroke="black" stroke-width="3"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </li>
+            <li><button class="btn-media" id="settings" (click)="switchSetting()">
+                    <svg width="4" height="27" viewBox="0 0 4 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M2.10915 15.2524C2.56154 15.2524 2.92826 14.6151 2.92826 13.8289C2.92826 13.0427 2.56154 12.4053 2.10915 12.4053C1.65677 12.4053 1.29004 13.0427 1.29004 13.8289C1.29004 14.6151 1.65677 15.2524 2.10915 15.2524Z"
+                            fill="black" stroke="black" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M2.10915 4.81315C2.56154 4.81315 2.92826 4.1758 2.92826 3.3896C2.92826 2.60341 2.56154 1.96606 2.10915 1.96606C1.65677 1.96606 1.29004 2.60341 1.29004 3.3896C1.29004 4.1758 1.65677 4.81315 2.10915 4.81315Z"
+                            fill="black" stroke="black" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M2.10915 25.6917C2.56154 25.6917 2.92826 25.0544 2.92826 24.2682C2.92826 23.482 2.56154 22.8447 2.10915 22.8447C1.65677 22.8447 1.29004 23.482 1.29004 24.2682C1.29004 25.0544 1.65677 25.6917 2.10915 25.6917Z"
+                            fill="black" stroke="black" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </li>
+            <li><button class="btn-remove" id="close-room">
+                    <svg width="41" height="18" viewBox="0 0 41 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M4.57367 16.3951L1.40892 12.7284C1.11393 12.3894 0.8833 11.9827 0.73181 11.5345C0.580317 11.0862 0.5113 10.6062 0.529175 10.1253C0.54705 9.64433 0.651424 9.17301 0.835614 8.7415C1.01981 8.31 1.27975 7.92782 1.5988 7.61944C5.19768 4.2671 9.42508 1.93956 13.9413 0.823838C18.1098 -0.252745 22.4318 -0.252745 26.6003 0.82384C31.1352 1.94679 35.3781 4.29161 38.9851 7.66834C39.3032 7.97578 39.5625 8.35659 39.7466 8.78653C39.9307 9.21646 40.0355 9.6861 40.0544 10.1655C40.0732 10.645 40.0057 11.1237 39.8561 11.5712C39.7065 12.0188 39.4781 12.4254 39.1855 12.765L36.0208 16.4317C35.5138 17.0307 34.8362 17.3957 34.1142 17.4587C33.3922 17.5217 32.6751 17.2783 32.0965 16.774C30.9501 15.7553 29.7079 14.8902 28.3937 14.1951C27.8742 13.922 27.4331 13.4822 27.1228 12.9276C26.8124 12.3731 26.6457 11.7271 26.6425 11.0661V7.96167C22.4998 6.64167 18.1263 6.64167 13.9835 7.96167V11.0661C13.9803 11.7271 13.8137 12.3731 13.5033 12.9276C13.193 13.4822 12.7519 13.922 12.2324 14.195C10.9181 14.8902 9.67597 15.7553 8.52961 16.774C7.94487 17.2839 7.21876 17.5271 6.48937 17.4572C5.75998 17.3874 5.07819 17.0093 4.57367 16.3951Z"
+                            fill="white" />
+                    </svg>
+                </button>
+            </li>
+        </ul>
+        <div class="room-submenu">
+            <ul>
+                <li>
+                    <button (click)="switchMember()"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M22.587 30.4368V27.2734C22.587 25.5954 22.026 23.9861 21.0275 22.7996C20.029 21.6131 18.6748 20.9465 17.2627 20.9465H6.61427C5.2022 20.9465 3.84796 21.6131 2.84947 22.7996C1.85098 23.9861 1.29004 25.5954 1.29004 27.2734V30.4368"
+                                stroke="#86FB9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M12.3482 14.3034C15.2887 14.3034 17.6724 11.5416 17.6724 8.13474C17.6724 4.72787 15.2887 1.96606 12.3482 1.96606C9.40767 1.96606 7.02393 4.72787 7.02393 8.13474C7.02393 11.5416 9.40767 14.3034 12.3482 14.3034Z"
+                                stroke="#86FB9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M30.7779 30.4368V27.2033C30.7772 25.7704 30.455 24.3785 29.862 23.246C29.269 22.1136 28.4387 21.3048 27.5015 20.9465"
+                                stroke="#86FB9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M20.9487 1.96606C22.1203 2.31677 23.1587 3.11336 23.9002 4.23026C24.6418 5.34717 25.0443 6.72085 25.0443 8.13474C25.0443 9.54863 24.6418 10.9223 23.9002 12.0392C23.1587 13.1561 22.1203 13.9527 20.9487 14.3034"
+                                stroke="#86FB9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
+<ng-container *ngIf="isSetting">
+    <div class="setting-container fixed inset-0 z-50">
+        <div class="setting-main relative">
+            <div class="title text-center">
+                Setting of room
+            </div>
+            <form [formGroup]="form" class="flex flex-col gap-[2rem]">
+                <div class="grid grid-cols-3">
+                    <label for="role-share">Allow share sreen: </label>
+                    <select formControlName="shareState" id="role-share" class="input col-span-2">
+                        <option value="Allow">Allow</option>
+                        <option value="Forbid">Forbid</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-3">
+                    <label for="role-join">Allow auto join: </label>
+                    <select formControlName="roleJoin" id="role-join" class="input col-span-2">
+                        <option value="Auto">Auto</option>
+                        <option value="Waiting">Waiting</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-3">
+                    <label for="password">Password Room: </label>
+                    <div class="flex flex-col col-span-2 relative">
+                        <input class="input" formControlName="password" type="input" pattern="[0-9]*"
+                            inputmode="numeric" id="password">
+                        <div class="absolute top-full">
+                            <p class="error-warning"
+                                *ngIf="form.controls['password'].invalid && form.controls['password'].touched">
+                                Invalid password. </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="grid grid-cols-3">
+                    <label for="hostId">Host: </label>
+                    <select id="hostId" formControlName="hostId" class="input col-span-2">
+                    </select>
+                </div>
+                <div class="grid grid-cols-3">
+                    <button type="submit" class="btn-submit col-start-2">Submit</button>
+                </div>
+            </form>
+            <div class="absolute top-1 right-1">
+                <button class="close-btn" (click)="switchSetting()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px">
+                        <linearGradient id="hbE9Evnj3wAjjA2RX0We2a" x1="7.534" x2="27.557" y1="7.534" y2="27.557"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#f44f5a" />
+                            <stop offset=".443" stop-color="#ee3d4a" />
+                            <stop offset="1" stop-color="#e52030" />
+                        </linearGradient>
+                        <path fill="url(#hbE9Evnj3wAjjA2RX0We2a)"
+                            d="M42.42,12.401c0.774-0.774,0.774-2.028,0-2.802L38.401,5.58c-0.774-0.774-2.028-0.774-2.802,0	L24,17.179L12.401,5.58c-0.774-0.774-2.028-0.774-2.802,0L5.58,9.599c-0.774,0.774-0.774,2.028,0,2.802L17.179,24L5.58,35.599	c-0.774,0.774-0.774,2.028,0,2.802l4.019,4.019c0.774,0.774,2.028,0.774,2.802,0L42.42,12.401z" />
+                        <linearGradient id="hbE9Evnj3wAjjA2RX0We2b" x1="27.373" x2="40.507" y1="27.373" y2="40.507"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#a8142e" />
+                            <stop offset=".179" stop-color="#ba1632" />
+                            <stop offset=".243" stop-color="#c21734" />
+                        </linearGradient>
+                        <path fill="url(#hbE9Evnj3wAjjA2RX0We2b)"
+                            d="M24,30.821L35.599,42.42c0.774,0.774,2.028,0.774,2.802,0l4.019-4.019	c0.774-0.774,0.774-2.028,0-2.802L30.821,24L24,30.821z" />
+                    </svg></button>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="isManageMember">
+    <div class="setting-container fixed inset-0 z-50">
+
+        <div class="setting-main relative fixed inset-0 z-50">
+            <div class="title text-center">
+                Waiting room
+            </div>
+            <div class="member-main">
+                <div>Member in room: {{'32'}}</div>
+                <div>Member in waiting room: {{'32'}}</div>
+                <div class="mt-[3rem] border member-queue flex flex-col gap-[2rem]">
+                    <div class="text-center">List of waiting member</div>
+                    <div class="queue">
+                        <ng-container>
+                            <app-user [type]="'request'"></app-user>
+                            <app-user [type]="'request'"></app-user>
+                            <app-user [type]="'request'"></app-user>
+                            <app-user [type]="'request'"></app-user>
+                            <app-user [type]="'request'"></app-user>
+                            <app-user [type]="'request'"></app-user>
+                            <app-user [type]="'request'"></app-user>
+                            <app-user [type]="'request'"></app-user>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute top-1 right-1">
+                <button class="close-btn" (click)="switchMember()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px">
+                        <linearGradient id="hbE9Evnj3wAjjA2RX0We2a" x1="7.534" x2="27.557" y1="7.534" y2="27.557"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#f44f5a" />
+                            <stop offset=".443" stop-color="#ee3d4a" />
+                            <stop offset="1" stop-color="#e52030" />
+                        </linearGradient>
+                        <path fill="url(#hbE9Evnj3wAjjA2RX0We2a)"
+                            d="M42.42,12.401c0.774-0.774,0.774-2.028,0-2.802L38.401,5.58c-0.774-0.774-2.028-0.774-2.802,0	L24,17.179L12.401,5.58c-0.774-0.774-2.028-0.774-2.802,0L5.58,9.599c-0.774,0.774-0.774,2.028,0,2.802L17.179,24L5.58,35.599	c-0.774,0.774-0.774,2.028,0,2.802l4.019,4.019c0.774,0.774,2.028,0.774,2.802,0L42.42,12.401z" />
+                        <linearGradient id="hbE9Evnj3wAjjA2RX0We2b" x1="27.373" x2="40.507" y1="27.373" y2="40.507"
+                            gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#a8142e" />
+                            <stop offset=".179" stop-color="#ba1632" />
+                            <stop offset=".243" stop-color="#c21734" />
+                        </linearGradient>
+                        <path fill="url(#hbE9Evnj3wAjjA2RX0We2b)"
+                            d="M24,30.821L35.599,42.42c0.774,0.774,2.028,0.774,2.802,0l4.019-4.019	c0.774-0.774,0.774-2.028,0-2.802L30.821,24L24,30.821z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-container>
