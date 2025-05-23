@@ -1,4 +1,10 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guard/auth.guard';
+import { unAuthGuard } from './core/guard/un-auth.guard';
+import { welcomeGuard } from './core/guard/welcome.guard';
+import { classroomResolver } from './core/resolver/classroom/classroom.resolver';
+import { schedulerResolver } from './core/resolver/scheduler/scheduler.resolver';
+import { userResolver } from './core/resolver/user/user.resolver';
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { BaseRoomLayoutComponent } from './layout/base-room-layout/base-room-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -24,16 +30,14 @@ import { WorkComponent } from './pages/work/home/work.component';
 import { JoinWorkComponent } from './pages/work/join-work/join-work.component';
 
 export const routes: Routes = [
-    { path: 'login', loadComponent: () => import('../app/pages/auth/user-login/user-login.component').then(m => m.UserLoginComponent) },
-    { path: 'register', loadComponent: () => import('../app/pages/auth/user-register/user-register.component').then(m => m.UserRegisterComponent) },
-    {
-        path: 'admin', children: [
-            { path: 'login', loadComponent: () => import('../app/pages/auth/admin-login/admin-login.component').then(m => m.AdminLoginComponent) }
-        ]
-    },
+    { path: 'login', loadComponent: () => import('../app/pages/auth/user-login/user-login.component').then(m => m.UserLoginComponent), canActivate: [unAuthGuard] },
+    { path: 'register', loadComponent: () => import('../app/pages/auth/user-register/user-register.component').then(m => m.UserRegisterComponent),canActivate: [unAuthGuard] },
     {
         path: 'welcome',
-        loadComponent: () => import('../app/pages/welcome/welcome.component').then(m => m.WelcomeComponent) // Lazy load WelcomeModule
+        loadComponent: () => import('../app/pages/welcome/welcome.component').then(m => m.WelcomeComponent),
+        canActivate: [authGuard],resolve:{
+            userResolver
+        }
     },
     {
         path: 'meeting', component: BaseRoomLayoutComponent, children: [
@@ -42,40 +46,47 @@ export const routes: Routes = [
             { path: ':id/join', component: MeetingJoinComponent },
             { path: ':id/room', component: MeetingRoomComponent },
             { path: '**', redirectTo: '' }
-        ]
+        ], canActivateChild: [authGuard,welcomeGuard],resolve:{
+            userResolver
+        }
+
     },
     {
         path: '',
         component: BaseLayoutComponent,
         children: [
-            { path: 'dashboard', component: DashboardComponent, },
+            { path: 'dashboard', component: DashboardComponent },
 
             { path: 'scheduler/create', component: CreateSchedulerComponent, },
             { path: 'scheduler/all', component: ListSchedulerUserComponent, },
             { path: 'scheduler/:id/view', component: ViewScheduleComponent, },
             { path: 'scheduler/:id/edit', component: EditScheduleComponent, },
-            { path: 'scheduler', component: SchedulerComponent ,},
+            { path: 'scheduler', component: SchedulerComponent, },
 
-            { path: 'setting', component: ProfileComponent ,},
+            { path: 'setting', component: ProfileComponent, },
 
             { path: 'statistical/:id/chart', component: ViewStatisticalComponent, },
             { path: 'statistical', component: StatisticalComponent, },
 
-            { path: 'work/join', component: JoinWorkComponent ,},
+            { path: 'work/join', component: JoinWorkComponent, },
             {
                 path: 'work/:id/class', component: LayoutComponent, children: [
-                    { path: 'home', component: HomeClassComponent ,},
-                    { path: 'all-members', component: AllMemberComponent ,},
-                    { path: 'all-members/request', component: RequestRoomComponent ,},
-                    { path: 'settings', component: SettingsComponent ,},
+                    { path: 'home', component: HomeClassComponent, },
+                    { path: 'all-members', component: AllMemberComponent, },
+                    { path: 'all-members/request', component: RequestRoomComponent, },
+                    { path: 'settings', component: SettingsComponent, },
                     { path: '**', redirectTo: 'home' }
                 ]
             },
-            { path: 'work/create', component: CreateWorkComponent ,},
-            { path: 'work/all', component: AllWorkComponent ,},
-            { path: 'work', component: WorkComponent,},
+            { path: 'work/create', component: CreateWorkComponent, },
+            { path: 'work/all', component: AllWorkComponent, },
+            { path: 'work', component: WorkComponent, },
             { path: '**', redirectTo: 'dashboard' }
-        ],
+        ], canActivateChild: [authGuard,welcomeGuard],resolve:{
+            userResolver,
+            classroomResolver,
+            schedulerResolver
+        }
     },
     { path: '**', redirectTo: '' }
 ];

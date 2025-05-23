@@ -8,7 +8,7 @@ import { LoadingComponent } from "./shared/component/loading/loading.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoadingComponent, CommonModule, DiaglogComponent],
+  imports: [RouterOutlet, LoadingComponent, CommonModule, DiaglogComponent,],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/services/auth/auth.service';
 import { FlagService } from '../../core/services/flag/flag.service';
+import { UserService } from '../../core/services/user/user.service';
 import { ClassPreviewComponent } from "../../shared/component/class-preview/class-preview.component";
 
 @Component({
@@ -11,7 +13,9 @@ import { ClassPreviewComponent } from "../../shared/component/class-preview/clas
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  constructor(private route: Router, private flagService: FlagService, private cdRef: ChangeDetectorRef) {
+  constructor(private route: Router, private flagService: FlagService, private cdRef: ChangeDetectorRef
+    ,private auth:AuthService,private userService: UserService
+  ) {
     this.flagService.isBack$.subscribe(isBack => {
       if (isBack == true) {
         this.setFlag();
@@ -24,7 +28,7 @@ export class DashboardComponent {
   }
 
   setFlag() {
-    const username = "Hehe";
+    const username = this.userService.getCurrentUser()?.fullName;
     const title = `Welcome ${username}!`;
     this.flagService.setTitle(title);
     this.flagService.setActiveScheduler(true);

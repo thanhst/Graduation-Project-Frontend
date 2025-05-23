@@ -61,7 +61,8 @@
                     <a routerLink="/login" class="text-yellow-300 text-lg font-normal">Login</a>
                 </div>
                 <div class="flex flex-row justify-around items-center">
-                    <button class="google-button flex justify-between items-center gap-3">
+                    <div #hiddenGoogleBtn style="display: none;"></div>
+                    <button (click)="onGoogleLogin()" class="google-button flex justify-between items-center gap-3">
                         <img class="max-w-xs sm:w-[1rem] md:max-w-md lg:max-w-lg xl:w-[2rem]"
                             src="/assets/images/Google.png">
                         Register with google

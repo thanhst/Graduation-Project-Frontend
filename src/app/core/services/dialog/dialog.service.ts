@@ -7,13 +7,13 @@ import { BehaviorSubject } from 'rxjs';
 export class DialogService {
   private dialogVisibleSubject = new BehaviorSubject<boolean>(false);
   private dialogConfigSubject = new BehaviorSubject<any>(null);
-
+  private isQuestionSubject = new BehaviorSubject<boolean>(false);
 
   private resolver: ((result: number) => void) | null = null;
 
   dialogVisible$ = this.dialogVisibleSubject.asObservable();
   dialogConfig$ = this.dialogConfigSubject.asObservable();
-
+  isQuestion$ = this.isQuestionSubject.asObservable();
 
   open(config: any): Promise<number> {
     this.dialogConfigSubject.next(config);
@@ -34,5 +34,8 @@ export class DialogService {
     this.dialogVisibleSubject.next(false);
     if (this.resolver) this.resolver(2); // 2: No
     this.resolver = null;
+  }
+  setIsQuestion(value :boolean){
+    this.isQuestionSubject.next(value);
   }
 }

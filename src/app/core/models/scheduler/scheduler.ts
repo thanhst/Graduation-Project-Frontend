@@ -1,17 +1,35 @@
 export class Scheduler {
+    schedulerID: string;
+    roomID: string;
+    hostName: string;
+    className: string;
+    startTime: string;
+    createdAt: Date;
+    updatedAt: Date;
+
     constructor(
-        private schedulerID:string ="schedularID",
-        private roomID:string = "roomID",
-        private hostName:string = "hostName",
-        private className:string = "className",
-        private startTime:string = "startTime",
-        private createdAt:Date = new Date(),
-        private updatedAt:Date = new Date()
-    ){}
-    public getClassName():string{
+        schedulerID: string = "schedulerID",
+        roomID: string = "roomID",
+        hostName: string = "hostName",
+        className: string = "className",
+        startTime: string = "startTime",
+        createdAt: Date = new Date(),
+        updatedAt: Date = new Date()
+    ) {
+        this.schedulerID = schedulerID;
+        this.roomID = roomID;
+        this.hostName = hostName;
+        this.className = className;
+        this.startTime = startTime;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public getClassName(): string {
         return this.className;
     }
-    public getHostName():string{
+
+    public getHostName(): string {
         return this.hostName;
     }
 }

@@ -11,6 +11,7 @@ import { DialogService } from '../../../core/services/dialog/dialog.service';
 export class DiaglogComponent {
   constructor(public dialogService:DialogService , private cdRef: ChangeDetectorRef){
   }
+  isQuestion :boolean = true;
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
@@ -18,6 +19,10 @@ export class DiaglogComponent {
       this.cdRef.detectChanges();
     })
     this.dialogService.dialogVisible$.subscribe(value=>{
+      this.cdRef.detectChanges();
+    })
+    this.dialogService.isQuestion$.subscribe(value=>{
+      this.isQuestion = value;
       this.cdRef.detectChanges();
     })
   }

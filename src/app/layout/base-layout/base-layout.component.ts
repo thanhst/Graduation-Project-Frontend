@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Type } from '@angular/core';
 import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { User } from '../../core/models/user/user';
+import { AuthService } from '../../core/services/auth/auth.service';
 import { DialogService } from '../../core/services/dialog/dialog.service';
 import { FlagService } from '../../core/services/flag/flag.service';
+import { LoadingService } from '../../core/services/loading/loading.service';
 @Component({
   selector: 'app-base-layout',
   imports: [RouterOutlet, RouterLink, RouterModule, CommonModule],
@@ -12,7 +14,9 @@ import { FlagService } from '../../core/services/flag/flag.service';
 })
 export class BaseLayoutComponent {
   constructor(private router: Router, public flagService: FlagService,
-    private cdRef: ChangeDetectorRef, private dialogService:DialogService ) {
+    private cdRef: ChangeDetectorRef, private dialogService: DialogService,
+    private loading: LoadingService,
+    private authService: AuthService) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
     this.flagService.setActiveSidebarRight(true);
@@ -102,17 +106,32 @@ export class BaseLayoutComponent {
   }
 
   async logOut() {
+    this.dialogService.setIsQuestion(true);
     const result = await this.dialogService.open({
-      content:'Confirm logout ?',
-      yesText:'Yes',
-      noText:'No'
+      content: 'Confirm logout ?',
+      yesText: 'Yes',
+      noText: 'No'
     })
-    if(result==1){
-      console.log('logout');
+    if (result == 1) {
+      this.loading.show()
+      setTimeout(() => {
+        this.loading.hide()
+        this.authService.logout().subscribe({
+          next: () => {
+          },
+          error: (err) => {
+            this.dialogService.setIsQuestion(false);
+            this.dialogService.open({
+              content: 'Error to logout!',
+            });
+            setTimeout(() => {
+              this.dialogService.cancel();
+            }, 5000);
+          }
+        });
+      }, 1000)
     }
-    else{
-      console.log('Not logout');
+    else {
     }
   }
-  //end
 }

@@ -1,29 +1,24 @@
-
 export class Notification {
+    id: string;
+    classID: string;
+    userID: string;
+    descriptions: string;
+    type: 'info' | 'warning' | 'error';
+    createdAt: Date;
+
     constructor(
-        private id: string = "id",
-        private classID: string = "className",
-        private userID: string = "classHost",
-        private descriptions: string = "descriptions",
-        private type: 'info' | 'warning' | 'error' = 'info',
-        private createdAt: Date = new Date()
-    ) {}
-    public getId(): string {
-        return this.id;
-    }
-    public getClassID(): string {
-        return this.classID;
-    }
-    public getUserID(): string {
-        return this.userID;
-    }
-    public getDescriptions(): string {
-        return this.descriptions;
-    }
-    public getType(): string {
-        return this.type;
-    }
-    public getCreatedAt(): Date {
-        return this.createdAt;
+        id: string = "id",
+        classID: string = "className",
+        userID: string = "classHost",
+        descriptions: string = "descriptions",
+        type: 'info' | 'warning' | 'error' = 'info',
+        createdAt: Date = new Date()
+    ) {
+        this.id = id;
+        this.classID = classID;
+        this.userID = userID;
+        this.descriptions = descriptions;
+        this.type = type;
+        this.createdAt = createdAt;
     }
 }
