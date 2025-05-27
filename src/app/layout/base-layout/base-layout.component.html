@@ -30,7 +30,7 @@
                                 fill="#6D7C90" />
                         </svg>
                         Scheduler</a></li>
-                <li routerLinkActive="active"><a routerLinkActive="menu-active"
+                <li *ngIf="userService.getUserRole()!='student'" routerLinkActive="active"><a routerLinkActive="menu-active"
                         [routerLinkActiveOptions]="{ exact: false }" routerLink="/statistical">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -75,7 +75,7 @@
     </main>
 
     <div class="absolute div-user flex justify-end">
-        <img class="image-user" src="/assets/images/usertest.svg">
+        <img class="image-user" [src]="userService.getCurrentUser()?.profilePicture">
     </div>
 
     <aside *ngIf="(flagService.isActiveSidebarRight$ | async)" class="sidebar-right">

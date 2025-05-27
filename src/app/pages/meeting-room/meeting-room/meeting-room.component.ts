@@ -20,7 +20,7 @@ export class MeetingRoomComponent {
       'shareState': ['', Validators.required],
       'password': ['', Validators.minLength(6)],
       'hostId': [''],
-      'roleJoin':['',Validators.required]
+      'roleJoin': ['', Validators.required]
     });
   }
   async ngAfterViewInit() {
@@ -42,7 +42,7 @@ export class MeetingRoomComponent {
   isCamOn: boolean = true;
   isShare: boolean = false;
   isSetting: boolean = false;
-  isManageMember:boolean = false;
+  isManageMember: boolean = false;
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -72,46 +72,50 @@ export class MeetingRoomComponent {
     audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
   }
   toggleShare() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
-      console.error('Trình duyệt không hỗ trợ chia sẻ màn hình.');
-      return;
-    }
+    if (this.isShare) {
+      this.isShare = false;
+    } else {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+        console.error('Trình duyệt không hỗ trợ chia sẻ màn hình.');
+        return;
+      }
 
-    const displayMediaOptions = {
-      video: {
-        cursor: 'always'
-      },
-      audio: false
-    } as any;
+      const displayMediaOptions = {
+        video: {
+          cursor: 'always'
+        },
+        audio: false
+      } as any;
 
-    navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
-      .then(
-        (stream) => {
-          this.isShare = true;
-          const shardElement = this.videoElement.nativeElement;
-          if (shardElement) {
-            if (this.stream) {
-              this.stream.getTracks().forEach(track => track.stop());
-            }
-            shardElement.srcObject = stream;
-            shardElement.play();
-          }
-          const [track] = stream.getVideoTracks();
-          track.addEventListener('ended', async () => {
+      navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
+        .then(
+          (stream) => {
+            this.isShare = true;
+            const shardElement = this.videoElement.nativeElement;
             if (shardElement) {
-              this.isShare = false;
-              shardElement.srcObject = null;
-              setTimeout(async () => {
-                this.stream = await this.streamService.cameraService(this.stream, this.videoElement);
-              }, 1000)
+              if (this.stream) {
+                this.stream.getTracks().forEach(track => track.stop());
+              }
+              shardElement.srcObject = stream;
+              shardElement.play();
             }
-          });
-        })
-      .catch((err) => {
-        console.error('Lỗi chia sẻ màn hình:', err);
-      });
+            const [track] = stream.getVideoTracks();
+            track.addEventListener('ended', async () => {
+              if (shardElement) {
+                this.isShare = false;
+                shardElement.srcObject = null;
+                setTimeout(async () => {
+                  this.stream = await this.streamService.cameraService(this.stream, this.videoElement);
+                }, 1000)
+              }
+            });
+          })
+        .catch((err) => {
+          console.error('Lỗi chia sẻ màn hình:', err);
+        });
+    }
   }
-  
+
   switchSetting() {
     this.isSetting = !this.isSetting;
   }

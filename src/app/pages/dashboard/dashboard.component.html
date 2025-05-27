@@ -44,12 +44,17 @@
                 <a [routerLink]="['/work/all']">See all</a>
             </div>
         </div>
-        <div class="class-preview-body grid grid-cols-2 gap-4">
-            <div *ngFor="let classPreview of classPreviews">
-                <app-class-preview [classID]="classPreview.id" [classname]="classPreview.classname"
-                    [descriptions]="classPreview.description" [imageSrcs]="classPreview.src"
-                    [username]="classPreview.username"></app-class-preview>
-            </div>
+        <div class="class-preview-body grid grid-cols-2 gap-4" *ngIf="classPreviews.length > 0">
+            <ng-container>
+                <div *ngFor="let classPreview of classPreviews">
+                    <app-class-preview [classID]="classPreview.classroom.classID" [classname]="classPreview.classroom.className"
+                        [descriptions]="classPreview.classroom.descriptions" [imageSrcs]="classPreview.src"
+                        [username]="classPreview.classroom.User?.fullName ?? 'Unknown User'"></app-class-preview>
+                </div>
+            </ng-container>
+        </div>
+        <div class="deactive flex justify-center items-center text-[1.5rem]" *ngIf="classPreviews.length == 0">
+            You have not attended any classes yet!
         </div>
     </div>
 </div>

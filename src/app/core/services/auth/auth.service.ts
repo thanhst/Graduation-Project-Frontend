@@ -6,6 +6,7 @@ import { environment } from '../../../../environment/environment';
 import { Account } from '../../models/account/account';
 import { User } from '../../models/user/user';
 import { DialogService } from '../dialog/dialog.service';
+import { LoadingService } from '../loading/loading.service';
 import { UserService } from '../user/user.service';
 
 interface TokenResponse {
@@ -25,6 +26,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router,
     private dialogService: DialogService,
+    private loadingService: LoadingService,
     private userService: UserService) { }
 
   private setUserInfo(tokens: TokenResponse): void {
@@ -112,5 +114,26 @@ export class AuthService {
     }).pipe(
       tap(tokens => this.setUserInfo(tokens))
     );
+  }
+  loginWithGithub() {
+    const popup = window.open(
+      "http://localhost:8080/api/auth/github/login?redirect_uri=http://localhost:4200",
+      "_blank",
+      "width=500,height=600"
+    );
+
+    window.addEventListener("message", (event) => {
+      if (event.origin !== "http://localhost:8080") return;
+      const data = event.data;
+      if (data) {
+        this.setUserInfo(data)
+        popup?.close();
+        this.loadingService.show()
+        setTimeout(() => {
+          this.loadingService.hide()
+          this.router.navigate(["/dashboard"])
+        },1000)
+      }
+    });
   }
 }

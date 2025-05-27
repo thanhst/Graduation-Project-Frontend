@@ -8,4 +8,9 @@ import { NotificationUIComponent } from '../../object-ui/notification/notificati
   styleUrl: './notification.component.scss'
 })
 export class NotificationComponent {
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    // console.log("render này!")
+  }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -26,7 +26,8 @@ export class BaseLoginComponent {
 
   constructor(private router: Router, private fb: FormBuilder
     , private loading: LoadingService, private dialogService: DialogService
-    , private auth: AuthService, private userService: UserService
+    , private auth: AuthService, private userService: UserService,
+    private ngZone: NgZone,
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -80,28 +81,31 @@ export class BaseLoginComponent {
 
   handleCredentialResponse(response: any) {
     this.loading.show()
-    setTimeout(() => {
-      const idToken = response.credential;
-      this.auth.loginWithGoogle(idToken).subscribe({
-        next: (res) => {
-          setTimeout(() => {
+    this.ngZone.run(() => {
+      setTimeout(() => {
+        const idToken = response.credential;
+        this.auth.loginWithGoogle(idToken).subscribe({
+          next: (res) => {
             this.loading.hide()
             this.router.navigate(['/dashboard']);
-          },2000)
-        },
-        error: (err) => {
-          this.dialogService.setIsQuestion(false)
-          this.dialogService.open({
-            content: "Error for login by google!"
-          })
-          setTimeout(() => {
-            this.loading.hide()
-            this.dialogService.cancel()
-            this.dialogService.setIsQuestion(true)
-          }, 5000)
-        }
-      });
-    }, 100)
+          },
+          error: (err) => {
+            this.dialogService.setIsQuestion(false)
+            this.dialogService.open({
+              content: "Error for login by google!"
+            })
+            setTimeout(() => {
+              this.loading.hide()
+              this.dialogService.cancel()
+              this.dialogService.setIsQuestion(true)
+            }, 5000)
+          }
+        });
+      }, 100)
+    })
+  }
+  loginWithGithub() {
+    this.auth.loginWithGithub();
   }
 
   onSubmit() {
@@ -132,10 +136,10 @@ export class BaseLoginComponent {
             },
             error: (err) => {
               let errorMessage;
-              if (err.status==0){
-                errorMessage='Error! The server have fixed!'
-              }else{
-                errorMessage= err.error?.message || err.error?.error || err.error || 'Error! The server have fixed!';
+              if (err.status == 0) {
+                errorMessage = 'Error! The server have fixed!'
+              } else {
+                errorMessage = err.error?.message || err.error?.error || err.error || 'Error! The server have fixed!';
               }
               this.dialogService.setIsQuestion(false);
               this.dialogService.open({

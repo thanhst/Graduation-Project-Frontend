@@ -1,9 +1,14 @@
+import { Classroom } from "../classroom/classroom";
+import { User } from "../user/user";
+
 export class StudentClass {
     public classID: string;
     public userID: string;
     public state: 'joined' | 'waiting';
     public createdAt: Date;
     public joinedAt: Date;
+    User?:User;
+    Classroom?:Classroom;
 
     constructor(
         classID: string = 'classID',

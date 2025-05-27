@@ -12,11 +12,17 @@ export class UserService {
   constructor(private http: HttpClient) { }
   private currentUser: User | null = null;
 
+  getUserRole(): string | null {
+    return localStorage.getItem("role");
+  }
+
   getUserInfor(userId: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/users/${userId}/get`, {
       withCredentials: true
     }).pipe(
-      tap(user => this.currentUser = user)
+      tap(user => {
+        this.currentUser = user
+      })
     );
   }
   getCurrentUser(): User | null {
@@ -37,8 +43,9 @@ export class UserService {
       withCredentials: true
     }).pipe(
       tap(value => {
-        this.currentUser = value.user,
-        localStorage.setItem("last_login",value.last_login)
+        this.currentUser = value.user
+        localStorage.setItem("last_login", value.last_login)
+        localStorage.setItem("role",value.role)
       })
     );
   }

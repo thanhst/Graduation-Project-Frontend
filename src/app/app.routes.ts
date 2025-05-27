@@ -31,11 +31,11 @@ import { JoinWorkComponent } from './pages/work/join-work/join-work.component';
 
 export const routes: Routes = [
     { path: 'login', loadComponent: () => import('../app/pages/auth/user-login/user-login.component').then(m => m.UserLoginComponent), canActivate: [unAuthGuard] },
-    { path: 'register', loadComponent: () => import('../app/pages/auth/user-register/user-register.component').then(m => m.UserRegisterComponent),canActivate: [unAuthGuard] },
+    { path: 'register', loadComponent: () => import('../app/pages/auth/user-register/user-register.component').then(m => m.UserRegisterComponent), canActivate: [unAuthGuard] },
     {
         path: 'welcome',
         loadComponent: () => import('../app/pages/welcome/welcome.component').then(m => m.WelcomeComponent),
-        canActivate: [authGuard],resolve:{
+        canActivate: [authGuard], resolve: {
             userResolver
         }
     },
@@ -46,7 +46,7 @@ export const routes: Routes = [
             { path: ':id/join', component: MeetingJoinComponent },
             { path: ':id/room', component: MeetingRoomComponent },
             { path: '**', redirectTo: '' }
-        ], canActivateChild: [authGuard,welcomeGuard],resolve:{
+        ], canActivateChild: [authGuard, welcomeGuard], resolve: {
             userResolver
         }
 
@@ -55,7 +55,12 @@ export const routes: Routes = [
         path: '',
         component: BaseLayoutComponent,
         children: [
-            { path: 'dashboard', component: DashboardComponent },
+            {
+                path: 'dashboard', component: DashboardComponent, resolve: {
+                    classroomResolver,
+                    schedulerResolver
+                }
+            },
 
             { path: 'scheduler/create', component: CreateSchedulerComponent, },
             { path: 'scheduler/all', component: ListSchedulerUserComponent, },
@@ -79,13 +84,14 @@ export const routes: Routes = [
                 ]
             },
             { path: 'work/create', component: CreateWorkComponent, },
-            { path: 'work/all', component: AllWorkComponent, },
+            { path: 'work/all', component: AllWorkComponent,resolve:{
+                classroomResolver,
+                schedulerResolver
+            } },
             { path: 'work', component: WorkComponent, },
             { path: '**', redirectTo: 'dashboard' }
-        ], canActivateChild: [authGuard,welcomeGuard],resolve:{
+        ], canActivateChild: [authGuard, welcomeGuard], resolve: {
             userResolver,
-            classroomResolver,
-            schedulerResolver
         }
     },
     { path: '**', redirectTo: '' }

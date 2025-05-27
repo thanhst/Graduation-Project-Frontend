@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { map } from 'rxjs';
+import { ClassroomWithSrc } from '../../core/interface/class.interface';
 import { AuthService } from '../../core/services/auth/auth.service';
+import { ClassService } from '../../core/services/class/class.service';
 import { FlagService } from '../../core/services/flag/flag.service';
 import { UserService } from '../../core/services/user/user.service';
 import { ClassPreviewComponent } from "../../shared/component/class-preview/class-preview.component";
@@ -12,9 +15,11 @@ import { ClassPreviewComponent } from "../../shared/component/class-preview/clas
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
+
 export class DashboardComponent {
+  classPreviews: ClassroomWithSrc[] = [];
   constructor(private route: Router, private flagService: FlagService, private cdRef: ChangeDetectorRef
-    ,private auth:AuthService,private userService: UserService
+    , private auth: AuthService, private userService: UserService, private classService: ClassService
   ) {
     this.flagService.isBack$.subscribe(isBack => {
       if (isBack == true) {
@@ -25,6 +30,21 @@ export class DashboardComponent {
     this.setFlag();
   }
   ngOnInit(): void {
+    this.classService.classrooms$.pipe(
+      map(classes => classes.slice(0, 4))
+    ).subscribe(previews => {
+      this.classPreviews = previews.map(c => {
+        const first4StudentClasses = c.StudentClasses ? c.StudentClasses.slice(0, 4) : [];
+        const srcUrls = first4StudentClasses.map(sc => sc.User?.profilePicture || '');
+        return {
+          classroom: {
+            ...c,
+            StudentClasses: first4StudentClasses,
+          },
+          src: srcUrls,
+        };
+      });
+    });
   }
 
   setFlag() {
@@ -36,14 +56,4 @@ export class DashboardComponent {
     this.flagService.setActiveSidebarRight(true);
     this.flagService.setActiveNotif(false);
   }
-
-  classPreviews = Array.from({ length: 4 }, () => {
-    return {
-      id: "idClass",
-      username: "username",
-      classname: "hello",
-      description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      src: ["/assets/images/base.png", "path2/to/image.png", "path3/to/image.png", "path4/to/image.png"]
-    };
-  });
 }

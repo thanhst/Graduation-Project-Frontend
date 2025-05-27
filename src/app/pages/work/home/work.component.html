@@ -1,7 +1,8 @@
 <div class="main-container relative">
     <div></div>
     <div class="function-container">
-        <a routerLink="/work/create" class="flex flex-col gap-3 justify-end items-center rectangle-color-meeting">
+        <a *ngIf="role=='teacher'" routerLink="/work/create"
+            class="flex flex-col gap-3 justify-end items-center rectangle-color-meeting">
             <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_71_927)">
                     <path
@@ -19,7 +20,8 @@
             </svg>
             Create class
         </a>
-        <a routerLink="/work/join" class="flex flex-col gap-3 justify-end items-center rectangle-color-work">
+        <a *ngIf="role=='student'" routerLink="/work/join"
+            class="flex flex-col gap-3 justify-end items-center rectangle-color-work">
             <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_71_934)">
                     <path
@@ -50,12 +52,20 @@
         <div class="class-preview-header">
             <div class="header">Class Schedule Today</div>
         </div>
-        <div class="class-preview-body grid grid-cols-2 gap-4">
-            <div *ngFor="let classPreview of classPreviews">
-                <app-class-preview [classID]="classPreview.id" [classname]="classPreview.classname"
-                    [descriptions]="classPreview.description" [imageSrcs]="classPreview.src"
-                    [username]="classPreview.username"></app-class-preview>
+        <ng-container *ngIf="this.classPreviews.length>0">
+            <div class="class-preview-body grid grid-cols-2 gap-4">
+                <div *ngFor="let classPreview of this.classPreviews">
+                    <app-class-preview [classID]="classPreview.classroom.classID"
+                        [classname]="classPreview.classroom.className"
+                        [descriptions]="classPreview.classroom.descriptions" [imageSrcs]="classPreview.src"
+                        [username]="classPreview.classroom.User?.fullName || 'Unknown user'"></app-class-preview>
+                </div>
             </div>
-        </div>
+        </ng-container>
+        <ng-container *ngIf="this.classPreviews.length==0">
+            <div class="deactive flex justify-center items-center text-[1.5rem]">
+                You have no classes in today!
+            </div>
+        </ng-container>
     </div>
 </div>

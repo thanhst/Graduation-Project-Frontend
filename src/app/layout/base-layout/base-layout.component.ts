@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Type } from '@angular/core';
 import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
-import { User } from '../../core/models/user/user';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { DialogService } from '../../core/services/dialog/dialog.service';
 import { FlagService } from '../../core/services/flag/flag.service';
 import { LoadingService } from '../../core/services/loading/loading.service';
+import { UserService } from '../../core/services/user/user.service';
 @Component({
   selector: 'app-base-layout',
   imports: [RouterOutlet, RouterLink, RouterModule, CommonModule],
@@ -16,6 +16,7 @@ export class BaseLayoutComponent {
   constructor(private router: Router, public flagService: FlagService,
     private cdRef: ChangeDetectorRef, private dialogService: DialogService,
     private loading: LoadingService,
+    public userService: UserService,
     private authService: AuthService) {
     this.flagService.setActiveScheduler(true);
     this.flagService.setActiveSchedulerNotification(true);
@@ -27,7 +28,6 @@ export class BaseLayoutComponent {
   schedulerNotifComponent: Type<any> | null = null;
   notificationComponent: Type<any> | null = null;
 
-  user: User = new User();
 
   //init
   ngOnInit(): void {
@@ -98,11 +98,6 @@ export class BaseLayoutComponent {
   }
   unloadSchedulerNotif() {
     this.schedulerNotifComponent = null;
-  }
-
-  onSearch(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    console.log('Enter pressed: ', value);
   }
 
   async logOut() {

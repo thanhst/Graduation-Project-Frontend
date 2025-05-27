@@ -1,3 +1,6 @@
+import { StudentClass } from "../student_class/student-class";
+import { User } from "../user/user";
+
 export class Classroom {
     classID: string;
     className: string;
@@ -6,6 +9,8 @@ export class Classroom {
     url: string;
     createdAt: Date;
     updatedAt: Date;
+    User?:User;
+    StudentClasses?:StudentClass[];
 
     constructor(
         classID: string = "classID",

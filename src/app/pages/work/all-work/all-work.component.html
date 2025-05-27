@@ -1,13 +1,21 @@
 <div class="all-works-container">
-    <div class="grid grid-cols-3 gap-4 grid-rows-[repeat(2,_minmax(0,_1fr))]">
-        <div *ngFor="let classPreview of paginatedContents">
-            <app-class-preview [classID]="classPreview.id" [classname]="classPreview.classname"
-                [descriptions]="classPreview.description" [imageSrcs]="classPreview.src"
-                [username]="classPreview.username"></app-class-preview>
+    <ng-container *ngIf="this.classPreviews.length>0">
+        <div class="grid grid-cols-3 gap-4 grid-rows-[repeat(2,_minmax(0,_1fr))]">
+            <div *ngFor="let classPreview of this.classPreviews">
+                <app-class-preview [classID]="classPreview.classroom.classID"
+                    [classname]="classPreview.classroom.className" [descriptions]="classPreview.classroom.descriptions"
+                    [imageSrcs]="classPreview.src"
+                    [username]="classPreview.classroom.User?.fullName || 'Unknown user'"></app-class-preview>
+            </div>
         </div>
-    </div>
+    </ng-container>
+    <ng-container *ngIf="this.classPreviews.length==0">
+        <div class="deactive flex justify-center items-center text-[1.5rem]">
+            You have not attended any classes yet!
+        </div>
+    </ng-container>
 </div>
 <div class="flex justify-center">
-    <app-pagination [totalItems]="classPreviews.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
-    (pageChange)="onPageChange($event)"></app-pagination>
+    <app-pagination [totalItems]="count" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
+        (pageChange)="onPageChange($event)"></app-pagination>
 </div>
