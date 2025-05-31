@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../../environment/environment';
 import { User } from '../../models/user/user';
 
@@ -8,44 +8,76 @@ import { User } from '../../models/user/user';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = environment.apiUrl
-  constructor(private http: HttpClient) { }
-  private currentUser: User | null = null;
+  private apiUrl = environment.apiUrl;
+  
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  currentUser$ = this.currentUserSubject.asObservable();
+  timestamp = Date.now()
+  constructor(private http: HttpClient) {}
 
+  /** Set current user */
+  setCurrentUser(user: User | null): void {
+    this.currentUserSubject.next(user);
+    this.timestamp = Date.now()
+  }
+
+  /** Get current user (non-reactive, use only when really needed) */
+  getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  /** Clear current user */
+  clearUser(): void {
+    this.setCurrentUser(null);
+  }
+
+  /** Get user role from localStorage */
   getUserRole(): string | null {
     return localStorage.getItem("role");
   }
 
+  /** Load user info and update state */
   getUserInfor(userId: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/users/${userId}/get`, {
       withCredentials: true
     }).pipe(
-      tap(user => {
-        this.currentUser = user
-      })
+      tap(user => this.setCurrentUser(user))
     );
   }
-  getCurrentUser(): User | null {
-    return this.currentUser;
+
+  /** Update user profile settings (general info) */
+  updateUserInforSettings(formData: FormData): Observable<any> {
+    const user = this.getCurrentUser();
+    if (!user) return new Observable<any>();
+
+    const loginMethod = localStorage.getItem("login_method") || "email";
+    formData.append("loginMethod", loginMethod);
+
+    return this.http.post<any>(
+      `${this.apiUrl}/users/${user.userId}/update/infor`,
+      formData,
+      { withCredentials: true }
+    ).pipe(
+      tap(response => this.setCurrentUser(response.user))
+    );
   }
 
-  clearUser() {
-    this.currentUser = null;
-  }
-
+  /** Update full user data */
   updateUser(formData: FormData): Observable<any> {
-    var userId = ""
-    if (this.currentUser != null) {
-      userId = this.currentUser.userId
-      formData.append("user", JSON.stringify(this.currentUser))
-    }
-    return this.http.post<any>(`${this.apiUrl}/users/${userId}/update`, formData, {
-      withCredentials: true
-    }).pipe(
-      tap(value => {
-        this.currentUser = value.user
-        localStorage.setItem("last_login", value.last_login)
-        localStorage.setItem("role",value.role)
+    const user = this.getCurrentUser();
+    if (!user) return new Observable<any>();
+
+    formData.append("user", JSON.stringify(user));
+
+    return this.http.post<any>(
+      `${this.apiUrl}/users/${user.userId}/update`,
+      formData,
+      { withCredentials: true }
+    ).pipe(
+      tap(response => {
+        this.setCurrentUser(response.user);
+        localStorage.setItem("last_login", response.last_login);
+        localStorage.setItem("role", response.role);
       })
     );
   }

@@ -9,6 +9,5 @@ import { FlagService } from '../../../../core/services/flag/flag.service';
 })
 export class RoomsComponent {
   constructor(private flagService: FlagService) {
-    this.flagService.setTitle('workname')
   }
 }

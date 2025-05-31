@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ClassService } from '../../../../core/services/class/class.service';
 import { FlagService } from '../../../../core/services/flag/flag.service';
 
 @Component({
@@ -9,16 +10,21 @@ import { FlagService } from '../../../../core/services/flag/flag.service';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
-  constructor(private flagService: FlagService, private cdr:ChangeDetectorRef) {
-    this.flagService.setTitle("Work");
+  constructor(private flagService: FlagService, private cdr:ChangeDetectorRef,private classService:ClassService) {
+
+  }
+  ngOnInit(): void {
     this.flagService.setActiveScheduler(false);
     this.flagService.setActiveSchedulerNotification(false);
     this.flagService.setActiveSidebarRight(false);
     this.flagService.setActiveNotif(false);
-  }
-  ngOnInit(): void {
     this.flagService.title$.subscribe(title => {
       this.cdr.detectChanges();
     });
+    this.classService.classroom$.subscribe(
+      classroom => {
+        this.flagService.setTitle(classroom.className);
+      }
+    )
   }
 }

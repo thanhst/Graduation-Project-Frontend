@@ -30,8 +30,9 @@
                                 fill="#6D7C90" />
                         </svg>
                         Scheduler</a></li>
-                <li *ngIf="userService.getUserRole()!='student'" routerLinkActive="active"><a routerLinkActive="menu-active"
-                        [routerLinkActiveOptions]="{ exact: false }" routerLink="/statistical">
+                <li *ngIf="userService.getUserRole()!='student'" routerLinkActive="active"><a
+                        routerLinkActive="menu-active" [routerLinkActiveOptions]="{ exact: false }"
+                        routerLink="/statistical">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M20 10.6156H10.269L3.38792 17.4966C4.79259 18.7359 6.51685 19.5561 8.36458 19.8639C10.2123 20.1718 12.1094 19.9549 13.8399 19.238C15.5705 18.5211 17.0652 17.3329 18.154 15.8087C19.2427 14.2844 19.8831 12.4851 20 10.6156ZM2.50339 16.6108C1.26413 15.2062 0.443938 13.4819 0.136091 11.6342C-0.171756 9.78643 0.0451009 7.8894 0.761998 6.15881C1.47889 4.42822 2.66706 2.93354 4.19135 1.84478C5.71564 0.756009 7.51488 0.116852 9.38443 0V9.73104L2.50339 16.6108ZM10.6355 0V9.36447H20C19.8478 6.93072 18.8123 4.63627 17.088 2.91198C15.3637 1.1877 13.0693 0.152223 10.6355 0Z"
@@ -75,12 +76,13 @@
     </main>
 
     <div class="absolute div-user flex justify-end">
-        <img class="image-user" [src]="userService.getCurrentUser()?.profilePicture">
+        <img *ngIf="userService.currentUser$ | async as user" class="image-user"
+            [src]="user.profilePicture  + '?t=' +userService.timestamp.toString()">
     </div>
 
     <aside *ngIf="(flagService.isActiveSidebarRight$ | async)" class="sidebar-right">
         <div class="schedule-notif flex flex-col justify-start gap-[2rem] w-full h-full">
-            <ng-container *ngIf="flagService.isActiveScheduler$ | async">
+            <ng-container *ngIf="flagService.isActiveScheduler$ | async as flag">
                 <ng-component *ngComponentOutlet="schedulerComponent"></ng-component>
             </ng-container>
             <ng-container *ngIf="flagService.isActiveSchedulerNotification$ | async">

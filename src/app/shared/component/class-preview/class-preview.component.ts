@@ -19,7 +19,6 @@ export class ClassPreviewComponent {
   
   constructor(private cdr: ChangeDetectorRef){}
   ngOnInit(): void {
-    // this.cdr.detectChanges();
   }
 
   ngAfterViewInit() {

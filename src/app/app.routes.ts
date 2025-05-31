@@ -28,6 +28,7 @@ import { SettingsComponent } from './pages/work/classroom/settings/settings.comp
 import { CreateWorkComponent } from './pages/work/create-work/create-work.component';
 import { WorkComponent } from './pages/work/home/work.component';
 import { JoinWorkComponent } from './pages/work/join-work/join-work.component';
+import { JoinComponent } from './pages/work/join/join.component';
 
 export const routes: Routes = [
     { path: 'login', loadComponent: () => import('../app/pages/auth/user-login/user-login.component').then(m => m.UserLoginComponent), canActivate: [unAuthGuard] },
@@ -49,7 +50,6 @@ export const routes: Routes = [
         ], canActivateChild: [authGuard, welcomeGuard], resolve: {
             userResolver
         }
-
     },
     {
         path: '',
@@ -58,15 +58,30 @@ export const routes: Routes = [
             {
                 path: 'dashboard', component: DashboardComponent, resolve: {
                     classroomResolver,
-                    schedulerResolver
                 }
             },
 
-            { path: 'scheduler/create', component: CreateSchedulerComponent, },
-            { path: 'scheduler/all', component: ListSchedulerUserComponent, },
-            { path: 'scheduler/:id/view', component: ViewScheduleComponent, },
-            { path: 'scheduler/:id/edit', component: EditScheduleComponent, },
-            { path: 'scheduler', component: SchedulerComponent, },
+            { path: 'scheduler/create', component: CreateSchedulerComponent },
+            {
+                path: 'scheduler/all', component: ListSchedulerUserComponent, resolve: {
+                    schedulerResolver,
+                }
+            },
+            {
+                path: 'scheduler/:id/view', component: ViewScheduleComponent, resolve: {
+                    data: schedulerResolver,
+                }, runGuardsAndResolvers: 'paramsChange'
+            },
+            {
+                path: 'scheduler/:id/edit', component: EditScheduleComponent, resolve: {
+                    data: schedulerResolver,
+                }, runGuardsAndResolvers: 'paramsChange'
+            },
+            {
+                path: 'scheduler', component: SchedulerComponent, resolve: {
+                    schedulerResolver,
+                }
+            },
 
             { path: 'setting', component: ProfileComponent, },
 
@@ -75,23 +90,27 @@ export const routes: Routes = [
 
             { path: 'work/join', component: JoinWorkComponent, },
             {
-                path: 'work/:id/class', component: LayoutComponent, children: [
-                    { path: 'home', component: HomeClassComponent, },
-                    { path: 'all-members', component: AllMemberComponent, },
-                    { path: 'all-members/request', component: RequestRoomComponent, },
-                    { path: 'settings', component: SettingsComponent, },
+                path: 'work/:id/class', component: LayoutComponent,
+                children: [
+                    { path: 'home', component: HomeClassComponent, resolve: { classroomResolver } },
+                    { path: 'all-members', component: AllMemberComponent, resolve: { classroomResolver } },
+                    { path: 'all-members/request', component: RequestRoomComponent, resolve: { classroomResolver } },
+                    { path: 'settings', component: SettingsComponent, resolve: { classroomResolver } },
+                    { path: 'join', component: JoinComponent, resolve: { classroomResolver } },
                     { path: '**', redirectTo: 'home' }
-                ]
+                ],
             },
             { path: 'work/create', component: CreateWorkComponent, },
-            { path: 'work/all', component: AllWorkComponent,resolve:{
-                classroomResolver,
-                schedulerResolver
-            } },
+            {
+                path: 'work/all', component: AllWorkComponent, resolve: {
+                    classroomResolver,
+                }
+            },
             { path: 'work', component: WorkComponent, },
             { path: '**', redirectTo: 'dashboard' }
         ], canActivateChild: [authGuard, welcomeGuard], resolve: {
             userResolver,
+            schedulerResolver
         }
     },
     { path: '**', redirectTo: '' }

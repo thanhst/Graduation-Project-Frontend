@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Scheduler } from '../../../core/models/scheduler/scheduler';
 import { FlagService } from '../../../core/services/flag/flag.service';
+import { SchedulerService } from '../../../core/services/scheduler/scheduler.service';
 
 @Component({
   selector: 'app-scheduler-notif',
@@ -11,9 +11,12 @@ import { FlagService } from '../../../core/services/flag/flag.service';
   styleUrl: './scheduler-notif.component.scss',
 })
 export class SchedulerNotifComponent {
-  selectedDate: Date = new Date();
-  notifClass = Array.from({ length: 20 }, () => new Scheduler());
 
-  constructor(public flagService:FlagService){
+  constructor(public flagService:FlagService,public schedulerService:SchedulerService,private cdr:ChangeDetectorRef){
+
+  }
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+
   }
 }

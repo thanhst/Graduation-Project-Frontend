@@ -1,11 +1,11 @@
 <div class="home-container">
-    <div class="infor-container">
-        <a [routerLink]="['../all-members']"  class="flex flex-col gap-3 justify-center items-center box-sum">
-            <div class="number">{{ '64' }}</div>
+    <div class="infor-container" *ngIf="this.classService.countData$|async as count">
+        <a [routerLink]="['../all-members']"  class="flex-2 flex flex-col gap-3 justify-center items-center box-sum">
+            <div class="number">{{ count.countJoined }}</div>
             <div>Student</div>
         </a>
-        <a [routerLink]="['../all-members/request']"  class="flex flex-col gap-3 justify-center items-center box-request">
-            <div class="number">{{ '32' }}</div>
+        <a *ngIf="role=='teacher'" [routerLink]="['../all-members/request']"  class="flex-2 flex flex-col gap-3 justify-center items-center box-request">
+            <div class="number">{{  count.countWaiting }}</div>
             <div>
                 Request join class
             </div>

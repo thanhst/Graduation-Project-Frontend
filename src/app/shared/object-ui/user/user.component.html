@@ -1,10 +1,11 @@
 <div class="user-container flex justify-between">
-    <div class="infor flex">
+    <div class="infor flex gap-3">
         <img class="w-[2rem] h-[2rem] rounded-full" [src]="src" alt="Image user">
-        <div>{{username}}</div>
+        <div [ngClass]="{'me':this.userId==myId}">{{username}}</div>
+        <span *ngIf="this.userId==myId">(Me)</span>
     </div>
     <div class="flex gap-3">
-        <button *ngIf="type==='request' && isTeacher===true" class="btn-view" (click)="onSubmit()">Accept</button>
-        <button *ngIf="isTeacher===true" class="btn-remove" (click)="onRemove()">Remove</button>
+        <button *ngIf="type==='request' && role=='teacher'" class="btn-view" (click)="onSubmit()">Accept</button>
+        <button *ngIf="role=='teacher'" class="btn-remove" (click)="onRemove()">Remove</button>
     </div>
 </div>

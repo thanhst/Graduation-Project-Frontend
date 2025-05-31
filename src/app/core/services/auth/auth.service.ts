@@ -13,6 +13,7 @@ interface TokenResponse {
   user_id: string;
   role: string;
   last_login: string;
+  login_method:string;
   access_exprise: string;
   refresh_exprise: string;
 }
@@ -33,6 +34,7 @@ export class AuthService {
     localStorage.setItem('user_id', tokens.user_id);
     localStorage.setItem('role', tokens.role);
     localStorage.setItem('last_login', tokens.last_login);
+    localStorage.setItem('login_method',tokens.login_method);
     localStorage.setItem('access_exprise', tokens.access_exprise);
     localStorage.setItem('refresh_exprise', tokens.refresh_exprise);
   }
@@ -40,6 +42,7 @@ export class AuthService {
     localStorage.removeItem('user_id');
     localStorage.removeItem('role');
     localStorage.removeItem("last_login");
+    localStorage.removeItem('login_method');
     localStorage.removeItem('access_exprise');
     localStorage.removeItem('refresh_exprise');
   }

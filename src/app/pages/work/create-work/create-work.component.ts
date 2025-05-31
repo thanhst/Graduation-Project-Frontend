@@ -33,7 +33,7 @@ export class CreateWorkComponent {
       classId: [hashMD5(Date.now().toString())],
       classname: ['', Validators.required],
       description: ['', Validators.required],
-      link: ["http://localhost:4200/work/join/?request=" + hashMD5(Date.now().toString())]
+      link: ["http://localhost:4200/classrooms/" + hashMD5(Date.now().toString())+"/join"]
     })
   }
   setFlag() {

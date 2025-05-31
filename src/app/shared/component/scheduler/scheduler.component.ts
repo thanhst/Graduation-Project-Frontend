@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FlagService } from '../../../core/services/flag/flag.service';
+import { SchedulerService } from '../../../core/services/scheduler/scheduler.service';
 @Component({
   selector: 'app-scheduler-shared',
   imports: [CommonModule],
@@ -14,7 +15,11 @@ export class SchedulerComponent {
   weeks: number[][] = [];
   currentSelectedDate: Date = this.currentDate;
 
-  constructor(public flagService:FlagService){
+  constructor(public flagService:FlagService,private schedulerService:SchedulerService){
+    this.schedulerService.selectedDate$.subscribe(()=>{
+      this.schedulerService.GetSchedulerByUserAndDate().subscribe(data=>{
+      });
+    })
   }
 
   ngOnInit() {
@@ -25,6 +30,7 @@ export class SchedulerComponent {
   
   setSelectedDate(day:number){
     this.currentSelectedDate = this.getDay(day);
+    this.schedulerService.SetSelectedDate(this.currentSelectedDate)
   }
   //end
 

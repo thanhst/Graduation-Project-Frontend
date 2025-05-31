@@ -16,12 +16,6 @@
         <div class="flex relative justify-between">
             <label for="title" class="flex-1">Title</label>
             <div class="flex-3 flex">
-                <input formControlName="idRoom" id="idRoom" name="idRoom" class="input flex-3" type="text" placeholder="IdRoom" readonly>
-            </div>
-        </div>
-        <div class="flex relative justify-between">
-            <label for="title" class="flex-1">Title</label>
-            <div class="flex-3 flex">
                 <input formControlName="title" id="title" name="title" class="input flex-3" type="text"
                     placeholder="Title of schedular">
                 <div class="absolute top-full">
@@ -56,16 +50,9 @@
                 </div>
             </div>
         </div>
-        <div class="flex relative justify-between gap-3">
-            <label class="flex-1" for="password">Password</label>
-            <input formControlName="password" id="password" name="password" class="input flex-3" type="text"
-                placeholder="Password">
-        </div>
         <div *ngIf="isTeacher" class="flex relative justify-between gap-3">
             <label class="flex-1" for="classname">Classname</label>
-            <select formControlName="classname" id="classname" name="classname" class="input flex-3">
-                <option *ngFor="let i of numbers">{{ i }}</option>
-            </select>
+            <input formControlName="classname" id="classname" name="classname" class="input flex-3" >
         </div>
         <div class="flex relative justify-between gap-3">
             <label class="flex-1" for="description">Description</label>

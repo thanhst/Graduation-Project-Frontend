@@ -11,13 +11,14 @@
     <div class="bg-white rounded-[10px] p-[2rem] flex flex-col gap-[3rem]">
         <h1 class="text-bigger text-center font-bold">Waiting room</h1>
         <div class="student-container" class="grid grid-rows-5 gap-3">
-            <ng-container *ngFor="let student of paginatedContents">
-                <app-user [src]="student.src" [username]="student.name" [type]="'request'"></app-user>
+            <ng-container *ngFor="let student of this.studentWaiting">
+                <app-user [src]="student.profilePicture" [username]="student.fullName" [type]="'request'"
+                    [userId]="student.userId" [classId]="this.classId" (accepted)="removeUser($event)"></app-user>
             </ng-container>
         </div>
     </div>
 </div>
-<div class="flex justify-center">
-    <app-pagination [totalItems]="studentPreviews().length" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+<div class="flex justify-center" *ngIf="this.classService.countData$ | async as count">
+    <app-pagination [totalItems]="+count.countWaiting" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
         (pageChange)="onPageChange($event)"></app-pagination>
 </div>

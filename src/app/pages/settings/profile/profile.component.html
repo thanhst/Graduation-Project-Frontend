@@ -1,80 +1,101 @@
 <div class="bg-white pt-[2rem] pb-[2rem] ps-[3rem] pe-[3rem] rounded-[10px] w-[75vw] flex flex-col gap-5">
-    <div class="flex justify-end">
-        <button class="btn-edit" (click)="onChangeEdit()">
+    <div class="flex justify-between gap-5">
+        <div *ngIf="isEditForm && loginMethod=='email'" class="flex justify-center items-center">
+            <span class="me-3 text-sm font-medium text-gray-700">Change password</span>
+            <div class="inline-flex items-center w-11 h-6  cursor-pointer rounded-full  relative bg-gray-300">
+                <input id="checked" type="checkbox" class="sr-only peer" [checked]="isChangePassword"
+                    (change)="onChangePassword()" />
+                <label for="checked"
+                    class="absolute cursor-pointer z-1 w-full h-full rounded-full bg-gray-300 transition-colors duration-300  peer-checked:bg-blue-600 ">
+                </label>
+                <label for="checked"
+                    class="absolute cursor-pointer z-2 top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 transform peer-checked:translate-x-5">
+                </label>
+            </div>
+        </div>
+        <button class="btn-edit ml-auto" (click)="onChangeEdit()">
             Edit
         </button>
     </div>
-    <form [formGroup]="form" id="form" class="flex flex-col gap-[2rem]" method="post" (ngSubmit)="onSubmit()">
-        <div class="flex relative justify-between">
-            <label for="fullname" class="flex-1">Fullname</label>
-            <div class="flex-3 flex">
-                <input formControlName="fullname" id="fullname" name="fullname" class="input flex-3" type="text"
-                    placeholder="Fullname">
-                <div class="absolute top-full">
-                    <p class="error-warning"
-                        *ngIf="form.controls['fullname'].invalid && form.controls['fullname'].touched">
-                        Invalid fullname. </p>
+    <div class="grid grid-cols-5 gap-[1rem]">
+        <form [formGroup]="form" id="form" class="flex flex-col gap-[2rem] col-span-4" method="post"
+            (ngSubmit)="onSubmit()">
+            <div class="flex relative justify-between">
+                <label for="fullname" class="flex-1">Fullname</label>
+                <div class="flex-3 flex">
+                    <input formControlName="fullname" id="fullname" name="fullname" class="input flex-3" type="text"
+                        placeholder="Fullname">
+                    <div class="absolute top-full">
+                        <p class="error-warning"
+                            *ngIf="form.controls['fullname'].invalid && form.controls['fullname'].touched">
+                            Invalid fullname. </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="flex relative justify-between">
-            <label for="title" class="flex-1">Email</label>
-            <div class="flex-3 flex">
-                <input formControlName="email" id="email" name="email" class="input flex-3" type="text"
-                    placeholder="Email" autocomplete="email">
-                <div class="absolute top-full">
-                    <p class="error-warning" *ngIf="form.controls['email'].invalid && form.controls['email'].touched">
-                        Invalid email. </p>
+            <div *ngIf="loginMethod =='email'" class="flex relative justify-between"
+                [class.deactive]="!isChangePassword">
+                <label for="currentPassword" class="flex-1">Current password</label>
+                <div class="flex-3 flex">
+                    <input formControlName="currentPassword" id="currentPassword" name="currentPassword"
+                        class="input flex-3" type="password" placeholder="Current password" autocomplete="new-password">
+                    <div class="absolute top-full">
+                        <p class="error-warning"
+                            *ngIf="form.controls['currentPassword'].invalid && form.controls['currentPassword'].touched">
+                            Invalid current password. </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="flex relative justify-between" [class.deactive]="!isEditForm">
-            <label for="title" class="flex-1">Current password</label>
-            <div class="flex-3 flex">
-                <input formControlName="currentPassword" id="currentPassword" name="currentPassword"
-                    class="input flex-3" type="password" placeholder="Current password" autocomplete="new-password">
-                <div class="absolute top-full">
-                    <p class="error-warning"
-                        *ngIf="form.controls['currentPassword'].invalid && form.controls['currentPassword'].touched">
-                        Invalid current password. </p>
+            <div *ngIf="loginMethod =='email'" class="flex relative justify-between"
+                [class.deactive]="!isChangePassword">
+                <label for="newPassword" class="flex-1">New password</label>
+                <div class="flex-3 flex">
+                    <input formControlName="newPassword" id="newPassword" name="newPassword" class="input flex-3"
+                        type="password" placeholder="New password" autocomplete="new-password">
+                    <div class="absolute top-full">
+                        <p class="error-warning"
+                            *ngIf="form.controls['newPassword'].touched && (form.controls['newPassword'].invalid || form.errors?.['checkNewPassword'])">
+                            {{ form.controls['newPassword'].invalid
+                            ? ' Invalid New password.'
+                            : form.errors?.['checkNewPassword']
+                            ? 'The new password must be difference with current password.'
+                            : null }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="flex relative justify-between" [class.deactive]="!isEditForm">
-            <label for="title" class="flex-1">New password</label>
-            <div class="flex-3 flex">
-                <input formControlName="newPassword" id="newPassword" name="newPassword" class="input flex-3"
-                    type="password" placeholder="New password" autocomplete="new-password">
-                <div class="absolute top-full">
-                    <p class="error-warning" *ngIf="form.controls['newPassword'].touched && (form.controls['newPassword'].invalid || form.errors?.['checkNewPassword'])">
-                        {{ form.controls['newPassword'].invalid
-                        ? ' Invalid New password.'
-                        : form.errors?.['checkNewPassword']
-                        ? 'The new password must be difference with current password.'
-                        : null }}
-                    </p>
+            <div *ngIf="loginMethod =='email'" class="flex relative justify-between"
+                [class.deactive]="!isChangePassword">
+                <label for="rePassword" class="flex-1">Re password</label>
+                <div class="flex-3 flex">
+                    <input formControlName="rePassword" id="rePassword" name="rePassword" class="input flex-3"
+                        type="password" placeholder="Re password" autocomplete="new-password">
+                    <div class="absolute top-full">
+                        <p class="error-warning"
+                            *ngIf="form.controls['rePassword'].touched && (form.controls['rePassword'].invalid || form.errors?.['checkPassword'])">
+                            {{
+                            form.controls['rePassword'].invalid
+                            ? 'Invalid re password.'
+                            : form.errors?.['checkPassword']
+                            ? 'The confirmation password does not match the original password.'
+                            : null
+                            }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="flex relative justify-between" [class.deactive]="!isEditForm">
-            <label for="title" class="flex-1">Re password</label>
-            <div class="flex-3 flex">
-                <input formControlName="rePassword" id="rePassword" name="rePassword" class="input flex-3"
-                    type="password" placeholder="Re password" autocomplete="new-password">
-                <div class="absolute top-full">
-                    <p class="error-warning" *ngIf="form.controls['rePassword'].touched && (form.controls['rePassword'].invalid || form.errors?.['checkPassword'])">
-                        {{
-                        form.controls['rePassword'].invalid
-                        ? 'Invalid re password.'
-                        : form.errors?.['checkPassword']
-                        ? 'The confirmation password does not match the original password.'
-                        : null
-                        }}</p>
-                </div>
+            <div *ngIf="isEditForm" class="flex justify-center">
+                <Button form="form" class="btn-submit">Submit</Button>
             </div>
+        </form>
+        <div class="col-start-5">
+            <label for="fileInput" class="cursor-pointer select-image">
+                <div
+                    class="relative overflow-hidden w-40 h-40 bg-gray-500 rounded-full flex items-center justify-center hover:bg-gray-400">
+                    <img class="image-shower" id="imagePreview" [src]="imagePreview">
+                    <div *ngIf="isEditForm" class="absolute bottom-0 upload-image">Upload</div>
+                </div>
+            </label>
+            <input *ngIf="isEditForm" form="form" type="file" id="fileInput" accept="image/*" class="hidden"
+                (change)="onFileSelected($event)">
         </div>
-        <div class="flex justify-center">
-            <Button form="form" class="btn-submit">Submit</Button>
-        </div>
-    </form>
+    </div>
 </div>

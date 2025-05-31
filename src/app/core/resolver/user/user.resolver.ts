@@ -14,7 +14,6 @@ export const userResolver: ResolveFn<any> = (route, state) => {
 
   const userID = localStorage.getItem('user_id');
   if (!userID) {
-    console.log("khong tim thay userid")
     return from(authService.logout()).pipe(
       switchMap(() => of(router.navigate(['/login'])))
     );

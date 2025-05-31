@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ClassService } from '../../../../core/services/class/class.service';
 import { FlagService } from '../../../../core/services/flag/flag.service';
 import { PaginationComponent } from "../../../../shared/component/pagination/pagination.component";
 import { RoomComponent } from "../../../../shared/object-ui/room/room.component";
@@ -15,9 +16,17 @@ export class HomeClassComponent {
 
   itemsPerPage: number = 2;
   currentPage: number = 1;
+  role: string = localStorage.getItem("role") || "student"
 
-  constructor(private flagService: FlagService) {
-    this.flagService.setTitle('workname')
+  constructor(private flagService: FlagService,private cdr:ChangeDetectorRef, public classService: ClassService) {
+
+  }
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.flagService.title$.subscribe(title => {
+      this.cdr.detectChanges();
+    });
   }
   roomPreviews = () => {
     return Array.from({ length: 11 }, (_, i) => ({

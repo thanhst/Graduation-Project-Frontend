@@ -6,9 +6,10 @@ import { DialogService } from '../../core/services/dialog/dialog.service';
 import { FlagService } from '../../core/services/flag/flag.service';
 import { LoadingService } from '../../core/services/loading/loading.service';
 import { UserService } from '../../core/services/user/user.service';
+import { SchedulerComponent } from "../../shared/component/scheduler/scheduler.component";
 @Component({
   selector: 'app-base-layout',
-  imports: [RouterOutlet, RouterLink, RouterModule, CommonModule],
+  imports: [RouterOutlet, RouterLink, RouterModule, CommonModule, SchedulerComponent],
   templateUrl: './base-layout.component.html',
   styleUrl: './base-layout.component.scss',
 })
@@ -27,7 +28,7 @@ export class BaseLayoutComponent {
   schedulerComponent: Type<any> | null = null;
   schedulerNotifComponent: Type<any> | null = null;
   notificationComponent: Type<any> | null = null;
-
+  loadDateTimeJs:boolean = false;
 
   //init
   ngOnInit(): void {
@@ -70,6 +71,7 @@ export class BaseLayoutComponent {
 
   //function
   async loadScheduler() {
+    this.loadDateTimeJs = true;
     if (!this.schedulerComponent) {
       const { SchedulerComponent } = await import('../../shared/component/scheduler/scheduler.component');
       this.schedulerComponent = SchedulerComponent;

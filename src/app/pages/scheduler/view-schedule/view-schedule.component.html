@@ -7,7 +7,7 @@
                     fill="#FA9A9A" />
             </svg>
         </button>
-        <a class="btn-edit" [routerLink]="['/scheduler',1,'edit']">
+        <a *ngIf="userId==thisScheduler.userID" class="btn-edit" [routerLink]="['/scheduler',this.thisScheduler.schedulerID,'edit']">
             Edit
         </a>
     </div>
@@ -16,7 +16,7 @@
         <div class="flex relative justify-between">
             <label for="title" class="flex-1">Title</label>
             <div class="flex-3 flex">
-                <input formControlName="idRoom" id="idRoom" name="idRoom" class="input flex-3" type="text" placeholder="IdRoom" readonly>
+                <input formControlName="title" id="title" name="title" class="input flex-3" type="text" placeholder="IdRoom" readonly>
             </div>
         </div>
         <div class="flex relative justify-between">
@@ -41,11 +41,6 @@
                 <input formControlName="date" id="date" name="date" class="input flex-3" type="datetime-local" readonly>
             </div>
         </div>
-        <div class="flex relative justify-between gap-3">
-            <label class="flex-1" for="password">Password</label>
-            <input formControlName="password" id="password" name="password" class="input flex-3" type="text"
-                placeholder="Password" readonly>
-        </div>
         <div *ngIf="isTeacher" class="flex relative justify-between gap-3">
             <label class="flex-1" for="classname">Classname</label>
             <input formControlName="classname" id="classname" name="classname" class="input flex-3" readonly>
@@ -55,8 +50,8 @@
             <textarea formControlName="description" id="description" name="description" class="input flex-3" readonly></textarea>
         </div>
         <div class="flex justify-between">
-            <a class="btn-view" routerLink='/meeting-room/join' [queryParams]="{'id':'1'}">Join room</a>
-            <button *ngIf="isTeacher" class="btn-remove">Remove room</button>
+            <a class="btn-view" routerLink='/meeting-room/join' [queryParams]="{'id':this.thisScheduler.roomID}">Join room</a>
+            <button *ngIf="userId==thisScheduler.userID" (click)="onRemove()" class="btn-remove">Remove room</button>
         </div>
     </form>
 </div>
