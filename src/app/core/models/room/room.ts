@@ -1,18 +1,18 @@
 export class Room {
     roomID: string;
-    classID: string;
-    state: "open" | "close";
+    classID: string|null;
+    state: "opening" | "closed";
     host: string;
     createdAt: Date;
-    endAt: Date;
+    endAt: Date|null;
 
     constructor(
         roomID: string = "roomID",
-        classID: string = "classID",
-        state: "open" | "close" = "open",
+        classID: string|null = "classID",
+        state: "opening" | "closed" = "opening",
         host: string = "userID",
         createdAt: Date = new Date(),
-        endAt: Date = new Date(),
+        endAt: Date|null = new Date(),
     ) {
         this.roomID = roomID;
         this.classID = classID;

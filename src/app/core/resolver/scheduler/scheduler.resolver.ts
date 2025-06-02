@@ -10,7 +10,7 @@ export const schedulerResolver: ResolveFn<any> = (route, state) => {
   schedulerService.SetSelectedDate(today);
   const tasks = {
     date: route.routeConfig?.path === "scheduler"||route.routeConfig?.path === ""?schedulerService.GetSchedulerByUserAndDate().pipe(catchError(()=>of(null))):of(null),
-    all:route.routeConfig?.path === "scheduler/all"||route.routeConfig?.path === ""?schedulerService.GetAll().pipe(catchError(()=>of(null))):of(null),
+    all:route.routeConfig?.path === "scheduler/all"||route.routeConfig?.path === ""?schedulerService.GetAll(100,0).pipe(catchError(()=>of(null))):of(null),
     view:route.routeConfig?.path === "scheduler/:id/view"||route.routeConfig?.path === "scheduler/:id/edit"?schedulerService.View(route.paramMap.get("id")||"").pipe(catchError(()=>of(null))):of(null)
   }
   return forkJoin(tasks);

@@ -62,11 +62,19 @@ export class CreateWorkComponent {
       console.error('Lỗi khi copy:', err);
     });
   }
-  onSubmit() {
+  async onSubmit() {
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
     } else {
+      this.dialogService.setIsQuestion(true)
+      const result = await this.dialogService.open({
+        content:"Create your class?",
+        yesText:"Yes",
+        noText:"No"
+      })
+      if (result == 1){
+        this.loadingService.show();
       const classroom = new Classroom(
         this.form.get("classId")?.value,
         this.form.get("classname")?.value,
@@ -78,9 +86,27 @@ export class CreateWorkComponent {
       )
       this.classService.createClass(classroom).subscribe({
         next: (data) => {
-          console.log(data)
+          this.loadingService.hide();
+          this.dialogService.setIsQuestion(false);
+          this.dialogService.open({
+            content:"Success to create class!"
+          })
+          setTimeout(()=>{
+            this.dialogService.cancel();
+          },3000)
+        },
+        error:(err)=>{
+          this.loadingService.hide();
+          this.dialogService.setIsQuestion(false);
+          this.dialogService.open({
+            content:err.error
+          })
+          setTimeout(()=>{
+            this.dialogService.cancel();
+          },3000)
         }
       })
+      }
     }
   }
 }

@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Room } from '../../../core/models/room/room';
+import { DialogService } from '../../../core/services/dialog/dialog.service';
+import { LoadingService } from '../../../core/services/loading/loading.service';
+import { RoomService } from '../../../core/services/room/room.service';
 import { StreamService } from '../../../core/services/stream/stream.service';
 
 @Component({
@@ -12,9 +16,11 @@ import { StreamService } from '../../../core/services/stream/stream.service';
 })
 export class MeetingHomeComponent {
   form: FormGroup;
-
+  user_id: string = localStorage.getItem("user_id") || ""
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
-  constructor(public streamService: StreamService, fb: FormBuilder) {
+  constructor(public streamService: StreamService, fb: FormBuilder, private loadingService:LoadingService,
+    private roomService:RoomService,private router:Router,private dialogService:DialogService
+  ) {
     this.form = fb.group({
       roomId: ['', Validators.required],
     })
@@ -74,5 +80,33 @@ export class MeetingHomeComponent {
     this.streamService.switchMicroState();
     const audioTrack = this.stream.getAudioTracks()[0];
     audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
+  }
+
+  createNewMeeting(){
+    this.loadingService.show();
+    const room=new Room(
+      "",
+      null,
+      "opening",
+      this.user_id,
+      new Date(),
+      null
+    )
+    this.roomService.createRoom(room).subscribe({
+      next:(room)=>{
+        this.loadingService.hide();
+        this.router.navigate([`meeting/${room.roomID}/room`]);
+      },
+      error:(err)=>{
+        this.loadingService.hide();
+        this.dialogService.setIsQuestion(false);
+        this.dialogService.open({
+          content:err.error
+        })
+        setTimeout(()=>{
+          this.dialogService.cancel()
+        },3000)
+      }
+    })
   }
 }

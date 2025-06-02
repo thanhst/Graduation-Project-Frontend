@@ -10,7 +10,7 @@ import { FlagService } from '../../../../core/services/flag/flag.service';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
-  constructor(private flagService: FlagService, private cdr:ChangeDetectorRef,private classService:ClassService) {
+  constructor(private flagService: FlagService, private cdr: ChangeDetectorRef, private classService: ClassService) {
 
   }
   ngOnInit(): void {
@@ -18,12 +18,10 @@ export class LayoutComponent {
     this.flagService.setActiveSchedulerNotification(false);
     this.flagService.setActiveSidebarRight(false);
     this.flagService.setActiveNotif(false);
-    this.flagService.title$.subscribe(title => {
-      this.cdr.detectChanges();
-    });
     this.classService.classroom$.subscribe(
       classroom => {
         this.flagService.setTitle(classroom.className);
+        this.cdr.detectChanges();
       }
     )
   }

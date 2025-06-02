@@ -106,11 +106,9 @@ export class CreateSchedulerComponent {
     var isoString: string = "";
     const val = this.form.get('date')?.value;
     const dateObj = val ? new Date(val) : null;
-    // console.log(dateObj)
     if (dateObj && !isNaN(dateObj.getTime())) {
       isoString = dateObj.toISOString();
     } else {
-      // console.error('Giá trị không phải ngày hợp lệ:', val);
     }
     if (result === 1) {
       this.loadingService.show();

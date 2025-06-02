@@ -1,16 +1,17 @@
-<div class="list-scheduler-container grid grid-rows-5">
-    <div *ngFor="let schedule of paginatedSchedulers" class="box flex justify-between items-center">
+<div class="list-scheduler-container h-[80vh] overflow-y-auto p-2 bg-white rounded shadow">
+    <div *ngFor="let schedule of mySchedulers" class="mt-2 mb-5 box flex justify-between items-center">
         <div>
-            <div>{{schedule.getTitle()}}</div>
-            <div class="text-smaller">{{ schedule.getClassname() }}</div>
+            <div>{{schedule.title}}</div>
+            <div class="text-smaller">{{ schedule.Classroom?.className }} - start time: {{schedule.startTime|date:'dd/MM/yyyy HH:mm'}}
+            </div>
         </div>
         <div class="flex gap-5">
-            <a [routerLink]="['/scheduler',schedule.getId(),'view']"  class="btn-view">View</a>
-            <a [routerLink]="['/scheduler',schedule.getId(),'edit']" class="btn-edit">Edit</a>
+            <a  [routerLink]="['/scheduler',schedule.schedulerID,'view']" class="btn-view">View</a>
+            <a *ngIf="schedule.userID==userId" [routerLink]="['/scheduler',schedule.schedulerID,'edit']" class="btn-edit">Edit</a>
         </div>
     </div>
 </div>
-<div class="flex justify-center">
+<!-- <div class="flex justify-center">
     <app-pagination [totalItems]="mySchedulers.length" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"
     (pageChange)="onPageChange($event)"></app-pagination>
-</div>
+</div> -->

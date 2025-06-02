@@ -16,7 +16,8 @@ export class SchedulerComponent {
   currentSelectedDate: Date = this.currentDate;
 
   constructor(public flagService:FlagService,private schedulerService:SchedulerService){
-    this.schedulerService.selectedDate$.subscribe(()=>{
+    this.currentSelectedDate = this.schedulerService.GetSelectedDate()
+    this.schedulerService.selectedDate$.subscribe((data)=>{
       this.schedulerService.GetSchedulerByUserAndDate().subscribe(data=>{
       });
     })

@@ -40,8 +40,12 @@ export class SchedulerService {
       }),
     )
   }
-  GetAll(): Observable<Scheduler[]> {
+  GetAll(limit: number, offset: number): Observable<Scheduler[]> {
     return this.http.get<Scheduler[]>(`${this.apiUrl}/schedulers/user/${this.userId}/get/all`, {
+      params: {
+        limit: limit.toString(),
+        offset: offset.toString()
+      },
       withCredentials: true
     }).pipe(
       tap(data=> {

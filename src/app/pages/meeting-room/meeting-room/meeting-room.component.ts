@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { User } from '../../../core/models/user/user';
 import { StreamService } from '../../../core/services/stream/stream.service';
 import { UserMeetingComponent } from "../../../shared/object-ui/user-meeting/user-meeting.component";
 import { UserComponent } from "../../../shared/object-ui/user/user.component";
+import { MeetingService } from '../../../core/websocket/meeting/meeting.service';
 
 @Component({
   selector: 'app-meeting-room',
@@ -14,8 +16,13 @@ import { UserComponent } from "../../../shared/object-ui/user/user.component";
 export class MeetingRoomComponent {
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
   form: FormGroup;
+  host:User = new User;
+  userInRoom:User[] = []
+  userInWaitingRoom: User[] = []
 
-  constructor(public streamService: StreamService, private fb: FormBuilder) {
+  constructor(public streamService: StreamService, private fb: FormBuilder,
+    private wsService:MeetingService
+  ) {
     this.form = this.fb.group({
       'shareState': ['', Validators.required],
       'password': ['', Validators.minLength(6)],

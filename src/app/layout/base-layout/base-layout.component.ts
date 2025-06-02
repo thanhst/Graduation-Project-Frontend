@@ -6,10 +6,9 @@ import { DialogService } from '../../core/services/dialog/dialog.service';
 import { FlagService } from '../../core/services/flag/flag.service';
 import { LoadingService } from '../../core/services/loading/loading.service';
 import { UserService } from '../../core/services/user/user.service';
-import { SchedulerComponent } from "../../shared/component/scheduler/scheduler.component";
 @Component({
   selector: 'app-base-layout',
-  imports: [RouterOutlet, RouterLink, RouterModule, CommonModule, SchedulerComponent],
+  imports: [RouterOutlet, RouterLink, RouterModule, CommonModule,],
   templateUrl: './base-layout.component.html',
   styleUrl: './base-layout.component.scss',
 })

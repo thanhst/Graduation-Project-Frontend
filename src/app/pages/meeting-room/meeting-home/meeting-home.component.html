@@ -62,7 +62,7 @@
                 <p class="block font-bold">Create or join meeting</p>
             </div>
             <div class="grid grid-cols-3">
-                <button class="btn-submit col-start-2 flex items-center justify-center gap-2">
+                <button (click)="createNewMeeting()" class="btn-submit col-start-2 flex items-center justify-center gap-2">
                     <svg class="block" width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14 25.3297C20.9036 25.3297 26.5 19.9202 26.5 13.2473C26.5 6.57434 20.9036 1.16486 14 1.16486C7.09644 1.16486 1.5 6.57434 1.5 13.2473C1.5 19.9202 7.09644 25.3297 14 25.3297Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M14 8.41431V18.0802" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -75,7 +75,6 @@
                 <div class="flex gap-5">
                     <form [formGroup]="form" id="form" class="flex-3 flex flex-col gap-[1rem]">
                         <input class="input" type="text" placeholder="Enter your ID room">
-                        <input class="input" type="password" placeholder="Enter the room password if required">
                     </form>
                     <div class="flex-1">
                         <button form="form" type="submit" class="btn-view">Join room</button>

@@ -3,8 +3,10 @@ import { authGuard } from './core/guard/auth.guard';
 import { unAuthGuard } from './core/guard/un-auth.guard';
 import { welcomeGuard } from './core/guard/welcome.guard';
 import { classroomResolver } from './core/resolver/classroom/classroom.resolver';
+import { roomResolver } from './core/resolver/room/room.resolver';
 import { schedulerResolver } from './core/resolver/scheduler/scheduler.resolver';
 import { userResolver } from './core/resolver/user/user.resolver';
+import { BaseLayoutMeetingComponent } from './layout/base-layout-meeting/base-layout-meeting.component';
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { BaseRoomLayoutComponent } from './layout/base-room-layout/base-room-layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -44,8 +46,14 @@ export const routes: Routes = [
         path: 'meeting', component: BaseRoomLayoutComponent, children: [
             { path: '', component: MeetingHomeComponent },
             { path: 'start', component: MeetingHomeComponent },
-            { path: ':id/join', component: MeetingJoinComponent },
-            { path: ':id/room', component: MeetingRoomComponent },
+            {
+                path: ':id', component: BaseLayoutMeetingComponent,
+                children: [
+                    { path: 'waiting-room', component: MeetingJoinComponent },
+                    { path: 'room', component: MeetingRoomComponent },
+                    { path: '**', redirectTo: 'waiting-room', pathMatch: 'full' }
+                ],resolve:{data: roomResolver}
+            },
             { path: '**', redirectTo: '' }
         ], canActivateChild: [authGuard, welcomeGuard], resolve: {
             userResolver
@@ -64,7 +72,7 @@ export const routes: Routes = [
             { path: 'scheduler/create', component: CreateSchedulerComponent },
             {
                 path: 'scheduler/all', component: ListSchedulerUserComponent, resolve: {
-                    schedulerResolver,
+                    data: schedulerResolver,
                 }
             },
             {
