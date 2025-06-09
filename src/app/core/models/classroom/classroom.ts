@@ -1,3 +1,4 @@
+import { Scheduler } from "../scheduler/scheduler";
 import { StudentClass } from "../student_class/student-class";
 import { User } from "../user/user";
 
@@ -11,6 +12,8 @@ export class Classroom {
     updatedAt: Date;
     User?:User;
     StudentClasses?:StudentClass[];
+    Schedulers?:Scheduler[];
+    Notifications?:Scheduler[];
 
     constructor(
         classID: string = "classID",

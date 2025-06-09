@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../../core/services/dialog/dialog.service';
-import { StreamService } from '../../../core/services/stream/stream.service';
+import { MediaService } from '../../../core/websocket/media/media.service';
 
 @Component({
   selector: 'app-meeting-join',
@@ -12,7 +12,7 @@ import { StreamService } from '../../../core/services/stream/stream.service';
 })
 export class MeetingJoinComponent {
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
-  constructor(public streamService: StreamService,private diaglogService:DialogService,
+  constructor(public mediaService: MediaService,private diaglogService:DialogService,
     private router:Router,  private route: ActivatedRoute
   ) {
   }
@@ -22,9 +22,9 @@ export class MeetingJoinComponent {
         video: true, audio: true
       });
       const videoTrack = this.stream.getVideoTracks()[0];
-      videoTrack.enabled = this.streamService.isCameraOnSubject.getValue();
+      videoTrack.enabled = this.mediaService.isCameraOnSubject.getValue();
       const audioTrack = this.stream.getAudioTracks()[0];
-      audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
+      audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
       
       this.videoElement.nativeElement.srcObject = this.stream;
       this.videoElement.nativeElement.muted = true;
@@ -46,10 +46,10 @@ export class MeetingJoinComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.streamService.isCameraOn$.subscribe(value=>{
+    this.mediaService.isCameraOn$.subscribe(value=>{
       this.isCamOn = value;
     })
-    this.streamService.isMicOn$.subscribe(value=>{
+    this.mediaService.isMicOn$.subscribe(value=>{
       this.isMicOn = value;
     })
   }
@@ -60,25 +60,26 @@ export class MeetingJoinComponent {
   }
 
   toggleCamera() {
-    this.streamService.switchCameraState();
+    this.mediaService.switchCameraState();
     const videoTrack = this.stream.getVideoTracks()[0];
-    videoTrack.enabled = this.streamService.isCameraOnSubject.getValue();
+    videoTrack.enabled = this.mediaService.isCameraOnSubject.getValue();
   }
   
   toggleMicro() {
-    this.streamService.switchMicroState();
+    this.mediaService.switchMicroState();
     const audioTrack = this.stream.getAudioTracks()[0];
-    audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
+    audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
   }
 
   async onLeave(){
+    this.diaglogService.setIsQuestion(true);
     const result = await this.diaglogService.open({
       content:'Do you want to leave this room?',
       yesText:'Yes',
       noText:'No'
     })
-    if(result == 1){
-      this.router.navigate(['../start'], { relativeTo: this.route });
+    if(result === 1){
+      this.router.navigate(['meeting/start']);
     }
   }
 }

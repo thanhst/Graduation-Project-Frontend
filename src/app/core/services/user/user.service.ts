@@ -9,7 +9,9 @@ import { User } from '../../models/user/user';
 })
 export class UserService {
   private apiUrl = environment.apiUrl;
-  
+  private switchHostSubject = new BehaviorSubject<Boolean>(true);
+  public switchHost$ = this.switchHostSubject.asObservable()
+
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
   timestamp = Date.now()
@@ -80,5 +82,8 @@ export class UserService {
         localStorage.setItem("role", response.role);
       })
     );
+  }
+  switchHost(value:boolean){
+    this.switchHostSubject.next(value);
   }
 }

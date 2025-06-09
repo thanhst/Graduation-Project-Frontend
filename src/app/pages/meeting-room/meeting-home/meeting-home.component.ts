@@ -6,7 +6,8 @@ import { Room } from '../../../core/models/room/room';
 import { DialogService } from '../../../core/services/dialog/dialog.service';
 import { LoadingService } from '../../../core/services/loading/loading.service';
 import { RoomService } from '../../../core/services/room/room.service';
-import { StreamService } from '../../../core/services/stream/stream.service';
+import { UserService } from '../../../core/services/user/user.service';
+import { MediaService } from '../../../core/websocket/media/media.service';
 
 @Component({
   selector: 'app-meeting-home',
@@ -18,8 +19,9 @@ export class MeetingHomeComponent {
   form: FormGroup;
   user_id: string = localStorage.getItem("user_id") || ""
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
-  constructor(public streamService: StreamService, fb: FormBuilder, private loadingService:LoadingService,
-    private roomService:RoomService,private router:Router,private dialogService:DialogService
+  constructor(public mediaService: MediaService, fb: FormBuilder, private loadingService: LoadingService,
+    private roomService: RoomService, private router: Router, private dialogService: DialogService,
+    public userService: UserService,
   ) {
     this.form = fb.group({
       roomId: ['', Validators.required],
@@ -31,9 +33,9 @@ export class MeetingHomeComponent {
         video: true, audio: true
       });
       const videoTrack = this.stream.getVideoTracks()[0];
-      videoTrack.enabled = this.streamService.isCameraOnSubject.getValue();
+      videoTrack.enabled = this.mediaService.isCameraOnSubject.getValue();
       const audioTrack = this.stream.getAudioTracks()[0];
-      audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
+      audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
       this.videoElement.nativeElement.srcObject = this.stream;
       this.videoElement.nativeElement.muted = true;
 
@@ -54,10 +56,10 @@ export class MeetingHomeComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.streamService.isCameraOn$.subscribe(value => {
+    this.mediaService.isCameraOn$.subscribe(value => {
       this.isCamOn = value;
     })
-    this.streamService.isMicOn$.subscribe(value => {
+    this.mediaService.isMicOn$.subscribe(value => {
       this.isMicOn = value;
     })
 
@@ -71,20 +73,20 @@ export class MeetingHomeComponent {
   }
 
   toggleCamera() {
-    this.streamService.switchCameraState();
+    this.mediaService.switchCameraState();
     const videoTrack = this.stream.getVideoTracks()[0];
-    videoTrack.enabled = this.streamService.isCameraOnSubject.getValue();
+    videoTrack.enabled = this.mediaService.isCameraOnSubject.getValue();
   }
 
   toggleMicro() {
-    this.streamService.switchMicroState();
+    this.mediaService.switchMicroState();
     const audioTrack = this.stream.getAudioTracks()[0];
-    audioTrack.enabled = this.streamService.isMicOnSubject.getValue();
+    audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
   }
 
-  createNewMeeting(){
+  createNewMeeting() {
     this.loadingService.show();
-    const room=new Room(
+    const room = new Room(
       "",
       null,
       "opening",
@@ -93,20 +95,52 @@ export class MeetingHomeComponent {
       null
     )
     this.roomService.createRoom(room).subscribe({
-      next:(room)=>{
+      next: (room) => {
         this.loadingService.hide();
         this.router.navigate([`meeting/${room.roomID}/room`]);
       },
-      error:(err)=>{
+      error: (err) => {
         this.loadingService.hide();
         this.dialogService.setIsQuestion(false);
         this.dialogService.open({
-          content:err.error
+          content: err.error
         })
-        setTimeout(()=>{
+        setTimeout(() => {
           this.dialogService.cancel()
-        },3000)
+        }, 3000)
       }
     })
+  }
+  async joinRoom() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) {
+      return;
+    } else {
+      this.dialogService.setIsQuestion(true)
+      const result = await this.dialogService.open({
+        content: "Ready to join this room?",
+        yesText: "Yes",
+        noText: "No",
+      })
+      if (result == 1) {
+        this.loadingService.show();
+        this.roomService.getRoom(this.form.get("roomId")?.value).subscribe({
+          next:(room)=>{
+            this.loadingService.hide();
+            this.router.navigate(["/meeting/"+room.roomID+"/waiting-room"])
+          },
+          error:(err)=>{
+            this.loadingService.hide();
+            this.dialogService.setIsQuestion(true)
+            this.dialogService.open({
+              content: err,
+            })
+            setTimeout(()=>{
+              this.dialogService.cancel();
+            },3000)
+          }
+        })
+      }
+    }
   }
 }

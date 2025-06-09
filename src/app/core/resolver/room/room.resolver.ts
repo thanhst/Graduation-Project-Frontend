@@ -23,7 +23,6 @@ export const roomResolver: ResolveFn<any> = (route, state) => {
       return of(null)
     })) : of(null),
     getRoom: route.routeConfig?.path == ":id" ? roomService.getRoom(route.paramMap?.get("id") || "").pipe(tap(room => {
-      console.log(room.roomID)
       if (room.roomID == "") {
         router.navigate([`/meeting`]);
       }

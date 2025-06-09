@@ -45,12 +45,20 @@
 }
 .camera-main{
 }
+.video-streaming{
+    background: rgb(123, 123, 123);
+    aspect-ratio: 4/3;
+    width: 15rem;
+}
 .emotion-icon{
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 100%;
-    padding: 10px;
+    padding: 5px;
     width: 2rem;
     height: 2rem;
+}
+.username-host{
+    color: rgb(255, 22, 22);
 }

@@ -2,6 +2,9 @@
     <div class="flex gap-[2rem]">
         <div class="camera-preview relative">
             <video #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"></video>
+            <div *ngIf="!isCamOn" class="user-image absolute inset-0 flex justify-center items-center">
+                <img [src]="this.userService.getCurrentUser()?.profilePicture">
+            </div>
             <div class="absolute relative">
                 <button (click)="toggleMicro()" class="absolute btn-media bottom-2 right-[4rem]" id="micro">
                     <svg *ngIf="isMicOn" width="19" height="29" viewBox="0 0 19 29" fill="none"
@@ -77,7 +80,7 @@
                         <input class="input" type="text" placeholder="Enter your ID room">
                     </form>
                     <div class="flex-1">
-                        <button form="form" type="submit" class="btn-view">Join room</button>
+                        <button (click)="joinRoom()" form="form" type="submit" class="btn-view">Join room</button>
                     </div>
                 </div>
             </div>

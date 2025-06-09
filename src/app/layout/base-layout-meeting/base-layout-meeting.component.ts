@@ -15,7 +15,7 @@ export class BaseLayoutMeetingComponent {
     private route: ActivatedRoute,
     private wsService: MeetingService,
     private rooomService: RoomService,
-    private dialogService:DialogService,
+    private dialogService: DialogService,
   ) { }
 
   ngOnInit(): void {
@@ -32,15 +32,15 @@ export class BaseLayoutMeetingComponent {
         }
         this.wsService.connect({ roomId, userId, role })
       },
-      error:(err)=>{
+      error: (err) => {
         this.dialogService.setIsQuestion(false);
         this.dialogService.open({
-          content:err.error
+          content: err.error
         })
-        setTimeout(()=>{
+        setTimeout(() => {
           this.dialogService.cancel()
           this.dialogService.setIsQuestion(true);
-        },3000)
+        }, 3000)
       }
     })
   }

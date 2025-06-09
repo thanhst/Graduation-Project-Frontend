@@ -22,7 +22,7 @@
         </div>
         <div class="student-container" class="grid grid-rows-5 gap-3">
             <ng-container *ngFor="let student of this.studentJoined">
-                <app-user [src]="student.profilePicture" [username]="student.fullName" [type]="'view'"
+                <app-user [unSubmitFun]="removeUserSubmit" [src]="student.profilePicture" [username]="student.fullName" [type]="'view'"
                     [userId]="student.userId" [classId]="this.classId" (accepted)="removeUser($event)"></app-user>
             </ng-container>
         </div>

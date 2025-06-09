@@ -12,7 +12,7 @@
         <h1 class="text-bigger text-center font-bold">Waiting room</h1>
         <div class="student-container" class="grid grid-rows-5 gap-3">
             <ng-container *ngFor="let student of this.studentWaiting">
-                <app-user [src]="student.profilePicture" [username]="student.fullName" [type]="'request'"
+                <app-user [submitFun]="addUserSubmit" [unSubmitFun]="removeUserSubmit" [src]="student.profilePicture" [username]="student.fullName" [type]="'request'"
                     [userId]="student.userId" [classId]="this.classId" (accepted)="removeUser($event)"></app-user>
             </ng-container>
         </div>

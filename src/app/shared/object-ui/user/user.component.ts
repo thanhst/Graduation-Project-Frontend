@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ClassService } from '../../../core/services/class/class.service';
 import { DialogService } from '../../../core/services/dialog/dialog.service';
 import { LoadingService } from '../../../core/services/loading/loading.service';
+import { MeetingService } from '../../../core/websocket/meeting/meeting.service';
 
 @Component({
   selector: 'app-user',
@@ -17,13 +18,16 @@ export class UserComponent {
   @Input() username: string = '';
   @Input() src: string = '';
   @Input() type: 'view' | 'request' = 'view';
+  @Input() submitFun!: Function
+  @Input() unSubmitFun!:Function
   @Output() accepted = new EventEmitter<string>();
-  role: string = localStorage.getItem("role") || "";
+  @Input () role: string = localStorage.getItem("role") || "";
   myId: string = localStorage.getItem("user_id") || ""
   constructor(
     private dialogService: DialogService,
     private loadingService: LoadingService,
-    private classService: ClassService
+    private classService: ClassService,
+    private meetingService:MeetingService
   ) {}
 
   async onSubmit() {
@@ -36,29 +40,7 @@ export class UserComponent {
 
     if (result === 1) {
       this.loadingService.show();
-      this.classService.acceptClass(this.classId, this.userId).subscribe({
-        next: (data) => {
-          this.loadingService.hide();
-          this.dialogService.setIsQuestion(false);
-          this.dialogService.open({
-            content: data.message,
-          });
-          setTimeout(() => {
-            this.dialogService.cancel();
-          }, 5000);
-          this.accepted.emit(this.userId);
-        },
-        error: () => {
-          this.loadingService.hide();
-          this.dialogService.setIsQuestion(false);
-          this.dialogService.open({
-            content: 'Error to accept!',
-          });
-          setTimeout(() => {
-            this.dialogService.cancel();
-          }, 5000);
-        }
-      });
+      this.submitFun(this.userId,()=>this.accepted.emit(this.userId))
     }
   }
 
@@ -72,29 +54,7 @@ export class UserComponent {
 
     if (result === 1) {
       this.loadingService.show();
-      this.classService.rejectClass(this.classId, this.userId).subscribe({
-        next: (data) => {
-          this.loadingService.hide();
-          this.accepted.emit(this.userId);
-          this.dialogService.setIsQuestion(false);
-          this.dialogService.open({
-            content: data.message,
-          });
-          setTimeout(() => {
-            this.dialogService.cancel();
-          }, 1000);
-        },
-        error: () => {
-          this.loadingService.hide();
-          this.dialogService.setIsQuestion(false);
-          this.dialogService.open({
-            content: 'Error to accept!',
-          });
-          setTimeout(() => {
-            this.dialogService.cancel();
-          }, 5000);
-        }
-      });
+      this.unSubmitFun(this.userId,()=>this.accepted.emit(this.userId));
     }
   }
 }

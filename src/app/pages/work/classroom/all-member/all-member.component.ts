@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { User } from '../../../../core/models/user/user';
 import { ClassService } from '../../../../core/services/class/class.service';
+import { DialogService } from '../../../../core/services/dialog/dialog.service';
 import { FlagService } from '../../../../core/services/flag/flag.service';
 import { LoadingService } from '../../../../core/services/loading/loading.service';
 import { PaginationComponent } from "../../../../shared/component/pagination/pagination.component";
@@ -22,7 +23,8 @@ export class AllMemberComponent {
   role: string = localStorage.getItem("role") || "student"
   typeStd: string = "view"
   constructor(private flagService: FlagService, public classService: ClassService,
-    private loadingService: LoadingService,private cdr:ChangeDetectorRef, private activeRoute: ActivatedRoute) {
+    private loadingService: LoadingService, private cdr: ChangeDetectorRef, private activeRoute: ActivatedRoute,
+    private dialogService: DialogService) {
     this.activeRoute.parent?.paramMap.subscribe(params => {
       this.classId = params.get('id') || '';
     });
@@ -54,6 +56,31 @@ export class AllMemberComponent {
     this.loadingService.show()
     this.classService.getUserJoinedWithClassrooms(this.classId, this.itemsPerPage, (this.currentPage - 1) * this.itemsPerPage).subscribe({
       next: (data) => { this.loadingService.hide(); }
+    });
+  }
+  removeUserSubmit(userId: string, callback:Function) {
+    this.classService.rejectClass(this.classId, userId).subscribe({
+      next: (data) => {
+        this.loadingService.hide();
+        callback()
+        this.dialogService.setIsQuestion(false);
+        this.dialogService.open({
+          content: data.message,
+        });
+        setTimeout(() => {
+          this.dialogService.cancel();
+        }, 1000);
+      },
+      error: () => {
+        this.loadingService.hide();
+        this.dialogService.setIsQuestion(false);
+        this.dialogService.open({
+          content: 'Error to accept!',
+        });
+        setTimeout(() => {
+          this.dialogService.cancel();
+        }, 5000);
+      }
     });
   }
 }

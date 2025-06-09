@@ -5,7 +5,7 @@
         <span *ngIf="this.userId==myId">(Me)</span>
     </div>
     <div class="flex gap-3">
-        <button *ngIf="type==='request' && role=='teacher'" class="btn-view" (click)="onSubmit()">Accept</button>
-        <button *ngIf="role=='teacher'" class="btn-remove" (click)="onRemove()">Remove</button>
+        <button *ngIf="type==='request' && (role=='teacher' || role=='host')" class="btn-view" (click)="onSubmit()">Accept</button>
+        <button *ngIf="role=='teacher' || role=='host'" class="btn-remove" (click)="onRemove()">Remove</button>
     </div>
 </div>
