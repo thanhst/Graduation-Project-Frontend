@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { DialogService } from '../../core/services/dialog/dialog.service';
 import { RoomService } from '../../core/services/room/room.service';
+import { MediaService } from '../../core/websocket/media/media.service';
 import { MeetingService } from '../../core/websocket/meeting/meeting.service';
 
 @Component({
@@ -16,7 +17,9 @@ export class BaseLayoutMeetingComponent {
     private wsService: MeetingService,
     private rooomService: RoomService,
     private dialogService: DialogService,
-  ) { }
+    private mediaService:MediaService,
+  ) {
+  }
 
   ngOnInit(): void {
     const roomId = this.route.snapshot.paramMap.get('id')!;

@@ -3,6 +3,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../../core/services/dialog/dialog.service';
+import { FlagService } from '../../../core/services/flag/flag.service';
 import { LoadingService } from '../../../core/services/loading/loading.service';
 import { StreamService } from '../../../core/services/stream/stream.service';
 import { UserService } from '../../../core/services/user/user.service';
@@ -10,6 +11,7 @@ import { MediaService } from '../../../core/websocket/media/media.service';
 import { MeetingService } from '../../../core/websocket/meeting/meeting.service';
 import { UserMeetingComponent } from "../../../shared/object-ui/user-meeting/user-meeting.component";
 import { UserComponent } from "../../../shared/object-ui/user/user.component";
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-meeting-room',
@@ -21,13 +23,14 @@ export class MeetingRoomComponent {
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
   form: FormGroup;
   userId: string = localStorage.getItem("user_id") || "";
-
+  roomId: string = "";
+  hostId: string = "";
   constructor(public streamService: StreamService, private fb: FormBuilder,
     public meetingService: MeetingService, private dialogService: DialogService,
-    private loadingService: LoadingService, private router: Router, private mediaService: MediaService,
-    private activeRoute: ActivatedRoute, public userService:UserService
+    private loadingService: LoadingService, private router: Router, public mediaService: MediaService,
+    private activeRoute: ActivatedRoute, public userService: UserService, public flagService: FlagService
   ) {
-    const roomId = this.activeRoute.parent?.snapshot.paramMap.get('id')!;
+    this.roomId = this.activeRoute.parent?.snapshot.paramMap.get('id')!;
     this.form = this.fb.group({
       'shareState': [this.meetingService.shareState ? "Allow" : "Forbid", Validators.required],
       'hostId': [this.meetingService.host?.userId],
@@ -37,6 +40,7 @@ export class MeetingRoomComponent {
     this.meetingService.host$.subscribe((host) => {
       if (host) {
         this.form.patchValue({ hostId: host.userId });
+        this.hostId = host.userId;
       }
     });
     this.meetingService.autoJoin$.subscribe((value) => {
@@ -53,23 +57,59 @@ export class MeetingRoomComponent {
         this.form.patchValue({ shareState: "Forbid" });
       }
     });
+    this.isShare = this.flagService.getIsShare();
+    this.flagService.isShare$.subscribe(value => {
+      this.isShare = value;
+    })
+    this.mediaService.isCameraOn$.subscribe(value => {
+      this.isCamOn = value
+    })
+    this.mediaService.isMicOn$.subscribe(value => {
+      this.isMicOn = value
+    })
     setTimeout(() => {
-      this.mediaService.connect(this.userId, roomId, "guest", this.mediaService.isCameraOnSubject.getValue(), this.mediaService.isMicOnSubject.getValue());
-    },10)
+      this.mediaService.connect(this.userId, this.roomId, "guest");
+    }, 10)
   }
   ngAfterViewInit() {
     this.streamService.stream$.subscribe(streamMap => {
-      const userStream = streamMap.get(this.meetingService.host?.userId||"");
-      if (userStream) {
-        this.isCamOn = userStream.isCamOn;
-        this.isMicOn = userStream.isMicOn;
-        const stream = userStream.stream;
-        if (stream != null) {
-          this.videoElement.nativeElement.srcObject = userStream.stream;
+      if (!this.isShare) {
+        if (this.videoElement.nativeElement.srcObject == null) {
+          const userStream = streamMap.get(this.meetingService.host?.userId || "");
+          if (userStream) {
+            const stream = userStream.stream;
+            if (stream != null) {
+              this.videoElement.nativeElement.srcObject = stream;
+              this.isHostCamOn = userStream.isCamOn
+            }
+            if (!userStream.onChange$) {
+              userStream.onChange$ = new BehaviorSubject<void>(undefined);
+              userStream.onChange$?.subscribe(() => {
+                this.isHostCamOn = userStream.isCamOn
+              })
+            }
+            this.videoElement.nativeElement.muted = (this.userId === userStream.userId);
+          }
         }
-        this.videoElement.nativeElement.muted = ( this.userId === userStream.userId);
       }
     });
+    this.mediaService.shareStream$.subscribe((stream) => {
+      if (stream != null && this.flagService.getIsShare() == true) {
+        this.stream = stream
+        this.videoElement.nativeElement.srcObject = this.stream;
+      } else if (this.flagService.getIsShare() == false) {
+        const streamMap = this.streamService.getStream();
+        const userStream = streamMap.get(this.meetingService.host?.userId || "");
+        if (userStream) {
+          const stream = userStream.stream;
+          if (stream != null) {
+            this.videoElement.nativeElement.srcObject = stream;
+            this.isHostCamOn = userStream.isCamOn
+          }
+          this.videoElement.nativeElement.muted = (this.userId === userStream.userId);
+        }
+      }
+    })
   }
 
   stream!: MediaStream;
@@ -78,36 +118,24 @@ export class MeetingRoomComponent {
   isShare: boolean = false;
   isSetting: boolean = false;
   isManageMember: boolean = false;
+  isHostCamOn: boolean = false;
 
   ngOnInit(): void {
   }
   ngOnDestroy(): void {
     if (this.stream) {
       this.stream.getTracks().forEach(track => track.stop());
+      this.videoElement.nativeElement.srcObject = null;
+      this.mediaService.disconnect();
     }
   }
 
   toggleCamera() {
-    const currentCamera = this.mediaService.getLocalStream()?.stream
-    if (currentCamera != null) {
-      this.isCamOn = !this.isCamOn
-      this.mediaService.switchCameraState();
-      const videoTrack = currentCamera.getVideoTracks()[0];
-      videoTrack.enabled = this.mediaService.isCameraOnSubject.getValue();
-      if (!this.mediaService.isCameraOnSubject.getValue()) {
-        videoTrack.stop
-      }
-    }
+    this.mediaService.switchCameraState();
   }
 
   toggleMicro() {
-    const currentCamera = this.mediaService.getLocalStream()?.stream
-    if (currentCamera != null) {
-      this.isMicOn = !this.isMicOn
-      this.mediaService.switchMicroState();
-      const audioTrack = currentCamera.getAudioTracks()[0];
-      audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
-    }
+    this.mediaService.switchMicroState();
   }
   toggleShare() {
     if (this.isShare) {
@@ -120,14 +148,17 @@ export class MeetingRoomComponent {
 
       const displayMediaOptions = {
         video: {
-          cursor: 'always'
+          cursor: 'always',
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          frameRate: { ideal: 30, max: 30 }
         },
         audio: false
       } as any;
 
       navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
         .then(
-          (stream) => {
+          async (stream) => {
             this.isShare = true;
             const shardElement = this.videoElement.nativeElement;
             if (shardElement) {
@@ -136,20 +167,45 @@ export class MeetingRoomComponent {
               }
               shardElement.srcObject = stream;
               shardElement.play();
-              stream.getTracks().forEach(track=>{
-                this.mediaService.peerConnection?.addTrack(track);
+              stream.getTracks().forEach(track => {
+                this.mediaService.peerConnection?.addTrack(track, stream);
               })
               const streams = [];
               streams.push({ trackId: stream.getVideoTracks()[0].id, type: "screen" })
-
+              this.flagService.setIsShare(true);
+              if (this.mediaService.peerConnection) {
+                this.mediaService.sendOffer(this.mediaService.peerConnection, this.userId, this.roomId, streams)
+                this.mediaService.send({
+                  event: "start-share",
+                  userId: this.userId,
+                  payload: {
+                  },
+                })
+              }
             }
             const [track] = stream.getVideoTracks();
             track.addEventListener('ended', async () => {
               if (shardElement) {
                 this.isShare = false;
                 shardElement.srcObject = null;
+                this.flagService.setIsShare(false);
+                this.mediaService.send({
+                  event: "stop-share",
+                  userId: this.userId,
+                  payload: {
+                  },
+                })
                 setTimeout(async () => {
-                  // this.stream = await this.mediaService.cameraService(this.stream, this.videoElement);
+                  this.streamService.stream$.subscribe(streamMap => {
+                    const userStream = streamMap.get(this.meetingService.host?.userId || "");
+                    if (userStream) {
+                      const stream = userStream.stream;
+                      if (stream != null) {
+                        this.videoElement.nativeElement.srcObject = stream;
+                      }
+                      this.videoElement.nativeElement.muted = (this.userId === userStream.userId);
+                    }
+                  });
                 }, 1000)
               }
             });
@@ -200,14 +256,14 @@ export class MeetingRoomComponent {
           noText: "No"
         })
         if (result == 1) {
-          this.isShare=false;
+          this.isShare = false;
           this.meetingService.send({
             event: "close_room",
             data: {}
           })
           setTimeout(() => {
             this.loadingService.hide();
-            this.router.navigate(["/meeting/start"])
+            window.location.href = '/meeting/start';
           }, 500)
         }
       } else {
@@ -274,5 +330,9 @@ export class MeetingRoomComponent {
       }
     }
     this.loadingService.hide();
+  }
+
+  trackByKey(index: number, item: any) {
+    return item.key;
   }
 }

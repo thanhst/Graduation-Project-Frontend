@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { environment } from '../../../../environment/environment';
+import { FlagService } from '../../services/flag/flag.service';
 
 interface SignalMessage {
   event: string;
@@ -10,13 +11,15 @@ interface SignalMessage {
   payload: any;
 }
 
-interface UserStream {
+export interface UserStream {
   userId: string;
   stream?: MediaStream;
   screen?: MediaStream;
-  isMuted?: boolean;
-  isSharingScreen?: boolean;
+  isMicOn: boolean;
+  isCamOn: boolean;
+  onChange$?: BehaviorSubject<void>;
 }
+
 
 @Injectable({
   providedIn: 'root',
@@ -30,21 +33,90 @@ export class MediaService {
   private remoteStreamsSubject = new BehaviorSubject<Map<string, UserStream>>(new Map());
   public remoteStreams$ = this.remoteStreamsSubject.asObservable();
 
+  private shareStreamSubject = new BehaviorSubject<MediaStream | null>(null);
+  public shareStream$ = this.shareStreamSubject.asObservable();
+
   private streamInfoMap: Map<string, { userId: string, type: string }> = new Map();
+
+  private errorOfCamSubject = new BehaviorSubject<boolean>(false);
+  private errorOfMicSubject = new BehaviorSubject<boolean>(false);
+  public errorOfCam$ = this.errorOfCamSubject.asObservable();
+  public errorOfMic$ = this.errorOfMicSubject.asObservable()
+
 
   public isMicOnSubject = new BehaviorSubject<boolean>(true);
   public isCameraOnSubject = new BehaviorSubject<boolean>(true);
+
   isMicOn$ = this.isMicOnSubject.asObservable();
   isCameraOn$ = this.isCameraOnSubject.asObservable();
+
   userNow: string = localStorage.getItem("user_id") || "";
-  switchCameraState() {
-    this.isCameraOnSubject.next(!this.isCameraOnSubject.getValue())
-  }
-  switchMicroState() {
-    this.isMicOnSubject.next(!this.isMicOnSubject.getValue())
+
+  constructor(private flagService: FlagService) {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        this.errorOfCamSubject.next(false)
+        stream.getTracks().forEach(track => track.stop());
+      })
+      .catch(err => { this.errorOfCamSubject.next(true) });
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        this.errorOfMicSubject.next(false)
+        stream.getTracks().forEach(track => track.stop());
+      })
+      .catch(err => { this.errorOfMicSubject.next(true) });
+
+    this.errorOfMic$.subscribe(value => {
+      this.isMicOnSubject.next(!value)
+    })
+    this.errorOfCam$.subscribe(value => {
+      this.isCameraOnSubject.next(!value);
+    })
   }
 
-  async connect(userId: string, roomId: string, role: string, isCamOn: boolean, isMicOn: boolean) {
+  async switchCameraState() {
+    this.isCameraOnSubject.next(!this.isCameraOnSubject.getValue())
+    const camState = this.isCameraOnSubject.getValue();
+    if (camState == true) {
+      this.localStreamSubject.getValue()?.stream?.getVideoTracks().forEach(
+        track => track.enabled = true)
+    } else {
+      this.localStreamSubject.getValue()?.stream?.getVideoTracks().forEach(track => {
+        track.enabled = false;
+      });
+    }
+    this.send({
+      event: "switch-camera-micro",
+      userId: this.userNow,
+      payload: {
+        "camState": this.isCameraOnSubject.getValue(),
+        "micState": this.isMicOnSubject.getValue(),
+      }
+    })
+  }
+  async switchMicroState() {
+    this.isMicOnSubject.next(!this.isMicOnSubject.getValue())
+    const micState = this.isMicOnSubject.getValue();
+    if (micState == true) {
+      this.localStreamSubject.getValue()?.stream?.getAudioTracks().forEach(
+        track => track.enabled = true)
+    } else {
+      this.localStreamSubject.getValue()?.stream?.getAudioTracks().forEach(track => {
+        track.enabled = false;
+      });
+    }
+    this.send({
+      event: "switch-camera-micro",
+      userId: this.userNow,
+      payload: {
+        "camState": this.isCameraOnSubject.getValue(),
+        "micState": this.isMicOnSubject.getValue(),
+      }
+    })
+  }
+
+  async connect(userId: string, roomId: string, role: string) {
     if (this.socket$) return;
 
     try {
@@ -63,16 +135,19 @@ export class MediaService {
       this.localStreamSubject.next({
         userId: userId,
         stream: stream,
+        isMicOn: wantAudio,
+        isCamOn: wantVideo
       });
     } catch (error) {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video:false,
-        audio:true,
+        video: false,
+        audio: true,
       });
-      this.switchCameraState();
       this.localStreamSubject.next({
         userId: userId,
         stream: stream,
+        isMicOn: this.isMicOnSubject.getValue(),
+        isCamOn: this.isCameraOnSubject.getValue()
       });
       console.error('Lỗi lấy media stream:', error);
     }
@@ -82,7 +157,8 @@ export class MediaService {
       openObserver: {
         next: async () => {
           console.log('Media WS connected');
-          this.send({ event: 'join', userId: userId, roomId: roomId, payload: { "role": role, "isCamOn": isCamOn, "isMicOn": isMicOn } });
+          console.log(this.getCamState(), this.getMicState())
+          this.send({ event: 'join', userId: userId, roomId: roomId, payload: { "role": role, "isCamOn": this.isCameraOnSubject.getValue(), "isMicOn": this.isMicOnSubject.getValue() } });
 
           this.createPeerConnection(userId);
 
@@ -101,20 +177,7 @@ export class MediaService {
           }
 
           if (this.peerConnection) {
-            const offer = await this.peerConnection.createOffer();
-            await this.peerConnection.setLocalDescription(offer);
-            this.send({
-              event: 'offer',
-              userId: userId,
-              roomId: roomId,
-              payload: {
-                "offer": {
-                  type: offer.type,
-                  sdp: offer.sdp,
-                },
-                "streams": streams,
-              },
-            });
+            this.sendOffer(this.peerConnection, userId, roomId, streams)
           }
         },
       },
@@ -148,12 +211,17 @@ export class MediaService {
       currentStream.getTracks().forEach(track => track.stop());
       this.localStreamSubject.next(null)
     }
+    const shareStream = this.shareStreamSubject.getValue();
+    if (shareStream) {
+      shareStream.getTracks().forEach(track => track.stop());
+      this.shareStreamSubject.next(null)
+    }
     this.socket$ = undefined;
     this.remoteStreamsSubject.next(new Map());
     this.streamInfoMap.clear();
   }
 
-  private send(msg: SignalMessage) {
+  public send(msg: SignalMessage) {
     this.socket$?.next(msg);
   }
 
@@ -206,13 +274,14 @@ export class MediaService {
 
       // Lấy current UserStream nếu có sẵn
       const currentMap = new Map(this.remoteStreamsSubject.getValue());
-      const existingUser = currentMap.get(userId) || { userId };
+      const existingUser = currentMap.get(userId) || { userId, isMicOn: true, isCamOn: true };
 
       // Gán đúng loại stream
       if (type === "video") {
         existingUser.stream = stream;
       } else if (type === "screen") {
         existingUser.screen = stream;
+        this.shareStreamSubject.next(stream)
       } else if (type === "audio") {
         existingUser.stream = stream;
       }
@@ -229,6 +298,7 @@ export class MediaService {
 
   private async handleSignal(msg: SignalMessage) {
     const { event, payload } = msg;
+    console.log(msg)
     switch (event) {
       case 'offer':
         if (this.peerConnection != null) {
@@ -276,6 +346,21 @@ export class MediaService {
           }
         })
         break;
+      case 'user-join':
+        const userIdJoin = msg.userId
+        if (userIdJoin == this.userNow) {
+          break;
+        }
+        if (userIdJoin != undefined && msg.userId != undefined) {
+          const currentMap = this.remoteStreamsSubject.getValue();
+          currentMap.set(userIdJoin, {
+            userId: msg.userId,
+            isCamOn: msg.payload.camState,
+            isMicOn: msg.payload.micState,
+          })
+          this.remoteStreamsSubject.next(currentMap);
+        }
+        break;
       case "user-leave":
         const userIdLeave = msg.userId
         if (userIdLeave == this.userNow) {
@@ -292,7 +377,55 @@ export class MediaService {
           this.remoteStreamsSubject.next(currentMap);
         }
         break;
+      case "start-share":
+        const userIdS = msg.userId;
+        this.flagService.setIsShare(true);
+        const currentMapS = this.remoteStreamsSubject.getValue();
+        if (userIdS != null) {
+          const screen = currentMapS.get(userIdS)?.screen;
+          if (screen != null) {
+            this.shareStreamSubject.next(screen)
+          }
+        }
+        break;
+      case "stop-share":
+        this.flagService.setIsShare(false);
+        this.shareStreamSubject.next(null)
+        break;
+      case "switch-camera-micro":
+        var userId = msg.userId;
+        if (userId != null) {
+          const user = this.remoteStreamsSubject.getValue().get(userId)
+          user!.isCamOn = msg.payload.camState;
+          user!.isMicOn = msg.payload.micState;
+          if (user!.onChange$){
+            user!.onChange$?.next();
+          }else{
+            // console.log("Null rồi")
+          }
+        }
+        break;
+      case 'get-all-user-states':
+        const userStates: any[] = Array.isArray(msg?.payload?.users) ? msg.payload.users : [];
+        const currentMap = this.remoteStreamsSubject.getValue();
+        userStates.forEach(element => {
+          const user = currentMap.get(element["userId"])
+          if (user != null) {
+            user.isCamOn = element["camState"]
+            user.isMicOn = element["micState"]
+          } else {
+            currentMap.set(element["userId"], {
+              userId: element["userId"],
+              isCamOn: element["camState"],
+              isMicOn: element["micState"],
+            })
+          }
+          console.log(user)
+        });
+        console.log(currentMap)
+        this.remoteStreamsSubject.next(currentMap)
 
+        break;
 
       default:
         console.warn('Unhandled signal event:', event);
@@ -301,5 +434,38 @@ export class MediaService {
 
   getLocalStream(): UserStream | null {
     return this.localStreamSubject.getValue();
+  }
+
+  async sendOffer(peerConnection: RTCPeerConnection, userId: string, roomId: string, streams: any) {
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+    this.send({
+      event: 'offer',
+      userId: userId,
+      roomId: roomId,
+      payload: {
+        "offer": {
+          type: offer.type,
+          sdp: offer.sdp,
+        },
+        "streams": streams,
+      },
+    });
+  }
+  getShareScreen() {
+    return this.shareStreamSubject.getValue();
+  }
+  getCamState() {
+    return this.isCameraOnSubject.getValue();
+  }
+  getMicState() {
+    return this.isMicOnSubject.getValue();
+  }
+
+  setErrorCam(value: boolean) {
+    this.errorOfCamSubject.next(value);
+  }
+  setErrorMic(value: boolean) {
+    this.errorOfCamSubject.next(value);
   }
 }

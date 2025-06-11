@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { User } from '../../../core/models/user/user';
 import { StreamService } from '../../../core/services/stream/stream.service';
 import { MediaService } from '../../../core/websocket/media/media.service';
@@ -15,7 +16,7 @@ export class UserMeetingComponent {
   @Input() hostId: string = "";
   public stream!: MediaStream;
   public role: string = "";
-  localUser:string = localStorage.getItem("user_id")|| ""
+  localUser: string = localStorage.getItem("user_id") || ""
   isOpenShare: boolean = false;
   emotion: 'Fear' | 'Happy' | 'Neutral' | 'Sad' | 'Surprise' | null = "Fear";
 
@@ -30,20 +31,39 @@ export class UserMeetingComponent {
     } else {
       this.role = "host"
     }
+    if (this.user.userId == this.localUser) {
+      this.mediaService.isCameraOn$.subscribe(value => {
+        this.isCamOn = value;
+      })
+      this.mediaService.isMicOn$.subscribe(value => {
+        this.isMicOn = value;
+      })
+    }
   }
-  async ngAfterViewInit() {
+  ngAfterViewInit() {
     const userId = this.user.userId
     this.streamService.stream$.subscribe(streamMap => {
-      const userStream = streamMap.get(userId);
-      if (userStream) {
-        this.isCamOn = userStream.isCamOn;
-        this.isMicOn = userStream.isMicOn;
-        const stream = userStream.stream;
-        if (stream != null) {
-          this.videoElement.nativeElement.srcObject = userStream.stream;
+      if (this.videoElement.nativeElement.srcObject == null) {
+        const userStream = streamMap.get(userId);
+        if (userStream) {
+          this.isCamOn = userStream.isCamOn;
+          this.isMicOn = userStream.isMicOn;
+          const stream = userStream.stream;
+          if (stream != null) {
+            this.videoElement.nativeElement.srcObject = stream;
+          }
+          this.videoElement.nativeElement.muted = (this.localUser === userStream.userId);
+          if (!userStream?.onChange$) {
+            userStream.onChange$ = new BehaviorSubject<void>(undefined);
+            userStream.onChange$.subscribe(() => {
+              this.isCamOn = userStream.isCamOn;
+              this.isMicOn = userStream.isMicOn;
+              console.log(userStream.isCamOn)
+              this.cdr.detectChanges()
+            })
+          }
+          this.cdr.detectChanges()
         }
-        this.videoElement.nativeElement.muted = ( this.localUser === userStream.userId);
-        this.cdr.detectChanges()
       }
     });
   }

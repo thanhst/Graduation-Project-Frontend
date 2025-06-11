@@ -3,17 +3,16 @@
         <div class="camera-main relative">
             <video #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"
                 [ngClass]="{'object-fit-cover transform scale-x-[1]':isShare}"></video>
-            <div *ngIf="!isCamOn" class="user-image absolute inset-0 flex justify-center items-center">
-                <img src="assets/images/Happy.svg">
+            <div *ngIf="!isHostCamOn && !isShare" class="user-image absolute inset-0 flex justify-center items-center">
+                <img [src]="this.meetingService.host?.profilePicture">
             </div>
         </div>
         <div class="user-view">
             <div class="user-view-camera">
-                <ng-container *ngFor="let user of this.meetingService.userInRoom$ | async | keyvalue">
-                    <ng-container *ngIf="this.userService.switchHost$ | async as isSwitching">
-                        <app-user-meeting *ngIf="user.value.userId != this.meetingService.host?.userId && isSwitching" [hostId]="this.meetingService.host?.userId||'undifine'"
-                        [user]="user.value"></app-user-meeting>
-                    </ng-container>
+                <ng-container *ngFor="let user of this.meetingService.userInRoom$ | async | keyvalue ; trackBy: trackByKey">
+                    <app-user-meeting
+                        *ngIf="user.value.userId !== this.meetingService.host?.userId || (this.flagService.isShare$ | async)"
+                        [hostId]="this.meetingService.host?.userId||'undifine'" [user]="user.value"></app-user-meeting>
                 </ng-container>
             </div>
         </div>
@@ -22,7 +21,7 @@
         <div class="host-name">Host:<span class="host-name-content"> {{(this.meetingService.host$ | async)?.fullName
                 }}</span></div>
         <ul>
-            <li><button (click)="toggleMicro()" class="btn-media" id="micro">
+            <li><button (click)="toggleMicro()" class="btn-media" id="micro" [ngClass]="{'deactive':(this.mediaService.errorOfMic$ | async)}">
                     <svg *ngIf="isMicOn" width="19" height="29" viewBox="0 0 19 29" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -51,7 +50,7 @@
                     </svg>
 
                 </button></li>
-            <li><button (click)="toggleCamera()" class="btn-media" id="camera">
+            <li><button (click)="toggleCamera()" class="btn-media" id="camera" [ngClass]="{'deactive':(this.mediaService.errorOfCam$ | async)}">
                     <svg *ngIf="isCamOn" width="25" height="19" viewBox="0 0 25 19" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M24.0001 3.37665L16.6819 9.31821L24.0001 15.2598V3.37665Z" stroke="black"
@@ -76,7 +75,7 @@
                 </button>
             </li>
             <li><button
-                    [disabled]="!(this.meetingService.shareState$ | async) && this.userId!=this.meetingService.host?.userId"
+                    [disabled]="!(this.mediaService.shareStream$ | async) && this.userId!=this.meetingService.host?.userId"
                     [ngClass]="{'deactive':!(this.meetingService.shareState$ | async) &&  this.userId!=this.meetingService.host?.userId,'active-menu' : isShare}"
                     (click)="toggleShare()" class="btn-media" id="share">
                     <svg width="34" height="30" viewBox="0 0 34 30" fill="none" xmlns="http://www.w3.org/2000/svg">

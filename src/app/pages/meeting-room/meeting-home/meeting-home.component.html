@@ -77,7 +77,7 @@
                 <p class="block">Join a meeting</p>
                 <div class="flex gap-5">
                     <form [formGroup]="form" id="form" class="flex-3 flex flex-col gap-[1rem]">
-                        <input class="input" type="text" placeholder="Enter your ID room">
+                        <input formControlName="roomId" class="input" type="text" placeholder="Enter your ID room">
                     </form>
                     <div class="flex-1">
                         <button (click)="joinRoom()" form="form" type="submit" class="btn-view">Join room</button>

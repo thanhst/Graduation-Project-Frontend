@@ -184,6 +184,6 @@
                 <img [src]="user.profilePicture" alt="non">
             </div>
         </div>
-        <div [ngClass]="{'username-host':this.role==='host'}" class="username">{{ user.fullName }}</div>
+        <div [ngClass]="{'username-host':this.role==='host','username-local':this.user.userId===this.localUser}" class="username">{{ user.fullName }}</div>
     </div>
 </div>

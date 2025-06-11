@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from '../../../core/services/dialog/dialog.service';
+import { UserService } from '../../../core/services/user/user.service';
 import { MediaService } from '../../../core/websocket/media/media.service';
 
 @Component({
@@ -12,9 +13,12 @@ import { MediaService } from '../../../core/websocket/media/media.service';
 })
 export class MeetingJoinComponent {
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
-  constructor(public mediaService: MediaService,private diaglogService:DialogService,
-    private router:Router,  private route: ActivatedRoute
+  roomId: string;
+  constructor(private diaglogService: DialogService,
+    private router: Router, private route: ActivatedRoute, public userService: UserService, private mediaService: MediaService
   ) {
+    this.roomId = this.route.parent?.snapshot.paramMap.get("id") || "";
+    
   }
   async ngAfterViewInit() {
     try {
@@ -25,7 +29,7 @@ export class MeetingJoinComponent {
       videoTrack.enabled = this.mediaService.isCameraOnSubject.getValue();
       const audioTrack = this.stream.getAudioTracks()[0];
       audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
-      
+
       this.videoElement.nativeElement.srcObject = this.stream;
       this.videoElement.nativeElement.muted = true;
 
@@ -37,21 +41,43 @@ export class MeetingJoinComponent {
       mediaStreamSource.connect(gainNode);
       // gainNode.connect(audioContext.destination);
     } catch (err) {
+      if (this.mediaService.getCamState() == true) {
+        this.mediaService.switchCameraState();
+      }
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        video: this.mediaService.getCamState(), audio: true
+      });
+
+      const audioTrack = this.stream.getAudioTracks()[0];
+      audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
+
+      this.videoElement.nativeElement.srcObject = this.stream;
+      this.videoElement.nativeElement.muted = true;
+
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const mediaStreamSource = audioContext.createMediaStreamSource(this.stream);
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 1;
+
+      mediaStreamSource.connect(gainNode);
+      console.log(err)
     }
   }
 
   stream!: MediaStream;
-  isMicOn:boolean = true;
-  isCamOn:boolean =true;
+  isMicOn: boolean = true;
+  isCamOn: boolean = true;
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.mediaService.isCameraOn$.subscribe(value=>{
+    this.mediaService.isCameraOn$.subscribe(value => {
       this.isCamOn = value;
     })
-    this.mediaService.isMicOn$.subscribe(value=>{
+    this.mediaService.isMicOn$.subscribe(value => {
       this.isMicOn = value;
     })
+    this.isMicOn = this.mediaService.getMicState()
+    this.isCamOn = this.mediaService.getCamState()
   }
   ngOnDestroy(): void {
     if (this.stream) {
@@ -64,21 +90,21 @@ export class MeetingJoinComponent {
     const videoTrack = this.stream.getVideoTracks()[0];
     videoTrack.enabled = this.mediaService.isCameraOnSubject.getValue();
   }
-  
+
   toggleMicro() {
     this.mediaService.switchMicroState();
     const audioTrack = this.stream.getAudioTracks()[0];
     audioTrack.enabled = this.mediaService.isMicOnSubject.getValue();
   }
 
-  async onLeave(){
+  async onLeave() {
     this.diaglogService.setIsQuestion(true);
     const result = await this.diaglogService.open({
-      content:'Do you want to leave this room?',
-      yesText:'Yes',
-      noText:'No'
+      content: 'Do you want to leave this room?',
+      yesText: 'Yes',
+      noText: 'No'
     })
-    if(result === 1){
+    if (result === 1) {
       this.router.navigate(['meeting/start']);
     }
   }

@@ -3,7 +3,7 @@
         <div class="camera-preview relative">
             <video #video autoplay class="rounded-[10px] h-full w-full transform scale-x-[-1]"></video>
             <div *ngIf="!isCamOn" class="user-image absolute inset-0 flex justify-center items-center">
-                <img src="assets/images/Happy.svg">
+                <img [src] = "this.userService.getCurrentUser()?.profilePicture">
             </div>
             <div class="absolute relative">
                 <button (click)="toggleMicro()" class="absolute btn-media bottom-2 right-[4rem]" id="micro">
@@ -62,7 +62,7 @@
         </div>
         <div class="room-infor flex-1">
             <div class="room-id">
-                Room id
+                {{ roomId }}
             </div>
             <div class="marquee flex items-center gap-3">
                 <div class="w-full h-full flex items-center">Waiting for the host to let you in</div>

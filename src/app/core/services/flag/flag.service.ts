@@ -24,6 +24,10 @@ export class FlagService {
 
   private isActiveNotificationSubject = new BehaviorSubject<boolean>(false);
   isActiveNotification$ = this.isActiveNotificationSubject.asObservable();
+
+  private isShareSubject = new BehaviorSubject<boolean>(false);
+  isShare$ = this.isShareSubject.asObservable();
+
   constructor() {}
 
   // Các setter và getter để cập nhật và lấy giá trị của các cờ
@@ -48,5 +52,13 @@ export class FlagService {
   }
   setBack(value:boolean){
     this.isBackSubject.next(value);
+  }
+
+  setIsShare(value:boolean){
+    this.isShareSubject.next(value);
+  }
+
+  getIsShare(){
+    return this.isShareSubject.getValue();
   }
 }
